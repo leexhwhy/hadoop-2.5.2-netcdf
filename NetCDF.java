@@ -60,7 +60,7 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     }
   }
   
-  public static class FloatMaxReducer 
+  public static class Reducer
        extends Reducer<Text,FloatWritable,Text,FloatWritable> {
     private ArrayList<Float> temperatureList = new ArrayList<Float>();
 
