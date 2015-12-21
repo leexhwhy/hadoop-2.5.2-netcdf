@@ -122,7 +122,6 @@ public class NetCDFReaderWithDimensions extends RecordReader<Text, NetCDFArrayWr
             System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon dim="+dimensions.get(2).getLength() );
             fw[0] = new FloatWritable(dimensions.get(1).getLength());
             fw[1] = new FloatWritable(dimensions.get(2).getLength());
-            fw
             for (int i=0; i< my.length; i++) {
                 fw[i+2]=new FloatWritable(my[i]);
             }
