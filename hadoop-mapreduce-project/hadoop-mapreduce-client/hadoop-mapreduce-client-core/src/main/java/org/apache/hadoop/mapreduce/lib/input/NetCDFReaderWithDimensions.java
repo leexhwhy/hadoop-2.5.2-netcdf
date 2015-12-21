@@ -114,8 +114,8 @@ public class NetCDFReaderWithDimensions extends RecordReader<Text, NetCDFArrayWr
             FloatWritable[] fw = new FloatWritable[my.length+2];
             fw[0] = new FloatWritable(dimensions.get(1).getLength());
             fw[1] = new FloatWritable(dimensions.get(2).getLength());
-            for (int i=2; i< my.length+2; i++) {
-                fw[i]=new FloatWritable(my[i]);
+            for (int i=0; i< my.length; i++) {
+                fw[i+2]=new FloatWritable(my[i]);
             }
             LOG.info("[YIQI] "+(time5-time4));
             // ADDED BY SAMAN
