@@ -103,7 +103,7 @@ public class NetCDFTranspose {
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(TextOutputFormat.class);
         for (int i = 0; i < otherArgs.length - 1; ++i) {
-            NetCDFInputFormat.addInputPath(job, new Path(otherArgs[i]));
+            NetCDFInputFormatWithDimensions.addInputPath(job, new Path(otherArgs[i]));
         }
         TextOutputFormat.setOutputPath(job,
                 new Path(otherArgs[otherArgs.length - 1]));
