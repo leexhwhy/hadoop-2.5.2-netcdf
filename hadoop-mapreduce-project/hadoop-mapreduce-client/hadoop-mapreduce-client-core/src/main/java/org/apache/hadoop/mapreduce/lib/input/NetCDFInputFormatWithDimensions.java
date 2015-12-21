@@ -184,7 +184,7 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
             InputSplit genericSplit, TaskAttemptContext context)
             throws IOException {
 
-        return new NetCDFReader();
+        return new NetCDFReaderWithDimensions();
     }
 
 
