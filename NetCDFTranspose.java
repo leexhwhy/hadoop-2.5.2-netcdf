@@ -42,10 +42,10 @@ public class NetCDFTranspose {
             FloatWritable[] records = (FloatWritable[]) value.toArray();
             float[] realValues = new float[records.length];
 
+            System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+realValues[0]+",lonSize="+realValues[1] );
+
             int latSize = (int)realValues[0];
             int lonSize = (int)realValues[1];
-
-            System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
             for (int i = 0; i < latSize; i++) {
                 for (int j = 0; j < lonSize; j++) {
@@ -66,7 +66,7 @@ public class NetCDFTranspose {
                 throws IOException, InterruptedException {
 
             for (FloatWritable val : values) {
-                System.out.println( "[SAMAN][NetCDFTranspose][Reduce] key="+key+",value="+val );
+                System.out.println("[SAMAN][NetCDFTranspose][Reduce] key="+key+",value="+val );
                 context.write(key, val);
             }
         }
