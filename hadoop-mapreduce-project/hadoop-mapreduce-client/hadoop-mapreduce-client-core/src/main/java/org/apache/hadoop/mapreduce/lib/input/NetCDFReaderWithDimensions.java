@@ -112,6 +112,14 @@ public class NetCDFReaderWithDimensions extends RecordReader<Text, NetCDFArrayWr
             LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
             float[] my = (float[])chunk.get1DJavaArray(Float.class);
             FloatWritable[] fw = new FloatWritable[my.length+2];
+
+            System.out.println( "[SAMAN][NetCDFReaderWithdimensions] time varSize="+ncFile.findVariable("time").getSize() );
+            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lat varSize="+ ncFile.findVariable("lat").getSize() );
+            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon varSize="+ncFile.findVariable("lon").getSize() );
+
+            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] time dim="+dimensions.get(0).getLength() );
+            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lat dim="+dimensions.get(1).getLength() );
+            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon dim="+dimensions.get(2).getLength() );
             fw[0] = new FloatWritable(dimensions.get(1).getLength());
             fw[1] = new FloatWritable(dimensions.get(2).getLength());
             for (int i=0; i< my.length; i++) {
