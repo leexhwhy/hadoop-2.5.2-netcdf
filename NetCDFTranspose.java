@@ -48,7 +48,7 @@ public class NetCDFTranspose {
             for (int i = 0; i < latSize; i++) {
                 for (int j = 0; j < lonSize; j++) {
                     int index = i * latSize + j + 2;
-                    context.write(key, new FloatWritable(records[index]));
+                    context.write(key, new FloatWritable(records[index].get()));
                 }
             }
         }
