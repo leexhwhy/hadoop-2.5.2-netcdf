@@ -20,6 +20,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormatWithDimensions;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormat;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
 import java.util.ArrayList;
@@ -104,7 +105,7 @@ public class NetCDFTranspose {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
+        job.setOutputFormatClass(NetCDFOutputFormat.class);
         for (int i = 0; i < otherArgs.length - 1; ++i) {
             NetCDFInputFormatWithDimensions.addInputPath(job, new Path(otherArgs[i]));
         }
