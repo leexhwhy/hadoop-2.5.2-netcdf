@@ -36,16 +36,21 @@ public class NetCDFTranspose {
     public static class VariableMapper
             extends Mapper<Text, NetCDFArrayWritable, Text, FloatWritable> {
 
-        FloatWritable [] records = (FloatWritable[])value.toArray();
-        float[] realValues = new float[records.length];
 
-        int latSize = realValues[0];
-        int lonSize = realValues[1];
+        @Override
+        public void map(Text key, NetCDFArrayWritable value, Context context )
+                throws IOException, InterruptedException {
+            FloatWritable[] records = (FloatWritable[]) value.toArray();
+            float[] realValues = new float[records.length];
 
-        for( int i = 0; i < latSize; i++ ){
-            for( int j = 0; j < lonSize; j++ ){
-                int index = i*latSize+j+2;
-                context.write(key, new FloatWritable(records[index]));
+            int latSize = realValues[0];
+            int lonSize = realValues[1];
+
+            for (int i = 0; i < latSize; i++) {
+                for (int j = 0; j < lonSize; j++) {
+                    int index = i * latSize + j + 2;
+                    context.write(key, new FloatWritable(records[index]));
+                }
             }
         }
 
@@ -53,9 +58,14 @@ public class NetCDFTranspose {
 
     public static class FloatMaxReducer
             extends Reducer<Text,FloatWritable,Text,FloatWritable> {
+        @Override
+        public void reduce(Text key, Iterable<FloatWritable> values,
+                           Context context )
+                throws IOException, InterruptedException {
 
-        for (FloatWritable val : values) {
-            context.write(key, val);
+            for (FloatWritable val : values) {
+                context.write(key, val);
+            }
         }
 
     }
