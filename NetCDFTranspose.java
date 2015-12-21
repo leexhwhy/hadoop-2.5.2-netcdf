@@ -18,8 +18,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormatYiqi;
+import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormatWithDimensions;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
@@ -31,7 +30,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 public class NetCDFTranspose {
-    private static final Log LOG = LogFactory.getLog(NetCDF.class);
+    private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
     public static class VariableMapper
             extends Mapper<Text, NetCDFArrayWritable, Text, FloatWritable> {
@@ -43,8 +42,8 @@ public class NetCDFTranspose {
             FloatWritable[] records = (FloatWritable[]) value.toArray();
             float[] realValues = new float[records.length];
 
-            int latSize = realValues[0];
-            int lonSize = realValues[1];
+            int latSize = (int)realValues[0];
+            int lonSize = (int)realValues[1];
 
             for (int i = 0; i < latSize; i++) {
                 for (int j = 0; j < lonSize; j++) {
