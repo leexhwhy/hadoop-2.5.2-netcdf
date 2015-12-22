@@ -52,7 +52,7 @@ public class NetCDFTranspose {
                 for (int j = 0; j < lonSize; j++) {
                     int index = i * latSize + j + 2;
                     System.out.println( "[SAMAN][NetCDFTranspose][Map] record is="+records[index].get() );
-                    context.write(key+","+i+","+j, new FloatWritable(records[index].get()));
+                    context.write(new Text(key+","+i+","+j), new FloatWritable(records[index].get()));
                 }
             }
         }
