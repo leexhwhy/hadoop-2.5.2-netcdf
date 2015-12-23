@@ -18,9 +18,6 @@
 
 package org.apache.hadoop.mapreduce.lib.output;
 
-import java.io.IOException;
-import java.text.NumberFormat;
-
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
@@ -29,15 +26,11 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.mapred.FileAlreadyExistsException;
 import org.apache.hadoop.mapred.InvalidJobConfException;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.OutputCommitter;
-import org.apache.hadoop.mapreduce.OutputFormat;
-import org.apache.hadoop.mapreduce.RecordWriter;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.TaskID;
-import org.apache.hadoop.mapreduce.TaskInputOutputContext;
+import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.security.TokenCache;
+
+import java.io.IOException;
+import java.text.NumberFormat;
 
 /** A base class for {@link OutputFormat}s that read from {@link FileSystem}s.*/
 @InterfaceAudience.Public
@@ -54,11 +47,11 @@ public abstract class FileOutputFormat<K, V> extends OutputFormat<K, V> {
     NUMBER_FORMAT.setGroupingUsed(false);
   }
   private FileOutputCommitter committer = null;
-public static final String COMPRESS ="mapreduce.output.fileoutputformat.compress";
-public static final String COMPRESS_CODEC = 
-"mapreduce.output.fileoutputformat.compress.codec";
-public static final String COMPRESS_TYPE = "mapreduce.output.fileoutputformat.compress.type";
-public static final String OUTDIR = "mapreduce.output.fileoutputformat.outputdir";
+  public static final String COMPRESS ="mapreduce.output.fileoutputformat.compress";
+  public static final String COMPRESS_CODEC =
+      "mapreduce.output.fileoutputformat.compress.codec";
+  public static final String COMPRESS_TYPE = "mapreduce.output.fileoutputformat.compress.type";
+  public static final String OUTDIR = "mapreduce.output.fileoutputformat.outputdir";
 
   @Deprecated
   public static enum Counter {

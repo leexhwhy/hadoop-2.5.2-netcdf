@@ -76,6 +76,7 @@ public class NetCDFTranspose {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+        conf.setNumReduceTasks(1);
 
         if (otherArgs.length < 2) {
             System.err.println("Usage: NetCDFTranspose <in> <out>");
@@ -106,6 +107,9 @@ public class NetCDFTranspose {
         job.setOutputValueClass(FloatWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormat.class);
+        String singleInput = otherArgs[0];
+        conf.set( NetCDFOutputFormat.NETCDF_INPUT_PATH, singleInput );
+
         for (int i = 0; i < otherArgs.length - 1; ++i) {
             NetCDFInputFormatWithDimensions.addInputPath(job, new Path(otherArgs[i]));
         }
