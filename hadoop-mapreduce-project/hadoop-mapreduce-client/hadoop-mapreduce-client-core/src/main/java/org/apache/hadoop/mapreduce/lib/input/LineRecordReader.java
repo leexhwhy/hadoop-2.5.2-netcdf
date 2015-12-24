@@ -187,8 +187,8 @@ public class LineRecordReader extends RecordReader<LongWritable, Text> {
         try {
           newSize = in.readLine(value, maxLineLength, maxBytesToConsume(pos));
         }catch ( IOException e ){
-          LOG.info( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
-          System.out.println( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
+          //LOG.info( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
+          //System.out.println( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
           throw e;
         }
         pos += newSize;

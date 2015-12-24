@@ -21,7 +21,6 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
 
     public NetCDFOutputFormat(){
         super();
-        Configuration conf = new Configuration();
 
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
@@ -36,12 +35,10 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
                 throws IOException {
 
 
-
         }
 
         public synchronized void close(TaskAttemptContext context)
                 throws IOException {
-
 
 
         }
