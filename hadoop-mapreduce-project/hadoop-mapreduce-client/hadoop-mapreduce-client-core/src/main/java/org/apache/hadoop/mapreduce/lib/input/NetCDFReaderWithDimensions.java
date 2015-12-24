@@ -102,7 +102,7 @@ public class NetCDFReaderWithDimensions extends RecordReader<Text, NetCDFArrayWr
             time4 = System.nanoTime();
             try{
                 //LOG.info( "[SAMAN] rsut("+pos+":"+pos+sectionLocator+")" );
-                //chunk = ncFile.readSection("rsut("+pos+":"+pos+sectionLocator+")");
+                chunk = ncFile.readSection("rsut("+pos+":"+pos+sectionLocator+")");
                 time5 = System.nanoTime();
             } catch (ucar.ma2.InvalidRangeException e)
             {
