@@ -73,7 +73,7 @@ public class NetCDFTranspose {
 
             try {
                 dataFile = NetcdfFile.open(fileName, null);
-                outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, outputFileName);
+                //outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, outputFileName);
                 Variable vtime = dataFile.findVariable("time");
                 Variable vtime_bnds = dataFile.findVariable("time_bnds");
                 Variable vlat = dataFile.findVariable("lat");
