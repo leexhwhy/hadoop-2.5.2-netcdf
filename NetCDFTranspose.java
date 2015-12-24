@@ -30,6 +30,9 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import ucar.ma2.*;
+import ucar.nc2.*;
+
 public class NetCDFTranspose {
     private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
@@ -64,6 +67,28 @@ public class NetCDFTranspose {
         public void reduce(Text key, Iterable<FloatWritable> values,
                            Context context )
                 throws IOException, InterruptedException {
+
+            String fileName = "rsut.nc";
+
+            try {
+                dataFile = NetcdfFile.open(fileName, null);
+                outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, outputFileName);
+                Variable vtime = dataFile.findVariable("time");
+                Variable vtime_bnds = dataFile.findVariable("time_bnds");
+                Variable vlat = dataFile.findVariable("lat");
+                Variable vlat_bnds = dataFile.findVariable("lat_bnds");
+                Variable vlon = dataFile.findVariable("lon");
+                Variable vlon_bnds = dataFile.findVariable("lon_bnds");
+                Variable vrsut = dataFile.findVariable("rsut");
+
+                System.out.println("sizes are = vtime.size=" + vtime.getSize() + ", vtime_bnds.size=" + vtime_bnds.getSize() + ", vlat.size=" + vlat.getSize() +
+                        ", vlat_bnds.size=" + vlat_bnds.getSize() + ", vlon.size=" + vlon.getSize() + ", vlon_bnds.size=" + vlon_bnds.getSize() +
+                        ", vrsut.size=" + vrsut.getSize());
+                System.out.println("dimension names are = " + vtime.getDimensionsString() + "," + vlat.getDimensionsString() + "," +
+                        vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
+            }catch( Exception e ){
+                e.printStackTrace();
+            }
 
             for (FloatWritable val : values) {
                 System.out.println("[SAMAN][NetCDFTranspose][Reduce] key="+key+",value="+val );

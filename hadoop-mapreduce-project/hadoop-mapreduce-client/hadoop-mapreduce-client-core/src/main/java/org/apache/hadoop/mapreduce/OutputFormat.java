@@ -18,11 +18,11 @@
 
 package org.apache.hadoop.mapreduce;
 
-import java.io.IOException;
-
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.fs.FileSystem;
+
+import java.io.IOException;
 
 /** 
  * <code>OutputFormat</code> describes the output-specification for a 
@@ -48,7 +48,8 @@ import org.apache.hadoop.fs.FileSystem;
 public abstract class OutputFormat<K, V> {
 
   /** 
-   * Get the {@link RecordWriter} for the given task.
+   * Get the
+   * {@link RecordWriter} for the given task.
    *
    * @param context the information about the current task.
    * @return a {@link RecordWriter} to write the output for the job.
