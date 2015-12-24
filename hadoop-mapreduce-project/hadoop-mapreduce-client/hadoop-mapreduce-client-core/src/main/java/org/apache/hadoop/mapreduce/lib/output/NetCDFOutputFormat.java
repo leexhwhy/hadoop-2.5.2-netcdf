@@ -19,7 +19,8 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
     private static final Log LOG = LogFactory.getLog(NetCDFOutputFormat.class);
 
 
-    public void NetCDFOutputFormat(){
+    public NetCDFOutputFormat(){
+        super();
         Configuration conf = new Configuration();
 
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
