@@ -25,6 +25,8 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
 
+
+
     }
 
     protected static class NetCDFRecordWriter<Text, FloatWritable> extends RecordWriter<Text, FloatWritable> {
@@ -50,8 +52,8 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
         Configuration conf = job.getConfiguration();
         Path outputPath = getOutputPath(job);
 
-        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
-        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
+        //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
+        //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
 
         return new NetCDFRecordWriter<Text, FloatWritable>();
 
