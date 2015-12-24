@@ -23,7 +23,7 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
         super();
 
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
-        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
+        //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
 
 
 
