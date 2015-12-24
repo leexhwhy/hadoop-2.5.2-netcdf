@@ -69,6 +69,7 @@ public class NetCDFTranspose {
                 throws IOException, InterruptedException {
 
             String fileName = "rsut.nc";
+            NetcdfFile dataFile = null;
 
             try {
                 dataFile = NetcdfFile.open(fileName, null);
