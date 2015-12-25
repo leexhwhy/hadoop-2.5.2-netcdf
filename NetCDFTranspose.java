@@ -68,7 +68,7 @@ public class NetCDFTranspose {
                            Context context )
                 throws IOException, InterruptedException {
 
-            String fileName = "rsut.nc";
+            String fileName = "~/rsut.nc";
             NetcdfFile dataFile = null;
 
             try {
