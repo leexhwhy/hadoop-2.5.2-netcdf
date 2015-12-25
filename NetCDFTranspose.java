@@ -88,6 +88,7 @@ public class NetCDFTranspose {
                 System.out.println("dimension names are = " + vtime.getDimensionsString() + "," + vlat.getDimensionsString() + "," +
                         vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
             }catch( Exception e ){
+                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Exception!" );
                 e.printStackTrace();
             }
 
