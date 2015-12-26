@@ -69,6 +69,8 @@ public class NetCDFTranspose {
                            Context context )
                 throws IOException, InterruptedException {
 
+            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
+
             String fileName = "~/rsut.nc";
             NetcdfFile dataFile = null;
 
