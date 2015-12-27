@@ -131,7 +131,7 @@ public class NetCDFTranspose {
         job.setJarByClass(NetCDFTranspose.class);
         job.setMapperClass(VariableMapper.class);
         job.setCombinerClass(Reducer.class);
-        job.setReducerClass(Reducer.class);
+        job.setReducerClass(FloatMaxReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FloatWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
