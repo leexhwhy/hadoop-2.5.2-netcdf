@@ -92,7 +92,7 @@ public class NetCDFTranspose {
                         vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
             }catch( Exception e ){
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Exception!" );
-                e.printStackTrace();
+                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " + e.getMessage() );
             }
 
             for (FloatWritable val : values) {
