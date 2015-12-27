@@ -44,7 +44,7 @@ public class NetCDFTranspose {
         public void map(Text key, NetCDFArrayWritable value, Context context )
                 throws IOException, InterruptedException {
             FloatWritable[] records = (FloatWritable[]) value.toArray();
-            float[] realValues = new float[records.length];
+            //float[] realValues = new float[records.length];
 
             int latSize = (int)(records[0].get());
             int lonSize = (int)(records[1].get());
@@ -64,7 +64,7 @@ public class NetCDFTranspose {
     }
 
     public static class FloatMaxReducer
-            extends Reducer<Text,Text,Text,FloatWritable> {
+            extends Reducer<Text,Text,Text,Text> {
         @Override
         public void reduce(Text key, Iterable<Text> values,
                            Context context )
@@ -131,10 +131,10 @@ public class NetCDFTranspose {
         Job job = new Job(conf, "NetCDFTranspose");
         job.setJarByClass(NetCDFTranspose.class);
         job.setMapperClass(VariableMapper.class);
-        job.setCombinerClass(Reducer.class);
+        //job.setCombinerClass(Reducer.class);
         job.setReducerClass(FloatMaxReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(FloatWritable.class);
+        job.setOutputValueClass(Text.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormat.class);
         job.setNumReduceTasks(1);
