@@ -96,10 +96,10 @@ public class NetCDFTranspose {
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " + e.getMessage() );
             }
 
-            for (FloatWritable val : values) {
-                System.out.println("[SAMAN][NetCDFTranspose][Reduce] key="+key+",value="+val );
-                context.write(key, val);
-            }
+            //for (FloatWritable val : values) {
+            //    System.out.println("[SAMAN][NetCDFTranspose][Reduce] key="+key+",value="+val );
+            //    context.write(key, val);
+            //}
         }
 
     }
