@@ -58,7 +58,7 @@ public class NetCDFTranspose {
             for( int i = 0; i < latSize; i++ ){
                 for( int j = 0; j < lonSize; j++ ){
                     int index = i*latSize+j+2;
-                    context.write( new Text(i), new Text(key+","+j+","+records[index].get()) );
+                    context.write( new Text(Integer.toString(i)), new Text(key+","+j+","+records[index].get()) );
                 }
             }
 
