@@ -1,6 +1,8 @@
 package saman;
 
 import java.io.IOException;
+import java.lang.InterruptedException;
+import java.lang.Override;
 import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +35,8 @@ import org.apache.hadoop.util.ToolRunner;
 import ucar.ma2.*;
 import ucar.nc2.*;
 
+import javax.xml.soap.Text;
+
 public class NetCDFTranspose {
     private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
@@ -51,7 +55,14 @@ public class NetCDFTranspose {
 
             //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
+            for( int i = 0; i < latSize; i++ ){
+                for( int j = 0; j < lonSize; j++ ){
+                    int index = i*latSize+j+2;
+                    context.write( new Text(i), new Text(key+","+j+","+records[index].get()) );
+                }
+            }
 
+            /*
             for (int i = 0; i < latSize; i++) {
                 for (int j = 0; j < lonSize; j++) {
                     int index = i * latSize + j + 2;
@@ -60,9 +71,31 @@ public class NetCDFTranspose {
                     context.write( new Text("key"), new Text( key+","+i+","+j+records[index].get() ) );
                 }
             }
+            */
         }
     }
 
+
+    public static class MergeChunkReducer
+            extends Reducer<Text,Text,Text,Text> {
+
+        @Override
+        public void reduce(Text key, Iterable<Text> values,
+                           Context context)
+                throws IOException, InterruptedException {
+
+            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
+            for( Text value : values ){
+                String stringValue = value.toString();
+                String[] parts = stringValue.split(",");
+                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Row:" +
+                        parts[0]+","+key+","+parts[1]+","+parts[2] );
+            }
+            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
+
+        }
+
+    }
     public static class FloatMaxReducer
             extends Reducer<Text,Text,Text,Text> {
         @Override
@@ -132,7 +165,7 @@ public class NetCDFTranspose {
         job.setJarByClass(NetCDFTranspose.class);
         job.setMapperClass(VariableMapper.class);
         //job.setCombinerClass(Reducer.class);
-        job.setReducerClass(FloatMaxReducer.class);
+        job.setReducerClass(MergeChunkReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
@@ -144,8 +177,8 @@ public class NetCDFTranspose {
         for (int i = 0; i < otherArgs.length - 1; ++i) {
             NetCDFInputFormatWithDimensions.addInputPath(job, new Path(otherArgs[i]));
         }
-        TextOutputFormat.setOutputPath(job,
-                new Path(otherArgs[otherArgs.length - 1]));
+        //TextOutputFormat.setOutputPath(job,
+        //        new Path(otherArgs[otherArgs.length - 1]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 
