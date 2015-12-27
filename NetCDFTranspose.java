@@ -37,7 +37,7 @@ public class NetCDFTranspose {
     private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
     public static class VariableMapper
-            extends Mapper<Text, NetCDFArrayWritable, Text, FloatWritable> {
+            extends Mapper<Text, NetCDFArrayWritable, Text, Text> {
 
 
         @Override
@@ -49,21 +49,22 @@ public class NetCDFTranspose {
             int latSize = (int)(records[0].get());
             int lonSize = (int)(records[1].get());
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
+            //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
 
             for (int i = 0; i < latSize; i++) {
                 for (int j = 0; j < lonSize; j++) {
                     int index = i * latSize + j + 2;
                     //System.out.println( "[SAMAN][NetCDFTranspose][Map] record is="+records[index].get() );
-                    context.write(new Text(key+","+i+","+j), new FloatWritable(records[index].get()));
+                    //context.write(new Text(key+","+i+","+j), new FloatWritable(records[index].get()));
+                    context.write( new Text("key"), new Text( key+","+i+","+j+records[index].get() ) );
                 }
             }
         }
     }
 
     public static class FloatMaxReducer
-            extends Reducer<Text,FloatWritable,Text,FloatWritable> {
+            extends Reducer<Text,Text,Text,FloatWritable> {
         @Override
         public void reduce(Text key, Iterable<FloatWritable> values,
                            Context context )
