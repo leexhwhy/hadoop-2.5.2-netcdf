@@ -66,7 +66,7 @@ public class NetCDFTranspose {
     public static class FloatMaxReducer
             extends Reducer<Text,Text,Text,FloatWritable> {
         @Override
-        public void reduce(Text key, Iterable<FloatWritable> values,
+        public void reduce(Text key, Iterable<Text> values,
                            Context context )
                 throws IOException, InterruptedException {
 
