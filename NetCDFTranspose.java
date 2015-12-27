@@ -35,8 +35,6 @@ import org.apache.hadoop.util.ToolRunner;
 import ucar.ma2.*;
 import ucar.nc2.*;
 
-import javax.xml.soap.Text;
-
 public class NetCDFTranspose {
     private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
