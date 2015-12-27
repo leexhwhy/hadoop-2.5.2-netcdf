@@ -71,7 +71,7 @@ public class NetCDFTranspose {
 
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
 
-            String fileName = "hdfs://master:9000/rsut.nc";
+            String fileName = "hdfs://master:9000/rsut";
             NetcdfFile dataFile = null;
 
             try {
