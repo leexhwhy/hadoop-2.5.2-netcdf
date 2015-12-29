@@ -55,6 +55,7 @@ public class NetCDFTranspose {
             int latSize = (int)(records[1].get());
             int lonSize = (int)(records[2].get());
 
+            System.out.println( "[SAMAN][NetCDFTranspose][Map] length is = " + records.length );
 
             System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
