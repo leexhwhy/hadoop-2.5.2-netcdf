@@ -1,6 +1,8 @@
 package saman;
 
 import java.io.IOException;
+import java.lang.Float;
+import java.lang.Integer;
 import java.lang.InterruptedException;
 import java.lang.Override;
 import java.util.List;
@@ -41,26 +43,33 @@ public class NetCDFTranspose {
     private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
     public static class VariableMapper
-            extends Mapper<Text, NetCDFArrayWritable, Text, Text> {
+            extends Mapper<Text, NetCDFArrayWritable, Text, NetCDFArrayWritable> {
 
 
         @Override
         public void map(Text key, NetCDFArrayWritable value, Context context )
                 throws IOException, InterruptedException {
             FloatWritable[] records = (FloatWritable[]) value.toArray();
+
+
+
             //float[] realValues = new float[records.length];
 
-            int latSize = (int)(records[0].get());
-            int lonSize = (int)(records[1].get());
+            int timeSize = (int)(records[0].get());
+            int latSize = (int)(records[1].get());
+            int lonSize = (int)(records[2].get());
+
 
             //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
             for( int i = 0; i < latSize; i++ ){
                 for( int j = 0; j < lonSize; j++ ){
                     int index = i*latSize+j+2;
-                    context.write( new Text(Integer.toString(i)), new Text(key+","+j+","+records[index].get()) );
+                    context.write( new Text(Integer.toString(i)+","+timeSize+","+latSize+","+lonSize),
+                            new Text(key+","+j+","+records[index].get()) );
                 }
             }
+            //context.write( key, value );
 
             /*
             for (int i = 0; i < latSize; i++) {
@@ -77,7 +86,7 @@ public class NetCDFTranspose {
 
 
     public static class MergeChunkReducer
-            extends Reducer<Text,Text,Text,Text> {
+            extends Reducer<Text,NetCDFArrayWritable,Text,NetCDFArrayWritable> {
 
         @Override
         public void reduce(Text key, Iterable<Text> values,
@@ -85,13 +94,44 @@ public class NetCDFTranspose {
                 throws IOException, InterruptedException {
 
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
+            //for( Text value : values ){
+            //    String stringValue = value.toString();
+            //    String[] parts = stringValue.split(",");
+            //    System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Row:" +
+            //            parts[0]+","+key+","+parts[1]+","+parts[2] );
+            //}
+
+            NetCDFArrayWritable result = new NetCDFArrayWritable;
+
+            String keyString = key.toString();
+            String[] dimensions = keyString.split(",");
+            int timeDim = Integer.valueOf(dimensions[1]);
+            int latDim = Integer.valueOf(dimensions[2]);
+            int lonDim = Integer.valueOf(dimensions[3]);
+
+            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
+                    "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
+
+            FloatWritable[] fw = new FloatWritable[timeDim*lonDim];
+
+
             for( Text value : values ){
-                String stringValue = value.toString();
-                String[] parts = stringValue.split(",");
-                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Row:" +
-                        parts[0]+","+key+","+parts[1]+","+parts[2] );
+                String valueString = value.toString();
+                String[] valueParts = valueString.split(",");
+                Int timeIndex = Integer.valueOf(valueParts[0]);
+                Int lonIndex = Integer.valueOf(valueParts[1]);
+                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
+                        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]);
+                fw[timeIndex*timeDim+lonDim] = new FloatWritable(Float.valueOf(valueParts[2]));
             }
+
+            result.set( fw );
+
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
+
+
+            //context.write( key, result );
+
 
         }
 
@@ -167,7 +207,7 @@ public class NetCDFTranspose {
         //job.setCombinerClass(Reducer.class);
         job.setReducerClass(MergeChunkReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+        job.setOutputValueClass(NetCDFArrayWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormat.class);
         //job.setNumReduceTasks(1);

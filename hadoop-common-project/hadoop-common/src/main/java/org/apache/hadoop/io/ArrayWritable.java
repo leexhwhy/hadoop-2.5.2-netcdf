@@ -18,11 +18,13 @@
 
 package org.apache.hadoop.io;
 
-import java.io.*;
-import java.lang.reflect.Array;
-
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.lang.reflect.Array;
 
 /** 
  * A Writable for arrays containing instances of a class. The elements of this
@@ -107,4 +109,3 @@ public class ArrayWritable implements Writable {
   }
 
 }
-
