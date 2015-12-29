@@ -58,9 +58,9 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
             String currentLat = keySplitted[0];
-            String timeDim = keySplitted[1];
-            String latDim = keySplitted[2];
-            String lonDim = keySplitted[3];
+            String timeDimSize = keySplitted[1];
+            String latDimSize = keySplitted[2];
+            String lonDimSize = keySplitted[3];
             System.out.println( "Lat is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
                     +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
 
