@@ -51,36 +51,21 @@ public class NetCDFTranspose {
                 throws IOException, InterruptedException {
             FloatWritable[] records = (FloatWritable[]) value.toArray();
 
-
-
-            //float[] realValues = new float[records.length];
-
             int timeSize = (int)(records[0].get());
             int latSize = (int)(records[1].get());
             int lonSize = (int)(records[2].get());
 
 
-            //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
+            System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
             for( int i = 0; i < latSize; i++ ){
                 for( int j = 0; j < lonSize; j++ ){
-                    int index = i*latSize+j+2;
+                    int index = i*latSize+j+3;
                     context.write( new Text(Integer.toString(i)+","+timeSize+","+latSize+","+lonSize),
                             new Text(key+","+j+","+records[index].get()) );
                 }
             }
-            //context.write( key, value );
 
-            /*
-            for (int i = 0; i < latSize; i++) {
-                for (int j = 0; j < lonSize; j++) {
-                    int index = i * latSize + j + 2;
-                    //System.out.println( "[SAMAN][NetCDFTranspose][Map] record is="+records[index].get() );
-                    //context.write(new Text(key+","+i+","+j), new FloatWritable(records[index].get()));
-                    context.write( new Text("key"), new Text( key+","+i+","+j+records[index].get() ) );
-                }
-            }
-            */
         }
     }
 
