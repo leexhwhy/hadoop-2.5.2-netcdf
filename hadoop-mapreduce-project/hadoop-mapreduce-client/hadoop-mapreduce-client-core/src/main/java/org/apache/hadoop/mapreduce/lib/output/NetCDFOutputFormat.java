@@ -5,9 +5,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-
 import ucar.ma2.*;
 import ucar.nc2.*;
 
@@ -54,6 +54,8 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 throws IOException {
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] Beginning!" );
+
+            FloatWritable[] records = (FloatWritable[]) value.toArray();
 
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
@@ -169,11 +171,83 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 outputFile.addGroupAttribute(null, new Attribute("modeling_realm", "atmos"));
                 outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
 
+                ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
+                Array dataLat = Array.factory(DataType.DOUBLE, new int[]{1});
+                int[] shape = latArray.getShape();
+                for( int i = 0; i < shape[0]; i++ ){
+                    dataLat.setDouble(Integer.valueOf(currentLat), latArray.get(i));
+                }
+
+                ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
+                Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{(int)(vlat.getSize()), 2});
+                shape = dataLatBnds.getShape();
+                Index2D idx = new Index2D(new int[]{1, 2});
+                idx.set(0,0);
+                dataLatBnds.setDouble(idx, latBndsArray.get(0,0));
+                idx.set(0,1);
+                dataLatBnds.setDouble(idx, latBndsArray.get(0,1));
+
+                ArrayDouble.D1 timeArray = (ArrayDouble.D1) vtime.read();
+                Array dataTime = Array.factory(DataType.DOUBLE, new int[]{(int)(vtime.getSize())});
+                shape = timeArray.getShape();
+                for( int i = 0; i < shape[0]; i++ ){
+                    dataTime.setDouble( i, timeArray.get(i) );
+                }
+
+                ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
+                Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{(int)(vtime.getSize()), 2});
+                shape = dataTimeBnds.getShape();
+                idx = new Index2D(new int[]{(int)(vtime.getSize()), 2});
+                for( int i = 0; i < shape[0]; i++ ){
+                    for( int j = 0; j < shape[1]; j++ ){
+                        idx.set( i, j );
+                        dataTimeBnds.setDouble(idx, timeBndsArray.get(i, j));
+                    }
+                }
+
+                ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
+                Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int)(vlon.getSize())});
+                shape = lonArray.getShape();
+                for( int i = 0; i < shape[0]; i++ ){
+                    dataLon.setDouble(i, lonArray.get(i));
+                }
+
+                ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
+                Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{(int)(vlon.getSize()), 2});
+                shape = dataLonBnds.getShape();
+                idx = new Index2D(new int[]{(int)(vlon.getSize()), 2});
+                for( int i = 0; i < shape[0]; i++ ){
+                    for( int j = 0; j < shape[1]; j++ ){
+                        idx.set(i, j);
+                        dataLonBnds.setDouble(idx, lonBndsArray.get(i, j));
+                    }
+                }
+
+                Index3D idx3 = new Index3D(new int[]{1, (int)(vtime.getSize()), (int)(vlon.getSize())});
+                Array dataRsut = Array.factory(DataType.FLOAT, new int[]{1, (int)(vtime.getSize()), (int)(vlon.getSize())});
+                for( int j = 0; j < vtime.getSize(); j++ ) {
+                    for (int k = 0; k < vlon.getSize(); k++) {
+                        try{
+                            idx3.set(1, j, k);
+                            dataRsut.setFloat( idx3, records[j*vtime.getSize()+k] );
+                        }catch( Exception e ){
+                            System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage() );
+                        }
+                    }
+                }
+
                 outputFile.create();
+                outputFile.write(vlatNew, dataLat);
+                outputFile.write(vlatbndsNew, dataLatBnds);
+                outputFile.write(vtimeNew, dataTime);
+                outputFile.write(vtimebndsNew, dataTimeBnds);
+                outputFile.write(vlonNew, dataLon);
+                outputFile.write(vlonbndsNew, dataLonBnds);
+                outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
-            }catch (Exception e){
-                System.out.println( "[SAMAN][NetCDFOutputFormat][write] " + e.getMessage() );
+            } catch (Exception e){
+                System.out.println( "[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage() );
             }
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] End!" );
