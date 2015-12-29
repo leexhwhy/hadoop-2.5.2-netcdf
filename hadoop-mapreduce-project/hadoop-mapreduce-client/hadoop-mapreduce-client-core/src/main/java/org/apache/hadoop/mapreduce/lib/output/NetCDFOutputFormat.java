@@ -59,8 +59,9 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
         Path outputPath = getOutputPath(job);
 
         Path file = getDefaultWorkFile(job, null);
+        file.toString()
 
-        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] file path is: " + file.getName() );
+        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] file path is: " + file.toString() );
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output path is: " + outputPath.getName() );
 
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
