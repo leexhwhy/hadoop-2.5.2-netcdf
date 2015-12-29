@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by saman on 12/21/15.
  */
-public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Text, FloatWritable> {
+public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFormat<Text, NetCDFArrayWritable> {
 
     public static final String NETCDF_INPUT_PATH = "hadoop.netcdf.outputformat.input";
 
@@ -29,10 +29,19 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
 
     }
 
-    protected static class NetCDFRecordWriter<Text, FloatWritable> extends RecordWriter<Text, FloatWritable> {
+    protected static class NetCDFRecordWriter<Text, NetCDFArrayWritable> extends RecordWriter<Text, NetCDFArrayWritable> {
 
-        public synchronized void write(Text key, FloatWritable value)
+        public synchronized void write(Text key, NetCDFArrayWritable value)
                 throws IOException {
+
+            System.out.println( "[SAMAN][NetCDFRecordWriter][write] Beginning!" );
+
+            String keyString = key.toString();
+            String[] keySplitted = keyString.split(",");
+            System.out.println( "Lat is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
+                    +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
+
+            System.out.println( "[SAMAN][NetCDFRecordWriter][write] End!" );
 
 
         }
@@ -44,7 +53,7 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
         }
     }
 
-    public RecordWriter<Text, FloatWritable> getRecordWriter(TaskAttemptContext job) throws
+    public RecordWriter<Text, NetCDFArrayWritable> getRecordWriter(TaskAttemptContext job) throws
             IOException, InterruptedException {
 
         Configuration conf = job.getConfiguration();
@@ -53,7 +62,7 @@ public class NetCDFOutputFormat<Text, FloatWritable> extends FileOutputFormat<Te
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
 
-        return new NetCDFRecordWriter<Text, FloatWritable>();
+        return new NetCDFRecordWriter<Text, NetCDFArrayWritable>();
 
     }
 

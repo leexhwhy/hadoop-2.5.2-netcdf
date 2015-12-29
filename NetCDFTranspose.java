@@ -55,9 +55,9 @@ public class NetCDFTranspose {
             int latSize = (int)(records[1].get());
             int lonSize = (int)(records[2].get());
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Map] length is = " + records.length );
+            //System.out.println( "[SAMAN][NetCDFTranspose][Map] length is = " + records.length );
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
+            //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
             for( int i = 0; i < latSize; i++ ){
                 for( int j = 0; j < lonSize; j++ ){
@@ -95,8 +95,8 @@ public class NetCDFTranspose {
             int latDim = Integer.valueOf(dimensions[2]);
             int lonDim = Integer.valueOf(dimensions[3]);
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
-                    "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
+            //System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
+            //        "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
 
             FloatWritable[] fw = new FloatWritable[timeDim*lonDim];
 
@@ -106,8 +106,8 @@ public class NetCDFTranspose {
                 String[] valueParts = valueString.split(",");
                 int timeIndex = Integer.valueOf(valueParts[0]);
                 int lonIndex = Integer.valueOf(valueParts[1]);
-                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
-                        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]);
+                //System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
+                //        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]);
                 fw[timeIndex*timeDim+lonDim] = new FloatWritable(Float.valueOf(valueParts[2]));
             }
 
@@ -115,8 +115,7 @@ public class NetCDFTranspose {
 
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
 
-
-            //context.write( key, result );
+            context.write( key, result );
 
 
         }
