@@ -89,7 +89,7 @@ public class NetCDFTranspose {
             extends Reducer<Text,Text,Text,NetCDFArrayWritable> {
 
         @Override
-        public void reduce(Text key, Iterable<NetCDFArrayWritable> values,
+        public void reduce(Text key, Iterable<Text> values,
                            Context context)
                 throws IOException, InterruptedException {
 
