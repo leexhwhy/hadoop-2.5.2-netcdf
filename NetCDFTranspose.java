@@ -101,7 +101,7 @@ public class NetCDFTranspose {
             //            parts[0]+","+key+","+parts[1]+","+parts[2] );
             //}
 
-            NetCDFArrayWritable result = new NetCDFArrayWritable;
+            NetCDFArrayWritable result = new NetCDFArrayWritable();
 
             String keyString = key.toString();
             String[] dimensions = keyString.split(",");
