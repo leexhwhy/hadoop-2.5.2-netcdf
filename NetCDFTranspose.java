@@ -43,7 +43,7 @@ public class NetCDFTranspose {
     private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
 
     public static class VariableMapper
-            extends Mapper<Text, NetCDFArrayWritable, Text, NetCDFArrayWritable> {
+            extends Mapper<Text, NetCDFArrayWritable, Text, Text> {
 
 
         @Override
@@ -86,10 +86,10 @@ public class NetCDFTranspose {
 
 
     public static class MergeChunkReducer
-            extends Reducer<Text,NetCDFArrayWritable,Text,NetCDFArrayWritable> {
+            extends Reducer<Text,Text,Text,NetCDFArrayWritable> {
 
         @Override
-        public void reduce(Text key, Iterable<Text> values,
+        public void reduce(Text key, Iterable<NetCDFArrayWritable> values,
                            Context context)
                 throws IOException, InterruptedException {
 
@@ -118,8 +118,8 @@ public class NetCDFTranspose {
             for( Text value : values ){
                 String valueString = value.toString();
                 String[] valueParts = valueString.split(",");
-                Int timeIndex = Integer.valueOf(valueParts[0]);
-                Int lonIndex = Integer.valueOf(valueParts[1]);
+                int timeIndex = Integer.valueOf(valueParts[0]);
+                int lonIndex = Integer.valueOf(valueParts[1]);
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
                         +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]);
                 fw[timeIndex*timeDim+lonDim] = new FloatWritable(Float.valueOf(valueParts[2]));
