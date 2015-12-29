@@ -43,7 +43,6 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] End!" );
 
-
         }
 
         public synchronized void close(TaskAttemptContext context)
@@ -58,6 +57,11 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
         Configuration conf = job.getConfiguration();
         Path outputPath = getOutputPath(job);
+
+        Path file = getDefaultWorkFile(job, null);
+
+        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] file path is: " + file.getName() );
+        System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output path is: " + outputPath.getName() );
 
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output file name is : " + outputPath.getName() );
         //System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] input file name is: " + conf.get(NetCDFOutputFormat.NETCDF_INPUT_PATH) );
