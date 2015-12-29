@@ -197,7 +197,7 @@ public class NetCDFTranspose {
         job.setOutputValueClass(NetCDFArrayWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormat.class);
-        //job.setNumReduceTasks(1);
+        job.setNumReduceTasks(2);
         String singleInput = otherArgs[0];
         conf.set( NetCDFOutputFormat.NETCDF_INPUT_PATH, singleInput );
 
