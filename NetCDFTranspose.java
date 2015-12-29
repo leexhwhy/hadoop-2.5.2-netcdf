@@ -207,6 +207,8 @@ public class NetCDFTranspose {
         //job.setCombinerClass(Reducer.class);
         job.setReducerClass(MergeChunkReducer.class);
         job.setOutputKeyClass(Text.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(Text.class);
         job.setOutputValueClass(NetCDFArrayWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormat.class);
