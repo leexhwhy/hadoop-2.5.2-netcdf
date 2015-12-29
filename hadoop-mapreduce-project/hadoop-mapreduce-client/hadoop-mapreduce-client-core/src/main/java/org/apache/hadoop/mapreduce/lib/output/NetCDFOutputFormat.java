@@ -96,10 +96,10 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
 
 
-                List<Dimension> time_bnds_dim = new ArrayList<>();
-                List<Dimension> lat_bnds_dim = new ArrayList<>();
-                List<Dimension> lon_bnds_dim = new ArrayList<>();
-                List<Dimension> rsut_dim = new ArrayList<>();
+                List<Dimension> time_bnds_dim = new ArrayList<Dimension>();
+                List<Dimension> lat_bnds_dim = new ArrayList<Dimension>();
+                List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
+                List<Dimension> rsut_dim = new ArrayList<Dimension>();
 
                 time_bnds_dim.add(timeDim);
                 time_bnds_dim.add(bndDim);
