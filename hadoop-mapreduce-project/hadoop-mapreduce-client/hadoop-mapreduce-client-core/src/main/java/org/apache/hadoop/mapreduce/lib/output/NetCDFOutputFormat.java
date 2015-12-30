@@ -58,6 +58,8 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             FloatWritable[] records = (FloatWritable[])((org.apache.hadoop.io.NetCDFArrayWritable)value).toArray();
 
+            System.out.println( "[SAMAN][NetCDFRecordWriter][Write] records length is: " + records.length );
+
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
             String currentLat = keySplitted[0];

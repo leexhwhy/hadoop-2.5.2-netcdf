@@ -95,8 +95,8 @@ public class NetCDFTranspose {
             int latDim = Integer.valueOf(dimensions[2]);
             int lonDim = Integer.valueOf(dimensions[3]);
 
-            //System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
-            //        "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
+            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
+                    "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
 
             FloatWritable[] fw = new FloatWritable[timeDim*lonDim];
 
