@@ -240,6 +240,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 for( int j = 0; j < vtime.getSize(); j++ ) {
                     for (int k = 0; k < vlon.getSize(); k++) {
                         try{
+                            System.out.println( "[SAMAN][NetCDFOutputFormat][Write] idx.set(0,"+j+","+k+")" );
                             idx3.set(0, j, k);
                             dataRsut.setFloat( idx3, records[j*Integer.valueOf(timeDimSize)+k].get() );
                         }catch( Exception e ){
