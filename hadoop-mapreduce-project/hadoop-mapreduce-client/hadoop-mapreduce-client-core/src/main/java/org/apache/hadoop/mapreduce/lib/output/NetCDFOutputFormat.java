@@ -230,7 +230,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                     for (int k = 0; k < vlon.getSize(); k++) {
                         try{
                             idx3.set(1, j, k);
-                            dataRsut.setFloat( idx3, records[j*vtime.getSize()+k].get() );
+                            dataRsut.setFloat( idx3, Float.valueOf(records[j*vtime.getSize()+k].get()) );
                         }catch( Exception e ){
                             System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage() );
                         }
