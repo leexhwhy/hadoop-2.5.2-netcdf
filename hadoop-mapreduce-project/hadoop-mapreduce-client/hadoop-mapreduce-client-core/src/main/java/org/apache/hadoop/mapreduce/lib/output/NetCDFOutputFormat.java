@@ -55,7 +55,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] Beginning!" );
 
-            FloatWritable[] records = (FloatWritable[]) value.toArray();
+            FloatWritable[] records = (FloatWritable[])((NetCDFArrayWritable)value).toArray();
 
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
