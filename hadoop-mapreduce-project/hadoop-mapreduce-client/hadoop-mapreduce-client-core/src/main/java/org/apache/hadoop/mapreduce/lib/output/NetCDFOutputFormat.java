@@ -58,6 +58,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             FloatWritable[] records = (FloatWritable[])((org.apache.hadoop.io.NetCDFArrayWritable)value).toArray();
 
+
             System.out.println( "[SAMAN][NetCDFRecordWriter][Write] records length is: " + records.length );
 
             String keyString = key.toString();
@@ -272,6 +273,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             } catch (Exception e){
                 System.out.println( "[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage() );
+                throw new IOException(e);
             }
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] End!" );
