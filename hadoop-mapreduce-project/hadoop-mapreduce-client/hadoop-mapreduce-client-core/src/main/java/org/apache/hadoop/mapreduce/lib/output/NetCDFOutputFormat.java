@@ -6,6 +6,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.NetCDFArrayWritable;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import ucar.ma2.*;
@@ -55,7 +56,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] Beginning!" );
 
-            FloatWritable[] records = (FloatWritable[])((NetCDFArrayWritable)value).toArray();
+            FloatWritable[] records = (FloatWritable[])((org.apache.hadoop.io.NetCDFArrayWritable)value).toArray();
 
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
