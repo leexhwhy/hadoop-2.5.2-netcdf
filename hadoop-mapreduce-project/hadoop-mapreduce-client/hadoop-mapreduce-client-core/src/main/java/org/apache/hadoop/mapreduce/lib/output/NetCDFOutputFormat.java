@@ -243,6 +243,9 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                             System.out.println( "[SAMAN][NetCDFOutputFormat][Write] before idx.set(0,"+j+","+k+")" );
                             idx3.set(0, j, k);
                             System.out.println( "[SAMAN][NetCDFOutputFormat][Write] after idx.set(0,"+j+","+k+")" );
+                            System.out.println( "[SAMAN][NetCDFOutputFormat][Write] idx3 is: " + idx3 );
+                            System.out.println( "[SAMAN][NetCDFOutputFormat][Write] value is: "
+                                    + records[j*Integer.valueOf(timeDimSize)+k].get() );
                             dataRsut.setFloat( idx3, records[j*Integer.valueOf(timeDimSize)+k].get() );
                             System.out.println( "[SAMAN][NetCDFOutputFormat][Write] after dataRsut.setFloat(..)" );
                         }catch( Exception e ){
