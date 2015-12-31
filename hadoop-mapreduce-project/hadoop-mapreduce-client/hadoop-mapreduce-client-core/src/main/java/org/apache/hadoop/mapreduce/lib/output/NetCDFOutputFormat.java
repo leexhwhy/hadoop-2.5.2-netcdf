@@ -182,12 +182,12 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 outputFile.addGroupAttribute(null, new Attribute("modeling_realm", "atmos"));
                 outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
 
-                //ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
+                ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before DataLat;" );
                 Array dataLat = Array.factory(DataType.DOUBLE, new int[]{1});
                 int[] shape;
                 //for( int i = 0; i < shape[0]; i++ ){
-                dataLat.setDouble(0, Double.valueOf(currentLat));
+                dataLat.setDouble(0, Double.valueOf(latArray.get(currentLat)));
                 //}
 
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;" );
