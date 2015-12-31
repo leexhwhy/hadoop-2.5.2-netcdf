@@ -99,7 +99,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                         vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
 
                 //Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
-                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before Simensions;" );
+                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before Dimensions;" );
                 Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), 1);
                 Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
                 Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
@@ -122,7 +122,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 rsut_dim.add(timeDim);
                 rsut_dim.add(lonDim);
 
-                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before Variables;" );
+                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before Variables, with vlat Dimension string: " + vlat.getDimensionsString() );
                 Variable vlatNew = outputFile.addVariable(null, vlat.getShortName(), vlat.getDataType(), vlat.getDimensionsString());
                 Variable vlatbndsNew = outputFile.addVariable(null, vlat_bnds.getShortName(), vlat_bnds.getDataType(), lat_bnds_dim);
                 Variable vtimeNew = outputFile.addVariable(null, vtime.getShortName(), vtime.getDataType(), vtime.getDimensionsString());
