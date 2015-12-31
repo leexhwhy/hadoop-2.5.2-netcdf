@@ -100,14 +100,13 @@ public class NetCDFTranspose {
 
             FloatWritable[] fw = new FloatWritable[timeDim*lonDim];
 
-
             for( Text value : values ){
                 String valueString = value.toString();
                 String[] valueParts = valueString.split(",");
                 int timeIndex = Integer.valueOf(valueParts[0]);
                 int lonIndex = Integer.valueOf(valueParts[1]);
-                //System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
-                //        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]);
+                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
+                        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]);
                 fw[timeIndex*timeDim+lonDim] = new FloatWritable(Float.valueOf(valueParts[2]));
             }
 
