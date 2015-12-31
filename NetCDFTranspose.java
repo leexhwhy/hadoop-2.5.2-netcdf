@@ -107,7 +107,7 @@ public class NetCDFTranspose {
                 int lonIndex = Integer.valueOf(valueParts[1]);
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
                         +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]
-                        +", and fw index of " + (timeIndex*timeDim+lonIndex);
+                        +", and fw index of " + (timeIndex*timeDim+lonIndex));
                 fw[timeIndex*timeDim+lonIndex] = new FloatWritable(Float.valueOf(valueParts[2]));
             }
 
