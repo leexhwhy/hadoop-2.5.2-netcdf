@@ -187,7 +187,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 Array dataLat = Array.factory(DataType.DOUBLE, new int[]{1});
                 int[] shape;
                 //for( int i = 0; i < shape[0]; i++ ){
-                dataLat.setDouble(0, Double.valueOf(latArray.get(currentLat)));
+                dataLat.setDouble(0, Double.valueOf(latArray.get(Integer.valueOf(currentLat))));
                 //}
 
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;" );
