@@ -60,7 +60,7 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     }
   }
   
-  public static class Reducer
+  public static class ReducerMax
        extends Reducer<Text,FloatWritable,Text,FloatWritable> {
     private ArrayList<Float> temperatureList = new ArrayList<Float>();
 
@@ -115,8 +115,8 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     Job job = new Job(conf, "NetCDF");
     job.setJarByClass(NetCDF.class);
     job.setMapperClass(VariableMapper.class);
-    job.setCombinerClass(Reducer.class);
-    job.setReducerClass(Reducer.class);
+    job.setCombinerClass(ReducerMax.class);
+    job.setReducerClass(ReducerMax.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(FloatWritable.class);
     job.setInputFormatClass(NetCDFInputFormat.class);
