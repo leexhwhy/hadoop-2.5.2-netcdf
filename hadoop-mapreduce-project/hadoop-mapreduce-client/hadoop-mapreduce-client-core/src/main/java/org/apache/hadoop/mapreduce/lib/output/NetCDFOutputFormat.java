@@ -77,7 +77,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             // Need to be taken out of being static.
             String fileName = "hdfs://master:9000/rsut";
-            String outputFileName = "hdfs://master:9000/rsutout/lat-"+currentLat;
+            String outputFileName = "/home/saman/rsutout/lat-"+currentLat;
             NetcdfFile dataFile = null;
             NetcdfFileWriter outputFile = null;
 
@@ -198,9 +198,9 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 //shape = dataLatBnds.getShape();
                 Index2D idx = new Index2D(new int[]{1, 2});
                 idx.set(0,0);
-                dataLatBnds.setDouble(idx, latBndsArray.get(0,0));
+                dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentLat),0));
                 idx.set(0,1);
-                dataLatBnds.setDouble(idx, latBndsArray.get(0,1));
+                dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentLat),1));
 
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] Before DataTime;" );
                 ArrayDouble.D1 timeArray = (ArrayDouble.D1) vtime.read();
@@ -275,6 +275,8 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 outputFile.write(vlonbndsNew, dataLonBnds);
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
+
+                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path+"/"+currentLat));
 
             } catch (Exception e){
                 System.out.println( "[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage() );
