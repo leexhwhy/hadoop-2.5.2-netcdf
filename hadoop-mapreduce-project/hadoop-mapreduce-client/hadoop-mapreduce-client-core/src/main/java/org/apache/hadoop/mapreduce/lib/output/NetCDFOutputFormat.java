@@ -77,7 +77,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
 
             // Need to be taken out of being static.
             String fileName = "hdfs://master:9000/rsut";
-            String outputFileName = "/home/saman/rsutout/lat-"+currentLat;
+            String outputFileName = "/home/saman/lat-"+currentLat+".nc";
             NetcdfFile dataFile = null;
             NetcdfFileWriter outputFile = null;
 
