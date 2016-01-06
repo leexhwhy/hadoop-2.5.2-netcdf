@@ -71,28 +71,28 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
             int blockSize = 128*1024*1024;
             int chunkSize = Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)*4;
             int numChunksPerKey = (blockSize/chunkSize);
-            boolean isBreak = false;
-            for( int i = 0; i < numChunksPerKey; i++ ){
-                for( int j = 0; j < Integer.valueOf(timeDimSize); j++ ){
-                    for( int k = 0; k < Integer.valueOf(lonDimSize); k++ ){
-                        if( records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k] == null )
-                            continue;
+            //boolean isBreak = false;
+            //for( int i = 0; i < numChunksPerKey; i++ ){
+            //    for( int j = 0; j < Integer.valueOf(timeDimSize); j++ ){
+            //        for( int k = 0; k < Integer.valueOf(lonDimSize); k++ ){
+            //            if( records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k] == null )
+            //                continue;
                         //if( i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k >= records.length ) {
                         //    isBreak = true;
                         //    break;
                         //}
-                        System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] ("+(i+Integer.valueOf(currentCumulativeLat)*chunkSize)+","+j+","+k+")="+records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k].get() );
-                    }
-                    if( isBreak == true )
-                        break;
-                }
-                if( isBreak == true )
-                    break;
-            }
+            //            System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] ("+(i+Integer.valueOf(currentCumulativeLat)*chunkSize)+","+j+","+k+")="+records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k].get() );
+            //        }
+            //        if( isBreak == true )
+            //            break;
+            //    }
+            //    if( isBreak == true )
+            //       break;
+            //}
 
             int latIndexesSize = ((Integer.valueOf(currentCumulativeLat)+1)*numChunksPerKey <= Integer.valueOf(timeDimSize))
-                    ? ( Integer.valueOf(timeDimSize)-(Integer.valueOf(currentCumulativeLat))*numChunksPerKey )
-                    : ( numChunksPerKey );
+                    ? ( numChunksPerKey )
+                    : ( Integer.valueOf(timeDimSize)-(Integer.valueOf(currentCumulativeLat))*numChunksPerKey );
 
             /* Writing partial NetCDF file into the temporary file */
 
@@ -306,7 +306,7 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                     outputFile.write(vrsutNew, dataRsut);
                     outputFile.close();
 
-                    _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/" + currentLat));
+                    _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/" + currentCumulativeLat));
 
                 } catch (Exception e) {
                     System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());
