@@ -125,9 +125,9 @@ public class NetCDFTransposeCompact {
                 latIndex = latIndex - ((int)(latIndex/numChunksPerKey))*numChunksPerKey;
                 int timeIndex = Integer.valueOf(valueParts[1]);
                 int lonIndex = Integer.valueOf(valueParts[2]);
-                System.out.println( "[SAMAN][NetCDFTransposeCompact][Reducer] set index("+timeIndex
-                        +","+latIndex+","+lonIndex+") with value="+valueParts[3]
-                        +", and fw index of " + (latIndex*timeDim*lonDim+timeIndex*lonDim+lonIndex));
+                //System.out.println( "[SAMAN][NetCDFTransposeCompact][Reducer] set index("+timeIndex
+                //        +","+latIndex+","+lonIndex+") with value="+valueParts[3]
+                //        +", and fw index of " + (latIndex*timeDim*lonDim+timeIndex*lonDim+lonIndex));
                 fw[latIndex*timeDim*lonDim+timeIndex*lonDim+lonIndex] = new FloatWritable(Float.valueOf(valueParts[3]));
             }
 
