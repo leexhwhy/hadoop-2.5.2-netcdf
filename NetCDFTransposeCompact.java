@@ -109,7 +109,7 @@ public class NetCDFTransposeCompact {
             int lonDim = Integer.valueOf(dimensions[3]);
 
             float chunkSize = ((float)(((timeDim*lonDim*4)/1024)/1024));
-            int numChunksPerKey = blockSize / chunkSize;
+            int numChunksPerKey = (int)(blockSize / chunkSize);
 
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
                     "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
