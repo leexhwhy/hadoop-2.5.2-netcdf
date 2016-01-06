@@ -75,10 +75,12 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
             for( int i = 0; i < numChunksPerKey; i++ ){
                 for( int j = 0; j < Integer.valueOf(timeDimSize); j++ ){
                     for( int k = 0; k < Integer.valueOf(lonDimSize); k++ ){
-                        if( i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k >= records.length ) {
-                            isBreak = true;
-                            break;
-                        }
+                        if( records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k] == null )
+                            continue;
+                        //if( i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k >= records.length ) {
+                        //    isBreak = true;
+                        //    break;
+                        //}
                         System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] ("+(i+Integer.valueOf(currentCumulativeLat)*chunkSize)+","+j+","+k+")="+records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k].get() );
                     }
                     if( isBreak == true )

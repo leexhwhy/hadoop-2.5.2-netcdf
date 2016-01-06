@@ -69,9 +69,9 @@ public class NetCDFTransposeCompact {
             //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
 
             for( int i = 0; i < latSize; i++ ){
+                System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] key="+(i/numChunksPerKey) );
                 for( int j = 0; j < lonSize; j++ ){
                     int index = i*lonSize+j+3;
-                    //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] key="+(i/numChunksPerKey) );
                     context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize),
                             new Text(i+","+key+","+j+","+records[index].get()) );
                 }
