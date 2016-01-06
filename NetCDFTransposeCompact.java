@@ -39,8 +39,8 @@ import org.apache.hadoop.util.ToolRunner;
 import ucar.ma2.*;
 import ucar.nc2.*;
 
-public class NetCDFTranspose {
-    private static final Log LOG = LogFactory.getLog(NetCDFTranspose.class);
+public class NetCDFTransposeCompact {
+    private static final Log LOG = LogFactory.getLog(NetCDFTransposeCompact.class);
 
     public static class VariableMapper
             extends Mapper<Text, NetCDFArrayWritable, Text, Text> {
@@ -49,6 +49,9 @@ public class NetCDFTranspose {
         @Override
         public void map(Text key, NetCDFArrayWritable value, Context context )
                 throws IOException, InterruptedException {
+
+            int blockSize = 128*1024*1024;
+
             FloatWritable[] records = (FloatWritable[]) value.toArray();
 
             int timeSize = (int)(records[0].get());
@@ -59,11 +62,17 @@ public class NetCDFTranspose {
 
             //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
+            float chunkSize = ((float)(((timeSize*lonSize*4)/1024)/1024));
+            int numChunksPerKey = blockSize / chunkSize;
+
+            System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
+
             for( int i = 0; i < latSize; i++ ){
                 for( int j = 0; j < lonSize; j++ ){
                     int index = i*lonSize+j+3;
-                    context.write( new Text(Integer.toString(i)+","+timeSize+","+latSize+","+lonSize),
-                            new Text(key+","+j+","+records[index].get()) );
+                    System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] key="+(i/numChunksPerKey) );
+                    context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize),
+                            new Text(i+","+key+","+j+","+records[index].get()) );
                 }
             }
 
@@ -79,6 +88,8 @@ public class NetCDFTranspose {
                            Context context)
                 throws IOException, InterruptedException {
 
+            int blockSize = 128*1024*1024;
+
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
             //for( Text value : values ){
             //    String stringValue = value.toString();
@@ -91,24 +102,32 @@ public class NetCDFTranspose {
 
             String keyString = key.toString();
             String[] dimensions = keyString.split(",");
+            int accumulatedLatIndex = Integer.valueOf(dimensions[0]);
             int timeDim = Integer.valueOf(dimensions[1]);
             int latDim = Integer.valueOf(dimensions[2]);
             int lonDim = Integer.valueOf(dimensions[3]);
 
+            float chunkSize = ((float)(((timeDim*lonDim*4)/1024)/1024));
+            int numChunksPerKey = blockSize / chunkSize;
+
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
                     "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
 
-            FloatWritable[] fw = new FloatWritable[timeDim*lonDim];
+            System.out.println( "[SAMAN][NetCDFTranposeCompact][reduce] blockSize="+blockSize+",chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
+
+            FloatWritable[] fw = new FloatWritable[numChunksPerKey*timeDim*lonDim];
 
             for( Text value : values ){
                 String valueString = value.toString();
                 String[] valueParts = valueString.split(",");
-                int timeIndex = Integer.valueOf(valueParts[0]);
-                int lonIndex = Integer.valueOf(valueParts[1]);
+                int latIndex = Integer.valueOf(valueParts[0]);
+                latIndex = latIndex - ((int)(latIndex/numChunksPerKey))*numChunksPerKey;
+                int timeIndex = Integer.valueOf(valueParts[1]);
+                int lonIndex = Integer.valueOf(valueParts[2]);
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
-                        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[2]
+                        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[3]
                         +", and fw index of " + (timeIndex*timeDim+lonIndex));
-                fw[timeIndex*lonDim+lonIndex] = new FloatWritable(Float.valueOf(valueParts[2]));
+                fw[latIndex*timeDim*lonDim+timeIndex*lonDim+lonIndex] = new FloatWritable(Float.valueOf(valueParts[3]));
             }
 
             result.set( fw );
@@ -196,7 +215,7 @@ public class NetCDFTranspose {
         job.setMapOutputValueClass(Text.class);
         job.setOutputValueClass(NetCDFArrayWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
-        job.setOutputFormatClass(NetCDFOutputFormat.class);
+        job.setOutputFormatClass(NetCDFOutputFormatCompact.class);
         job.setNumReduceTasks(2);
         String singleInput = otherArgs[0];
         conf.set( NetCDFOutputFormat.NETCDF_INPUT_PATH, singleInput );

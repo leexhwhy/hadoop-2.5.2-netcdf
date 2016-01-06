@@ -6,21 +6,17 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.NetCDFArrayWritable;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import ucar.ma2.*;
 import ucar.nc2.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by saman on 12/21/15.
  */
-public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFormat<Text, NetCDFArrayWritable> {
+public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOutputFormat<Text, NetCDFArrayWritable> {
 
     public static final String NETCDF_INPUT_PATH = "hadoop.netcdf.outputformat.input";
     public static final String NETCDF_LOCAL_TEMPFILE_PREFIX = "hadoop.netcdfoutputformat.tempfileprefix";
@@ -28,7 +24,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
     private static final Log LOG = LogFactory.getLog(NetCDFOutputFormat.class);
 
 
-    public NetCDFOutputFormat(){
+    public NetCDFOutputFormatCompact(){
         super();
     }
 
@@ -56,25 +52,37 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] Beginning!" );
 
             FloatWritable[] records = (FloatWritable[])((org.apache.hadoop.io.NetCDFArrayWritable)value).toArray();
-            for( int i = 0; i < 10; i++ ){
-                System.out.println( "[SAMAN][NetCDFRecordWriter][Write] Records["+i+"]="+records[i] );
-            }
+            //for( int i = 0; i < 10; i++ ){
+            //    System.out.println( "[SAMAN][NetCDFRecordWriter][Write] Records["+i+"]="+records[i] );
+            //}
 
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][Write] records length is: " + records.length );
 
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
-            String currentLat = keySplitted[0];
+            String currentCumulativeLat = keySplitted[0];
             String timeDimSize = keySplitted[1];
             String latDimSize = keySplitted[2];
             String lonDimSize = keySplitted[3];
             System.out.println( "Lat is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
                     +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
 
+            int blockSize = 128*1024*1024;
+            float chunkSize = (float)(((Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)*4)/1024)/1024);
+            int numChunksPerKey = (int)(blockSize/chunkSize);
+            for( int i = 0; i < numChunksPerKey; i++ ){
+                for( int j = 0; j < Integer.valueOf(timeDimSize); j++ ){
+                    for( int k = 0; k < Integer.valueOf(lonDimSize); k++ ){
+                        System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] ()="+records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k].get() );
+                    }
+                }
+            }
+
             /* Writing partial NetCDF file into the temporary file */
 
             // Need to be taken out of being static.
+            /*
             String fileName = "hdfs://master:9000/rsut";
             String outputFileName = "/home/saman/lat-"+currentLat+".nc";
             NetcdfFile dataFile = null;
@@ -281,6 +289,7 @@ public class NetCDFOutputFormat<Text, NetCDFArrayWritable> extends FileOutputFor
                 System.out.println( "[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage() );
                 throw new IOException(e);
             }
+            */
 
             System.out.println( "[SAMAN][NetCDFRecordWriter][write] End!" );
 
