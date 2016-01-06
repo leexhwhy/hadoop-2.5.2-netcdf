@@ -97,6 +97,8 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                     ? ( numChunksPerKey )
                     : ( Integer.valueOf(timeDimSize)-(Integer.valueOf(currentCumulativeLat))*numChunksPerKey );
 
+            System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] latIndexesSize="+latIndexesSize );
+
             /* Writing partial NetCDF file into the temporary file */
 
             // Need to be taken out of being static.
@@ -214,7 +216,8 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                     Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
                     int[] shape;
                     for( int i = 0; i < latIndexesSize; i++ ){
-                        dataLat.setDouble(i, Double.valueOf(latArray.get(Integer.valueOf(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i))));
+                        System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] getting lat: " + (Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i) );
+                        dataLat.setDouble(i, Double.valueOf(latArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i)));
                     }
 
                     System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;");
