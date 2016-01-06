@@ -12,6 +12,9 @@ import ucar.ma2.*;
 import ucar.nc2.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by saman on 12/21/15.
@@ -21,21 +24,21 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
     public static final String NETCDF_INPUT_PATH = "hadoop.netcdf.outputformat.input";
     public static final String NETCDF_LOCAL_TEMPFILE_PREFIX = "hadoop.netcdfoutputformat.tempfileprefix";
 
-    private static final Log LOG = LogFactory.getLog(NetCDFOutputFormat.class);
+    private static final Log LOG = LogFactory.getLog(NetCDFOutputFormatCompact.class);
 
 
     public NetCDFOutputFormatCompact(){
         super();
     }
 
-    protected static class NetCDFRecordWriter<Text, NetCDFArrayWritable> extends RecordWriter<Text, NetCDFArrayWritable> {
+    protected static class NetCDFRecordWriterCompact<Text, NetCDFArrayWritable> extends RecordWriter<Text, NetCDFArrayWritable> {
 
         private FileSystem _fs;
         private TaskAttemptContext _job;
         private Path _output_path;
         private String netCDFLocalTempPrefix;
 
-        public NetCDFRecordWriter( FileSystem _fs, TaskAttemptContext _job ) {
+        public NetCDFRecordWriterCompact( FileSystem _fs, TaskAttemptContext _job ) {
 
             Configuration conf = _job.getConfiguration();
             this._fs = _fs;
@@ -333,7 +336,7 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
 
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output path is: " + outputPath.getName() );
 
-        return new NetCDFRecordWriter<Text, NetCDFArrayWritable>( _fs, job );
+        return new NetCDFRecordWriterCompact<Text, NetCDFArrayWritable>( _fs, job );
 
     }
 
