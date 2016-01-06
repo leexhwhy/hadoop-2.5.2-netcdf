@@ -27,6 +27,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormatWithDimensions;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class NetCDFTransposeCompact {
             //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
             float chunkSize = ((float)(((timeSize*lonSize*4)/1024)/1024));
-            int numChunksPerKey = blockSize / chunkSize;
+            int numChunksPerKey = (int)(blockSize / chunkSize);
 
             System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
 
@@ -206,7 +207,7 @@ public class NetCDFTransposeCompact {
             numPriority=1;
         }
         Job job = new Job(conf, "NetCDFTranspose");
-        job.setJarByClass(NetCDFTranspose.class);
+        job.setJarByClass(NetCDFTransposeCompact.class);
         job.setMapperClass(VariableMapper.class);
         //job.setCombinerClass(Reducer.class);
         job.setReducerClass(MergeChunkReducer.class);
