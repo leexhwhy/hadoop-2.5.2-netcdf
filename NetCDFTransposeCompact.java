@@ -66,12 +66,12 @@ public class NetCDFTransposeCompact {
             int chunkSize = (timeSize*lonSize*4);
             int numChunksPerKey = (int)(blockSize / chunkSize);
 
-            System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
+            //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
 
             for( int i = 0; i < latSize; i++ ){
                 for( int j = 0; j < lonSize; j++ ){
                     int index = i*lonSize+j+3;
-                    System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] key="+(i/numChunksPerKey) );
+                    //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] key="+(i/numChunksPerKey) );
                     context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize),
                             new Text(i+","+key+","+j+","+records[index].get()) );
                 }
@@ -125,9 +125,9 @@ public class NetCDFTransposeCompact {
                 latIndex = latIndex - ((int)(latIndex/numChunksPerKey))*numChunksPerKey;
                 int timeIndex = Integer.valueOf(valueParts[1]);
                 int lonIndex = Integer.valueOf(valueParts[2]);
-                System.out.println( "[SAMAN][NetCDFTranspose][Reducer] set index("+timeIndex
-                        +","+Integer.valueOf(dimensions[0])+","+lonIndex+") with value="+valueParts[3]
-                        +", and fw index of " + (timeIndex*timeDim+lonIndex));
+                System.out.println( "[SAMAN][NetCDFTransposeCompact][Reducer] set index("+timeIndex
+                        +","+latIndex+","+lonIndex+") with value="+valueParts[3]
+                        +", and fw index of " + (latIndex*timeDim*lonDim+timeIndex*lonDim+lonIndex));
                 fw[latIndex*timeDim*lonDim+timeIndex*lonDim+lonIndex] = new FloatWritable(Float.valueOf(valueParts[3]));
             }
 

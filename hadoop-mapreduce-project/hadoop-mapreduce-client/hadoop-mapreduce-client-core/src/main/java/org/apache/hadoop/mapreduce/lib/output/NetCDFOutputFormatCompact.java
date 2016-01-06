@@ -74,7 +74,7 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
             for( int i = 0; i < numChunksPerKey; i++ ){
                 for( int j = 0; j < Integer.valueOf(timeDimSize); j++ ){
                     for( int k = 0; k < Integer.valueOf(lonDimSize); k++ ){
-                        System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] ()="+records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k].get() );
+                        System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] ("+(i+Integer.valueOf(currentCumulativeLat)*chunkSize)+","+j+","+k+")="+records[i*Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)+j*Integer.valueOf(lonDimSize)+k].get() );
                     }
                 }
             }
