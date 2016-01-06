@@ -69,8 +69,8 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                     +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
 
             int blockSize = 128*1024*1024;
-            float chunkSize = (float)(((float)(Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)*4)/1024.0)/1024.0);
-            int numChunksPerKey = (int)(blockSize/chunkSize);
+            int chunkSize = Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)*4;
+            int numChunksPerKey = (blockSize/chunkSize);
             for( int i = 0; i < numChunksPerKey; i++ ){
                 for( int j = 0; j < Integer.valueOf(timeDimSize); j++ ){
                     for( int k = 0; k < Integer.valueOf(lonDimSize); k++ ){
