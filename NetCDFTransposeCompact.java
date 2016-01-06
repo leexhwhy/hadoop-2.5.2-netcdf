@@ -63,7 +63,7 @@ public class NetCDFTransposeCompact {
 
             //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
 
-            float chunkSize = ((float)(((timeSize*lonSize*4)/1024)/1024));
+            float chunkSize = ((float)(((float)(timeSize*lonSize*4)/1024.0)/1024.0));
             int numChunksPerKey = (int)(blockSize / chunkSize);
 
             System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
@@ -108,7 +108,7 @@ public class NetCDFTransposeCompact {
             int latDim = Integer.valueOf(dimensions[2]);
             int lonDim = Integer.valueOf(dimensions[3]);
 
-            float chunkSize = ((float)(((timeDim*lonDim*4)/1024)/1024));
+            float chunkSize = ((float)(((float)(timeDim*lonDim*4)/1024.0)/1024.0));
             int numChunksPerKey = (int)(blockSize / chunkSize);
 
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
