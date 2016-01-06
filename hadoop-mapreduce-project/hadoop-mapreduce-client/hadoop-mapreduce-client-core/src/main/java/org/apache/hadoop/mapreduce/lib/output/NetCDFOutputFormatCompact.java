@@ -229,7 +229,7 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                     for (int i = 0; i < latIndexesSize; i++) {
                         for (int j = 0; j < shape[1]; j++) {
                             idx.set(i, j);
-                            dataTimeBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i, j));
+                            dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i, j));
                         }
                     }
 
