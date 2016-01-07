@@ -216,7 +216,7 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                     Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
                     int[] shape;
                     for( int i = 0; i < latIndexesSize; i++ ){
-                        System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] getting lat: " + (Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i) );
+                        //System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] getting lat: " + (Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i) );
                         dataLat.setDouble(i, Double.valueOf(latArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i)));
                     }
 
@@ -283,15 +283,15 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
                         for (int j = 0; j < vtime.getSize(); j++) {
                             for (int k = 0; k < vlon.getSize(); k++) {
                                 try {
-                                    System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
+                                    //System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
                                     idx3.set(i, j, k);
-                                    System.out.println("[SAMAN][NetCDFOutputFormat][Write] after idx.set("+i+"," + j + "," + k + ")");
-                                    System.out.println("[SAMAN][NetCDFOutputFormat][Write] idx3 is: " + idx3);
-                                    System.out.println("[SAMAN][NetCDFOutputFormat][Write] index to get: " + (j * Integer.valueOf(lonDimSize) + k));
-                                    System.out.println("[SAMAN][NetCDFOutputFormat][Write] value is: "
-                                            + records[j * Integer.valueOf(lonDimSize) + k].get());
+                                    //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after idx.set("+i+"," + j + "," + k + ")");
+                                    //System.out.println("[SAMAN][NetCDFOutputFormat][Write] idx3 is: " + idx3);
+                                    //System.out.println("[SAMAN][NetCDFOutputFormat][Write] index to get: " + (j * Integer.valueOf(lonDimSize) + k));
+                                    //System.out.println("[SAMAN][NetCDFOutputFormat][Write] value is: "
+                                    //        + records[j * Integer.valueOf(lonDimSize) + k].get());
                                     dataRsut.setFloat(idx3, records[i * Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize) + j * Integer.valueOf(lonDimSize) + k].get());
-                                    System.out.println("[SAMAN][NetCDFOutputFormat][Write] after dataRsut.setFloat(..)");
+                                    //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after dataRsut.setFloat(..)");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     System.out.println("[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage());
