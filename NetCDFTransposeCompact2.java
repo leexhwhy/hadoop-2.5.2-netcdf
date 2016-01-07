@@ -76,7 +76,7 @@ public class NetCDFTransposeCompact2 {
                 result[1] = new FloatWritable(Float.valueOf(key.toString()));
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][Map] key="+(i/numChunksPerKey) );
                 java.lang.System.arraycopy(records, i*lonSize, result, 2, lonSize);
-                resultNetCDF.set(result);
+                resultNetCDF.set(resultNetCDF);
                 context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize), resultNetCDF );
                 //for( int j = 0; j < lonSize; j++ ){
                 //    int index = i*lonSize+j+3;
