@@ -215,8 +215,8 @@ public class NetCDFTransposeCompact2 {
         //job.setCombinerClass(Reducer.class);
         job.setReducerClass(MergeChunkReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setMapOutputKeyClass(NetCDFArrayWritable.class);
-        job.setMapOutputValueClass(Text.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(NetCDFArrayWritable.class);
         job.setOutputValueClass(NetCDFArrayWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormatCompact.class);
