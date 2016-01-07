@@ -1,6 +1,7 @@
 package saman;
 
 import java.io.IOException;
+import java.lang.*;
 import java.lang.Float;
 import java.lang.Integer;
 import java.lang.InterruptedException;
@@ -40,11 +41,11 @@ import org.apache.hadoop.util.ToolRunner;
 import ucar.ma2.*;
 import ucar.nc2.*;
 
-public class NetCDFTransposeCompact {
-    private static final Log LOG = LogFactory.getLog(NetCDFTransposeCompact.class);
+public class NetCDFTransposeCompact2 {
+    private static final Log LOG = LogFactory.getLog(NetCDFTransposeCompact2.class);
 
     public static class VariableMapper
-            extends Mapper<Text, NetCDFArrayWritable, Text, Text> {
+            extends Mapper<Text, NetCDFArrayWritable, Text, NetCDFArrayWritable> {
 
 
         @Override
@@ -69,12 +70,19 @@ public class NetCDFTransposeCompact {
             //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
 
             for( int i = 0; i < latSize; i++ ){
-                System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] key="+(i/numChunksPerKey) );
-                for( int j = 0; j < lonSize; j++ ){
-                    int index = i*lonSize+j+3;
-                    context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize),
-                            new Text(i+","+key+","+j+","+records[index].get()) );
-                }
+                FloatWritable result = new FloatWritable[2+lonSize];
+                NetCDFArrayWritable resultNetCDF = new NetCDFArrayWritable();
+                result[0] = new FloatWritable(Float.valueOf(i));
+                result[1] = new FloatWritable(Float.valueOf(key));
+                System.out.println( "[SAMAN][NetCDFTransposeCompact2][Map] key="+(i/numChunksPerKey) );
+                java.lang.System.arraycopy(records, i*lonSize, result, 2, lonSize);
+                resultNetCDF.set(result);
+                context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize), resultNetCDF );
+                //for( int j = 0; j < lonSize; j++ ){
+                //    int index = i*lonSize+j+3;
+                //    context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize),
+                //            new Text(i+","+key+","+j+","+records[index].get()) );
+                //}
             }
 
         }
@@ -82,16 +90,16 @@ public class NetCDFTransposeCompact {
 
 
     public static class MergeChunkReducer
-            extends Reducer<Text,Text,Text,NetCDFArrayWritable> {
+            extends Reducer<Text,NetCDFArrayWritable,Text,NetCDFArrayWritable> {
 
         @Override
-        public void reduce(Text key, Iterable<Text> values,
+        public void reduce(Text key, Iterable<NetCDFArrayWritable> values,
                            Context context)
                 throws IOException, InterruptedException {
 
             int blockSize = 128*1024*1024;
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
+            System.out.println( "[SAMAN][NetCDFTranspose2][Reducer] Reducer Beginning!" );
             //for( Text value : values ){
             //    String stringValue = value.toString();
             //    String[] parts = stringValue.split(",");
@@ -111,11 +119,17 @@ public class NetCDFTransposeCompact {
             int chunkSize = (timeDim*lonDim*4);
             int numChunksPerKey = (int)(blockSize / chunkSize);
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " +
+            System.out.println( "[SAMAN][NetCDFTranspose2][Reducer] " +
                     "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
 
-            System.out.println( "[SAMAN][NetCDFTranposeCompact][reduce] blockSize="+blockSize+",chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
+            System.out.println("[SAMAN][NetCDFTranposeCompact2][reduce] blockSize=" + blockSize + ",chunkSize=" + chunkSize + ",numChunksPerKey=" + numChunksPerKey);
 
+            for( NetCDFArrayWritable array : values ){
+                FloatWritable[] records = (FloatWritable[]) value.toArray();
+                System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+records[0]+", timeIndex="+records[1] );
+            }
+
+            /*
             FloatWritable[] fw = new FloatWritable[numChunksPerKey*timeDim*lonDim];
 
             for( Text value : values ){
@@ -132,10 +146,10 @@ public class NetCDFTransposeCompact {
             }
 
             result.set( fw );
-
+            */
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
 
-            context.write( key, result );
+            //context.write( key, result );
 
 
         }
@@ -206,13 +220,13 @@ public class NetCDFTransposeCompact {
         {
             numPriority=1;
         }
-        Job job = new Job(conf, "NetCDFTransposeCompact");
-        job.setJarByClass(NetCDFTransposeCompact.class);
+        Job job = new Job(conf, "NetCDFTransposeCompact2");
+        job.setJarByClass(NetCDFTransposeCompact2.class);
         job.setMapperClass(VariableMapper.class);
         //job.setCombinerClass(Reducer.class);
         job.setReducerClass(MergeChunkReducer.class);
         job.setOutputKeyClass(Text.class);
-        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputKeyClass(NetCDFArrayWritable.class);
         job.setMapOutputValueClass(Text.class);
         job.setOutputValueClass(NetCDFArrayWritable.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
