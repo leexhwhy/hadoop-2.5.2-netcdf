@@ -73,7 +73,7 @@ public class NetCDFTransposeCompact2 {
                 FloatWritable[] result = new FloatWritable[2+lonSize];
                 NetCDFArrayWritable resultNetCDF = new NetCDFArrayWritable();
                 result[0] = new FloatWritable(Float.valueOf(i));
-                result[1] = new FloatWritable(Float.valueOf(key));
+                result[1] = new FloatWritable(key.toString());
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][Map] key="+(i/numChunksPerKey) );
                 java.lang.System.arraycopy(records, i*lonSize, result, 2, lonSize);
                 resultNetCDF.set(result);
