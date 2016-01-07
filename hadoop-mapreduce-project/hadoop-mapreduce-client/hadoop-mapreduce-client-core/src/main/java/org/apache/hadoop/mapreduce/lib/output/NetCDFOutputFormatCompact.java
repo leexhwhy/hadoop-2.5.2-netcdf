@@ -103,8 +103,8 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
 
             // Need to be taken out of being static.
 
-                String fileName = "hdfs://master:9000/rsut";
-                String outputFileName = "/home/saman/lat-" + currentCumulativeLat + ".nc";
+                String fileName = "hdfs://c3n2:9000/rsut";
+                String outputFileName = "/data/saman/lat-" + currentCumulativeLat + ".nc";
                 NetcdfFile dataFile = null;
                 NetcdfFileWriter outputFile = null;
 
