@@ -70,7 +70,7 @@ public class NetCDFTransposeCompact2 {
             //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
 
             for( int i = 0; i < latSize; i++ ){
-                FloatWritable result = new FloatWritable[2+lonSize];
+                FloatWritable[] result = new FloatWritable[2+lonSize];
                 NetCDFArrayWritable resultNetCDF = new NetCDFArrayWritable();
                 result[0] = new FloatWritable(Float.valueOf(i));
                 result[1] = new FloatWritable(Float.valueOf(key));
