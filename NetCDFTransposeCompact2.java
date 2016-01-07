@@ -125,7 +125,7 @@ public class NetCDFTransposeCompact2 {
             System.out.println("[SAMAN][NetCDFTranposeCompact2][reduce] blockSize=" + blockSize + ",chunkSize=" + chunkSize + ",numChunksPerKey=" + numChunksPerKey);
 
             for( NetCDFArrayWritable array : values ){
-                FloatWritable[] records = (FloatWritable[]) value.toArray();
+                FloatWritable[] records = (FloatWritable[]) values.toArray();
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+records[0]+", timeIndex="+records[1] );
             }
 
