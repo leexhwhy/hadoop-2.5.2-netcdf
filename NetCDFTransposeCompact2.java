@@ -60,14 +60,8 @@ public class NetCDFTransposeCompact2 {
             int latSize = (int)(records[1].get());
             int lonSize = (int)(records[2].get());
 
-            //System.out.println( "[SAMAN][NetCDFTranspose][Map] length is = " + records.length );
-
-            //System.out.println( "[SAMAN][NetCDFTranspose][Map] latSize="+latSize+",lonSize="+lonSize );
-
             int chunkSize = (timeSize*lonSize*4);
             int numChunksPerKey = (int)(blockSize / chunkSize);
-
-            //System.out.println( "[SAMAN][NetCDFTransposeCompact][Map] chunkSize="+chunkSize+",numChunksPerKey="+numChunksPerKey );
 
             for( int i = 0; i < latSize; i++ ){
                 FloatWritable[] result = new FloatWritable[2+lonSize];
@@ -76,13 +70,8 @@ public class NetCDFTransposeCompact2 {
                 result[1] = new FloatWritable(Float.valueOf(key.toString()));
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][Map] key="+(i/numChunksPerKey) );
                 java.lang.System.arraycopy(records, i*lonSize, result, 2, lonSize);
-                resultNetCDF.set(resultNetCDF);
+                resultNetCDF.set(result);
                 context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize), resultNetCDF );
-                //for( int j = 0; j < lonSize; j++ ){
-                //    int index = i*lonSize+j+3;
-                //    context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize),
-                //            new Text(i+","+key+","+j+","+records[index].get()) );
-                //}
             }
 
         }
