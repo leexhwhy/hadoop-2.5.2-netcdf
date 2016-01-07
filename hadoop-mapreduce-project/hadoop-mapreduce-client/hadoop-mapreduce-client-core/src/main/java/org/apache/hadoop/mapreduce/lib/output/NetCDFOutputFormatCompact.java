@@ -93,7 +93,7 @@ public class NetCDFOutputFormatCompact<Text, NetCDFArrayWritable> extends FileOu
             //       break;
             //}
 
-            int latIndexesSize = ((Integer.valueOf(currentCumulativeLat)+1)*numChunksPerKey <= Integer.valueOf(timeDimSize))
+            int latIndexesSize = ((Integer.valueOf(currentCumulativeLat)+1)*numChunksPerKey <= Integer.valueOf(latDimSize))
                     ? ( numChunksPerKey )
                     : ( Integer.valueOf(timeDimSize)-(Integer.valueOf(currentCumulativeLat))*numChunksPerKey );
 
