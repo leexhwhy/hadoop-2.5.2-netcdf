@@ -163,7 +163,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Attributes;");
-                List<Attribute> attributes = vtime.getAttributes();
+                java.util.List<Attribute> attributes = vtime.getAttributes();
                 Iterator itr = attributes.iterator();
                 while (itr.hasNext()) {
                     Attribute attribute = (Attribute) itr.next();
