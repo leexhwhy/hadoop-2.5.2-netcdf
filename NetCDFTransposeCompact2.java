@@ -124,7 +124,7 @@ public class NetCDFTransposeCompact2 {
                 listNetCDFArrayWritable.add(array);
             }
 
-            Collections.sort(listNetCDFArrayWritable);
+            //Collections.sort(listNetCDFArrayWritable);
 
             Iterator itr = listNetCDFArrayWritable.iterator();
             while( itr.hasNext() ){
