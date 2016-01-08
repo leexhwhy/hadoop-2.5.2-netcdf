@@ -118,9 +118,9 @@ public class NetCDFTransposeCompact2 {
 
             List listNetCDFArrayWritable = new LinkedList<NetCDFArrayWritable>();
 
-            Collections.sort(values);
-
-            for( NetCDFArrayWritable array : values ){
+            Iterator itr = values.iterator();
+            for( itr.hasNext() ){
+                NetCDFArrayWritable array = (NetCDFArrayWritable)itr.next();
                 //FloatWritable[] records = (FloatWritable[]) array.toArray();
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
                 listNetCDFArrayWritable.add(array);
@@ -128,7 +128,7 @@ public class NetCDFTransposeCompact2 {
 
             //Collections.sort(listNetCDFArrayWritable);
 
-            Iterator itr = listNetCDFArrayWritable.iterator();
+            itr = listNetCDFArrayWritable.iterator();
             while( itr.hasNext() ){
                 NetCDFArrayWritable array = (NetCDFArrayWritable)itr.next();
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
