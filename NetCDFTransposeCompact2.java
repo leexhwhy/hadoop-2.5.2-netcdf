@@ -116,11 +116,11 @@ public class NetCDFTransposeCompact2 {
 
             System.out.println("[SAMAN][NetCDFTranposeCompact2][reduce] blockSize=" + blockSize + ",chunkSize=" + chunkSize + ",numChunksPerKey=" + numChunksPerKey);
 
-            List listNetCDFArrayWritable = new LinkedList();
+            List listNetCDFArrayWritable = new LinkedList<NetCDFArrayWritable>();
 
             for( NetCDFArrayWritable array : values ){
                 //FloatWritable[] records = (FloatWritable[]) array.toArray();
-                //System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+records[0]+", timeIndex="+records[1] );
+                System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
                 listNetCDFArrayWritable.add(array);
             }
 
