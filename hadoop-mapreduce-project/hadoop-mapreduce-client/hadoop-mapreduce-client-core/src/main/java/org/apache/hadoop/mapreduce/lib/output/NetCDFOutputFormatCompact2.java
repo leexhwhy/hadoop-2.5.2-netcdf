@@ -336,7 +336,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
         }
     }
 
-    public RecordWriter<Text, NetCDFArrayWritable> getRecordWriter(TaskAttemptContext job) throws
+    public RecordWriter<Text, List> getRecordWriter(TaskAttemptContext job) throws
             IOException, InterruptedException {
 
         Configuration conf = job.getConfiguration();
@@ -345,7 +345,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output path is: " + outputPath.getName() );
 
-        return new NetCDFRecordWriterCompact2<Text, NetCDFArrayWritable>( _fs, job );
+        return new NetCDFRecordWriterCompact2<Text, List>( _fs, job );
 
     }
 
