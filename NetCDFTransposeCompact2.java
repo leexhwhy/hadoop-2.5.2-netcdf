@@ -82,7 +82,7 @@ public class NetCDFTransposeCompact2 {
 
 
     public static class MergeChunkReducer
-            extends Reducer<Text,NetCDFArrayWritable,Text,NetCDFArrayWritable> {
+            extends Reducer<Text,NetCDFArrayWritable,Text,List> {
 
         @Override
         public void reduce(Text key, Iterable<NetCDFArrayWritable> values,
@@ -155,6 +155,9 @@ public class NetCDFTransposeCompact2 {
 
             result.set( fw );
             */
+
+
+
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
 
             //context.write( key, result );
@@ -236,7 +239,7 @@ public class NetCDFTransposeCompact2 {
         job.setOutputKeyClass(Text.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(NetCDFArrayWritable.class);
-        job.setOutputValueClass(NetCDFArrayWritable.class);
+        job.setOutputValueClass(Key.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
         job.setOutputFormatClass(NetCDFOutputFormatCompact.class);
         job.setNumReduceTasks(2);
