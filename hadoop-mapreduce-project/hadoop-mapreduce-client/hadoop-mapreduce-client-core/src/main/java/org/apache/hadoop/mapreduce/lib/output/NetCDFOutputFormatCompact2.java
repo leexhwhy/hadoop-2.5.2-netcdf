@@ -137,10 +137,10 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before List Dimensions;");
-                List<Dimension> time_bnds_dim = new ArrayList<Dimension>();
-                List<Dimension> lat_bnds_dim = new ArrayList<Dimension>();
-                List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
-                List<Dimension> rsut_dim = new ArrayList<Dimension>();
+                java.util.List<Dimension> time_bnds_dim = new ArrayList<Dimension>();
+                java.util.List<Dimension> lat_bnds_dim = new ArrayList<Dimension>();
+                java.util.List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
+                java.util.List<Dimension> rsut_dim = new ArrayList<Dimension>();
 
                 time_bnds_dim.add(timeDim);
                 time_bnds_dim.add(bndDim);
