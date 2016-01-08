@@ -119,7 +119,7 @@ public class NetCDFTransposeCompact2 {
             List listNetCDFArrayWritable = new LinkedList<NetCDFArrayWritable>();
 
             Iterator itr = values.iterator();
-            for( itr.hasNext() ){
+            while( itr.hasNext() ){
                 NetCDFArrayWritable array = (NetCDFArrayWritable)itr.next();
                 //FloatWritable[] records = (FloatWritable[]) array.toArray();
                 System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
