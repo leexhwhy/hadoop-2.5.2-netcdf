@@ -6,9 +6,15 @@ import java.lang.Float;
 import java.lang.Integer;
 import java.lang.InterruptedException;
 import java.lang.Override;
-import java.util.List;
+import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 //import org.apache.hadoop.mapred.JobClient;
@@ -31,9 +37,6 @@ import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Arrays;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
@@ -108,14 +111,25 @@ public class NetCDFTransposeCompact2 {
             int chunkSize = (timeDim*lonDim*4);
             int numChunksPerKey = (int)(blockSize / chunkSize);
 
-            System.out.println( "[SAMAN][NetCDFTranspose2][Reducer] " +
-                    "timeDim="+timeDim+",latDim="+latDim+",lonDim="+lonDim);
+            System.out.println("[SAMAN][NetCDFTranspose2][Reducer] " +
+                    "timeDim=" + timeDim + ",latDim=" + latDim + ",lonDim=" + lonDim);
 
             System.out.println("[SAMAN][NetCDFTranposeCompact2][reduce] blockSize=" + blockSize + ",chunkSize=" + chunkSize + ",numChunksPerKey=" + numChunksPerKey);
 
+            List listNetCDFArrayWritable = new LinkedList();
+
             for( NetCDFArrayWritable array : values ){
-                FloatWritable[] records = (FloatWritable[]) array.toArray();
-                System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+records[0]+", timeIndex="+records[1] );
+                //FloatWritable[] records = (FloatWritable[]) array.toArray();
+                //System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+records[0]+", timeIndex="+records[1] );
+                listNetCDFArrayWritable.add(array);
+            }
+
+            Collections.sort(listNetCDFArrayWritable);
+
+            Iterator itr = listNetCDFArrayWritable.iterator();
+            while( itr.hasNext() ){
+                NetCDFArrayWritable array = (NetCDFArrayWritable)itr.next();
+                System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
             }
 
             /*
