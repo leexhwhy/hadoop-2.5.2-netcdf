@@ -161,7 +161,7 @@ public class NetCDFTransposeCompact2 {
 
             System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
 
-            //context.write( key, result );
+            context.write( key, listNetCDFArrayWritable );
 
 
         }
