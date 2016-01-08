@@ -241,7 +241,7 @@ public class NetCDFTransposeCompact2 {
         job.setMapOutputValueClass(NetCDFArrayWritable.class);
         job.setOutputValueClass(Key.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
-        job.setOutputFormatClass(NetCDFOutputFormatCompact.class);
+        job.setOutputFormatClass(NetCDFOutputFormatCompact2.class);
         job.setNumReduceTasks(2);
         String singleInput = otherArgs[0];
         conf.set( NetCDFOutputFormat.NETCDF_INPUT_PATH, singleInput );
