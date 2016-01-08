@@ -118,7 +118,7 @@ public class NetCDFTransposeCompact2 {
 
             List listNetCDFArrayWritable = new LinkedList<NetCDFArrayWritable>();
 
-            Collections.sort(values;
+            Collections.sort(values);
 
             for( NetCDFArrayWritable array : values ){
                 //FloatWritable[] records = (FloatWritable[]) array.toArray();
