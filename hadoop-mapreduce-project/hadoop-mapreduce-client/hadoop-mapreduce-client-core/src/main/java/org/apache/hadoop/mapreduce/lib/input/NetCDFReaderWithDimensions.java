@@ -69,12 +69,12 @@ public class NetCDFReaderWithDimensions extends RecordReader<Text, NetCDFArrayWr
         end = fSplit.endChunk; //start + split.getLength();
         final Path file = fSplit.getPath();
 
-        LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
+        //LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
 
         ncFile = NetcdfDataset.openFile(file.toString(), null);
         List<Variable> vs = ncFile.getVariables();
         v = vs.get(vs.size()-1);
-        LOG.info("Variable is "+ v.getFullName());
+        //LOG.info("Variable is "+ v.getFullName());
         dimensions = v.getDimensions();
         this.pos = start;
         StringBuilder sb = new StringBuilder();
@@ -109,24 +109,24 @@ public class NetCDFReaderWithDimensions extends RecordReader<Text, NetCDFArrayWr
                 LOG.info("section error " + e);
             }
             if (chunk == null) {LOG.info("chunk is null");return false;}
-            LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
+            //LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
             float[] my = (float[])chunk.get1DJavaArray(Float.class);
             FloatWritable[] fw = new FloatWritable[my.length+3];
 
-            System.out.println( "[SAMAN][NetCDFReaderWithdimensions] time varSize="+ncFile.findVariable("time").getSize() );
-            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lat varSize="+ ncFile.findVariable("lat").getSize() );
-            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon varSize="+ncFile.findVariable("lon").getSize() );
+            //System.out.println( "[SAMAN][NetCDFReaderWithdimensions] time varSize="+ncFile.findVariable("time").getSize() );
+            //System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lat varSize="+ ncFile.findVariable("lat").getSize() );
+            //System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon varSize="+ncFile.findVariable("lon").getSize() );
 
-            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] time dim="+dimensions.get(0).getLength() );
-            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lat dim="+dimensions.get(1).getLength() );
-            System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon dim="+dimensions.get(2).getLength() );
+            //System.out.println( "[SAMAN][NetCDFReaderWithDimensions] time dim="+dimensions.get(0).getLength() );
+            //System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lat dim="+dimensions.get(1).getLength() );
+            //System.out.println( "[SAMAN][NetCDFReaderWithDimensions] lon dim="+dimensions.get(2).getLength() );
             fw[0] = new FloatWritable(dimensions.get(0).getLength());
             fw[1] = new FloatWritable(dimensions.get(1).getLength());
             fw[2] = new FloatWritable(dimensions.get(2).getLength());
             for (int i=0; i< my.length; i++) {
                 fw[i+3]=new FloatWritable(my[i]);
             }
-            LOG.info("[YIQI] "+(time5-time4));
+            //LOG.info("[YIQI] "+(time5-time4));
             // ADDED BY SAMAN
             //String floatNumbers = new String();
             //for( int i = 0; i < fw.length; i++ ){

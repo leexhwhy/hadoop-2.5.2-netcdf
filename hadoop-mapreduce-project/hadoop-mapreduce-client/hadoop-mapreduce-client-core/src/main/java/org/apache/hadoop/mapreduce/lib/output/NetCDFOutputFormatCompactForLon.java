@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by saman on 12/21/15.
  */
-public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Text, List> {
+public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputFormat<Text, List> {
 
     public static final String NETCDF_INPUT_PATH = "hadoop.netcdf.outputformat.input";
     public static final String NETCDF_LOCAL_TEMPFILE_PREFIX = "hadoop.netcdfoutputformat.tempfileprefix";
@@ -28,7 +28,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
     private static final Log LOG = LogFactory.getLog(NetCDFOutputFormatCompact2.class);
 
 
-    public NetCDFOutputFormatCompact2(){
+    public NetCDFOutputFormatCompactForLon(){
         super();
     }
 
@@ -65,15 +65,15 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
             String keyString = key.toString();
             String[] keySplitted = keyString.split(",");
-            String currentCumulativeLat = keySplitted[0];
+            String currentCumulativeLon = keySplitted[0];
             String timeDimSize = keySplitted[1];
             String latDimSize = keySplitted[2];
             String lonDimSize = keySplitted[3];
-            System.out.println( "Lat is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
+            System.out.println( "Lon is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
                     +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
 
             int blockSize = 128*1024*1024;
-            int chunkSize = Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)*4;
+            int chunkSize = Integer.valueOf(timeDimSize)*Integer.valueOf(latDimSize)*4;
             int numChunksPerKey = (blockSize/chunkSize);
             //boolean isBreak = false;
             //for( int i = 0; i < numChunksPerKey; i++ ){
@@ -94,18 +94,18 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
             //       break;
             //}
 
-            int latIndexesSize = ((Integer.valueOf(currentCumulativeLat)+1)*numChunksPerKey <= Integer.valueOf(latDimSize))
+            int lonIndexesSize = ((Integer.valueOf(currentCumulativeLon)+1)*numChunksPerKey <= Integer.valueOf(lonDimSize))
                     ? ( numChunksPerKey )
-                    : ( Integer.valueOf(latDimSize)-(Integer.valueOf(currentCumulativeLat))*numChunksPerKey );
+                    : ( Integer.valueOf(lonDimSize)-(Integer.valueOf(currentCumulativeLon))*numChunksPerKey );
 
-            System.out.println( "[SAMAN][NetCDFOutputFormatCompact2][Write] latIndexesSize="+latIndexesSize );
+            System.out.println( "[SAMAN][NetCDFOutputFormatCompact2][Write] latIndexesSize="+lonIndexesSize );
 
             /* Writing partial NetCDF file into the temporary file */
 
             // Need to be taken out of being static.
 
             String fileName = "hdfs://c3n2:9000/rsut";
-            String outputFileName = "/data/saman/lat-" + currentCumulativeLat + ".nc";
+            String outputFileName = "/data/saman/lon-" + currentCumulativeLon + ".nc";
             NetcdfFile dataFile = null;
             NetcdfFileWriter outputFile = null;
 
@@ -128,7 +128,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
                 //Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Dimensions.");
-                Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), latIndexesSize);
+                Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), lonIndexesSize);
                 Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
                 Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
                 Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
@@ -153,12 +153,12 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 rsut_dim.add(lonDim);
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Variables, with vlat Dimension string: " + vlat.getDimensionsString());
-                Variable vlatNew = outputFile.addVariable(null, vlat.getShortName(), vlat.getDataType(), vlat.getDimensionsString());
-                Variable vlatbndsNew = outputFile.addVariable(null, vlat_bnds.getShortName(), vlat_bnds.getDataType(), lat_bnds_dim);
-                Variable vtimeNew = outputFile.addVariable(null, vtime.getShortName(), vtime.getDataType(), vtime.getDimensionsString());
-                Variable vtimebndsNew = outputFile.addVariable(null, vtime_bnds.getShortName(), vtime_bnds.getDataType(), time_bnds_dim);
                 Variable vlonNew = outputFile.addVariable(null, vlon.getShortName(), vlon.getDataType(), vlon.getDimensionsString());
                 Variable vlonbndsNew = outputFile.addVariable(null, vlon_bnds.getShortName(), vlon_bnds.getDataType(), lon_bnds_dim);
+                Variable vtimeNew = outputFile.addVariable(null, vtime.getShortName(), vtime.getDataType(), vtime.getDimensionsString());
+                Variable vtimebndsNew = outputFile.addVariable(null, vtime_bnds.getShortName(), vtime_bnds.getDataType(), time_bnds_dim);
+                Variable vlatNew = outputFile.addVariable(null, vlat.getShortName(), vlat.getDataType(), vlat.getDimensionsString());
+                Variable vlatbndsNew = outputFile.addVariable(null, vlat_bnds.getShortName(), vlat_bnds.getDataType(), lat_bnds_dim);
                 Variable vrsutNew = outputFile.addVariable(null, vrsut.getShortName(), vrsut.getDataType(), rsut_dim);
 
 
@@ -212,28 +212,28 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 outputFile.addGroupAttribute(null, new Attribute("modeling_realm", "atmos"));
                 outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
 
-                ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLat;");
-                Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
+                ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
+                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLon;");
+                Array dataLon = Array.factory(DataType.DOUBLE, new int[]{lonIndexesSize});
                 int[] shape;
-                for( int i = 0; i < latIndexesSize; i++ ){
+                for( int i = 0; i < lonIndexesSize; i++ ){
                     //System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] getting lat: " + (Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i) );
-                    dataLat.setDouble(i, Double.valueOf(latArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i)));
+                    dataLon.setDouble(i, Double.valueOf(lonArray.get(Integer.valueOf(currentCumulativeLon)*numChunksPerKey+i)));
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;");
-                ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
-                Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize, 2});
-                shape = dataLatBnds.getShape();
-                Index2D idx = new Index2D(new int[]{latIndexesSize, 2});
+                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLonBnds;");
+                ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
+                Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{lonIndexesSize, 2});
+                shape = dataLonBnds.getShape();
+                Index2D idx = new Index2D(new int[]{lonIndexesSize, 2});
                 //idx.set(0, 0);
                 //dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentLat), 0));
                 //idx.set(0, 1);
                 //dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentLat), 1));
-                for (int i = 0; i < latIndexesSize; i++) {
+                for (int i = 0; i < lonIndexesSize; i++) {
                     for (int j = 0; j < shape[1]; j++) {
                         idx.set(i, j);
-                        dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i, j));
+                        dataLonBnds.setDouble(idx, lonBndsArray.get(Integer.valueOf(currentCumulativeLon)*numChunksPerKey+i, j));
                     }
                 }
 
@@ -257,36 +257,36 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLon;");
-                ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
-                Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize())});
-                shape = lonArray.getShape();
+                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLat;");
+                ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
+                Array dataLat = Array.factory(DataType.DOUBLE, new int[]{(int) (vlat.getSize())});
+                shape = latArray.getShape();
                 for (int i = 0; i < shape[0]; i++) {
-                    dataLon.setDouble(i, lonArray.get(i));
+                    dataLat.setDouble(i, latArray.get(i));
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLonBnds;");
-                ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
-                Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize()), 2});
-                shape = dataLonBnds.getShape();
-                idx = new Index2D(new int[]{(int) (vlon.getSize()), 2});
+                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;");
+                ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
+                Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{(int) (vlat.getSize()), 2});
+                shape = dataLatBnds.getShape();
+                idx = new Index2D(new int[]{(int) (vlat.getSize()), 2});
                 for (int i = 0; i < shape[0]; i++) {
                     for (int j = 0; j < shape[1]; j++) {
                         idx.set(i, j);
-                        dataLonBnds.setDouble(idx, lonBndsArray.get(i, j));
+                        dataLatBnds.setDouble(idx, latBndsArray.get(i, j));
                     }
                 }
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
-                Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
-                Array dataRsut = Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
+                Index3D idx3 = new Index3D(new int[]{lonIndexesSize, (int) (vtime.getSize()), (int) (vlat.getSize())});
+                Array dataRsut = Array.factory(DataType.FLOAT, new int[]{lonIndexesSize, (int) (vtime.getSize()), (int) (vlat.getSize())});
                 int globalIndex = 0;
 
-                for( int i = 0; i < latIndexesSize; i++ ) {
+                for( int i = 0; i < lonIndexesSize; i++ ) {
                     for (int j = 0; j < vtime.getSize(); j++) {
                         NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
                         FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
-                        for (int k = 0; k < vlon.getSize(); k++) {
+                        for (int k = 0; k < vlat.getSize(); k++) {
                             try {
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
                                 idx3.set(i, j, k);
@@ -309,16 +309,16 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
                 outputFile.create();
-                outputFile.write(vlatNew, dataLat);
-                outputFile.write(vlatbndsNew, dataLatBnds);
-                outputFile.write(vtimeNew, dataTime);
-                outputFile.write(vtimebndsNew, dataTimeBnds);
                 outputFile.write(vlonNew, dataLon);
                 outputFile.write(vlonbndsNew, dataLonBnds);
+                outputFile.write(vtimeNew, dataTime);
+                outputFile.write(vtimebndsNew, dataTimeBnds);
+                outputFile.write(vlatNew, dataLat);
+                outputFile.write(vlatbndsNew, dataLatBnds);
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
-                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/" + currentCumulativeLat));
+                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/" + currentCumulativeLon));
 
             } catch (Exception e) {
                 System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());
@@ -345,7 +345,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output path is: " + outputPath.getName() );
 
-        return new NetCDFRecordWriterCompactForLon<Text, List>( _fs, job );
+        return new NetCDFRecordWriterCompact2<Text, List>( _fs, job );
 
     }
 
