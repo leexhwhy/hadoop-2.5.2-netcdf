@@ -345,7 +345,7 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
 
         System.out.println( "[SAMAN][NetCDFOutputFormat][getRecordWriter] output path is: " + outputPath.getName() );
 
-        return new NetCDFRecordWriterCompact2<Text, List>( _fs, job );
+        return new NetCDFRecordWriterCompactForLon<Text, List>( _fs, job );
 
     }
 
