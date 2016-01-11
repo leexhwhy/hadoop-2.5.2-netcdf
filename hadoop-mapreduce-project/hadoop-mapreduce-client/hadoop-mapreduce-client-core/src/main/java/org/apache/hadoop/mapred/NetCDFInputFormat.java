@@ -79,6 +79,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
   private static final Log LOG
     = LogFactory.getLog(NetCDFInputFormat.class.getName());
 
+  private static final String HIVE_QUERY = "hadoop.netcdf.hivequery.raw";
+
 
   private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job)
   {
@@ -128,6 +130,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
   public InputSplit[] getSplits(JobConf job, int numSplits)
     throws IOException {
     FileStatus[] files = listStatus(job);
+
+    System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher") );
     
 	
     System.out.println( "[SAMAN] beginning of getSplits" );
