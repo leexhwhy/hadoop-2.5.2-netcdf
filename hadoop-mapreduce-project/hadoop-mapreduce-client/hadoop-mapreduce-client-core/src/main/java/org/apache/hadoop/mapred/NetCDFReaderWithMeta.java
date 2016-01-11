@@ -103,11 +103,14 @@
           fw[0] = new FloatWritable( dimensionsSize );
           fw[1] = new FloatWritable( pos );
           for (int i = 2; i < dimensionsSize+1; i++ ){
-        fw[i] = new FloatWritable(v.getDimensions().get(i-1).getLength());
+            fw[i] = new FloatWritable(v.getDimensions().get(i-1).getLength());
           }
           for (int i=dimensionsSize+1; i< my.length+dimensionsSize+1; i++) {
             fw[i]=new FloatWritable(my[i-dimensionsSize-1]);
           }
+
+          System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] fw[0]="+fw[0].toString() );
+
           value.set(fw);
           pos ++;
           return true;
