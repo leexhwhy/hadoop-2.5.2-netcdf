@@ -155,6 +155,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
     NetworkTopology clusterMap = new NetworkTopology();
     for (FileStatus file: files) {
       Path path = file.getPath();
+      LOG.info("[SAMAN][NetCDFInputFormat][getSplits] File name is : " + path.getName());
+
       FileSystem fs = path.getFileSystem(job);
       long length = file.getLen();
       BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
