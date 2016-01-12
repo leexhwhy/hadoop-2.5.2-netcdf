@@ -148,9 +148,9 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
                 lat_bnds_dim.add(bndDim);
                 lon_bnds_dim.add(lonDim);
                 lon_bnds_dim.add(bndDim);
-                rsut_dim.add(latDim);
-                rsut_dim.add(timeDim);
                 rsut_dim.add(lonDim);
+                rsut_dim.add(timeDim);
+                rsut_dim.add(latDim);
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Variables, with vlat Dimension string: " + vlat.getDimensionsString());
                 Variable vlonNew = outputFile.addVariable(null, vlon.getShortName(), vlon.getDataType(), vlon.getDimensionsString());
