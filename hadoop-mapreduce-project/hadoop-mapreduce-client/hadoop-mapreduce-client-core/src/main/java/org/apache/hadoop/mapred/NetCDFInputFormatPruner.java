@@ -158,7 +158,7 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                 topLimit = Float.valueOf(querySplitted[i+1]);
             }
             if (hiveQuery.contains(">")) {
-                String[] querySplitted = hiveQuery.split(">");
+                String[] querySplitted = hiveQuery.split(" ");
                 int i = Arrays.asList(querySplitted).indexOf(">");
                 bottomLimit = Float.valueOf(querySplitted[i+1]);
             }
