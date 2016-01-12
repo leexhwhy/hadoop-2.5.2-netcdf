@@ -318,7 +318,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
-                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/" + currentCumulativeLat));
+                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
 
             } catch (Exception e) {
                 System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());

@@ -318,7 +318,7 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
-                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/" + currentCumulativeLon));
+                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlon" + currentCumulativeLon));
 
             } catch (Exception e) {
                 System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());
