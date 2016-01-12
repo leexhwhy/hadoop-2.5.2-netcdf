@@ -128,9 +128,9 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
 
                 //Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Dimensions.");
-                Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), lonIndexesSize);
+                Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
                 Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
-                Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
+                Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), lonIndexesSize);
                 Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] After Dimensions.");
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] latDim: " + latDim.getLength());
