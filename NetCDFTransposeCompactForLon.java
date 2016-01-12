@@ -36,7 +36,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact2;
-import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompactForLon
+import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompactForLon;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
 import org.apache.hadoop.mapred.JobConf;
