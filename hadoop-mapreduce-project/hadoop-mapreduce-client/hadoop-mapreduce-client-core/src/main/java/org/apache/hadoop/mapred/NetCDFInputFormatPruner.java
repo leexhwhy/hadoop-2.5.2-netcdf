@@ -166,8 +166,8 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
 
         System.out.println( "[SAMAN][NetCDFInputFormatPruner] QueryType = " + queryType.toString()
                 +", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit );
-        LOG.info( "[SAMAN][NetCDFInputFormatPruner] QueryType = " + queryType.toString()
-                +", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit );
+        LOG.info("[SAMAN][NetCDFInputFormatPruner] QueryType = " + queryType.toString()
+                + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit);
         /* End Analyzing Query here */
 
         System.out.println( "[SAMANPruner] beginning of getSplits" );
@@ -191,6 +191,16 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
         NetworkTopology clusterMap = new NetworkTopology();
         for (FileStatus file: files) {
             Path path = file.getPath();
+            if( queryType == QueryType.TIME || queryType == QueryType.NOLIMIT){
+                if( path.getName().contains("lat") || path.getName().contains("lon") )
+                    continue;
+            }else if( queryType == QueryType.LAT ){
+                if( !path.getName().contains("lat") )
+                    continue;
+            }else if( queryType == QueryType.LON ){
+                if( !path.getName().contains("lon") )
+                    continue;
+            }
             LOG.info("[SAMAN][NetCDFInputFormatPruner][getSplits] File name is : " + path.getName());
             System.out.println("[SAMAN][NetCDFInputFormatPruner][getSplits] File name is : " + path.getName());
             FileSystem fs = path.getFileSystem(job);
