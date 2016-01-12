@@ -233,8 +233,8 @@ public class NetCDFTransposeCompactForLon {
         {
             numPriority=1;
         }
-        Job job = new Job(conf, "NetCDFTransposeCompact2");
-        job.setJarByClass(NetCDFTransposeCompact2.class);
+        Job job = new Job(conf, "NetCDFTransposeCompactForLon");
+        job.setJarByClass(NetCDFTransposeCompactForLon.class);
         job.setMapperClass(VariableMapper.class);
         //job.setCombinerClass(Reducer.class);
         job.setReducerClass(MergeChunkReducer.class);
