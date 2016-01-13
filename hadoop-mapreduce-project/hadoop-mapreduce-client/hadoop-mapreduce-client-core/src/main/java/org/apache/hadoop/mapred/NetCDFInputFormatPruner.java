@@ -30,6 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.sun.org.apache.xpath.internal.operations.Variable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -90,6 +92,9 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
 
         NetcdfFile ncFile;
         Variable v;
+        Variable time;
+        Variable lat;
+        Variable lon;
         ncFile = null;
         try {
             //if( file == null ){
@@ -102,6 +107,10 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
             ncFile = NetcdfDataset.openFile(file.toString(), null);
 
             v = ncFile.findVariable("rsut");
+            time = ncFile.findVariable("time");
+            lat = ncFile.findVariable("lat");
+            lon = ncFile.findVariable("lon");
+
             //List<Variable> vs = ncFile.getVariables();
             //v = vs.get(vs.size()-1);
 
@@ -114,6 +123,9 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
             result.numRecs = ncFile.vnumRecs;
             result.recSize = ncFile.vrecSize;
             result.smallRecSize = ncFile.vsmallRecSize;
+            result.timeLength = (int)(time.getSize());
+            result.latLength = (int)(lat.getSize());
+            result.lonLength = (int)(lon.getSize());
             //result.shape = v.shape;
 
         } catch (Exception e)
@@ -201,6 +213,8 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                 if( !path.getName().contains("lon") )
                     continue;
             }
+
+
             LOG.info("[SAMAN][NetCDFInputFormatPruner][getSplits] File name is : " + path.getName());
             System.out.println("[SAMAN][NetCDFInputFormatPruner][getSplits] File name is : " + path.getName());
             FileSystem fs = path.getFileSystem(job);
@@ -216,7 +230,7 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                 long   splitSize       = 0;
                 int    chunkIndex      = 0;
                 long   bytesRemaining  = chunkStarts[chunkStarts.length-1] + recSize - recStart - 2*smallSize;
-                long   thisStart       = recStart;  //file position
+                long   thisStart       = recStart; // file position
                 long   thisChunk       = 0;
                 long   blockNo         = 1;
                 //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +

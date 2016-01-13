@@ -9,5 +9,8 @@ public class NetCDFInfo {
     public long recSize;
     public long smallRecSize;
     public int[] shape;
+    public int timeLength;
+    public int latLength;
+    public int lonLength;
 
 }
