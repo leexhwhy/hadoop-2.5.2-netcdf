@@ -219,12 +219,12 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                 long   thisStart       = recStart;  //file position
                 long   thisChunk       = 0;
                 long   blockNo         = 1;
-                LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
-                        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
-                        ", thisStart = " + thisStart);
-                System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
-                        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
-                        ", thisStart = " + thisStart);
+                //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
+                //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
+                //        ", thisStart = " + thisStart);
+                //System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
+                //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
+                //        ", thisStart = " + thisStart);
                 while ( bytesRemaining > 0) {
                     while ( chunkIndex < chunkStarts.length && chunkStarts[chunkIndex] < blockNo * blockSize ) {
                         chunkIndex++;
@@ -242,10 +242,10 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                     }
                     endChunk            = chunkIndex;
                     blockNo++;
-                    LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
-                            ", endChunk="+endChunk+", blockNo="+blockNo);
-                    System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
-                            ", endChunk="+endChunk+", blockNo="+blockNo);
+                    //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
+                    //        ", endChunk="+endChunk+", blockNo="+blockNo);
+                    //System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
+                    //        ", endChunk="+endChunk+", blockNo="+blockNo);
                     String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
                     FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
                     split.getFileSplit().startChunk = thisChunk;
@@ -259,8 +259,8 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
 
                     bytesRemaining -= splitSize;
                     thisChunk = endChunk;
-                    LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
-                    System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
+                    //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
+                    //System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
                 }
 
             } else if (length != 0) {
