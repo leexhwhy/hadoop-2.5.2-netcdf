@@ -250,11 +250,11 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                     FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
                     split.getFileSplit().startChunk = thisChunk;
                     split.getFileSplit().endChunk = endChunk;
-                    if( topLimit < endChunk )
+                    if( (topLimit < thisChunk) && (topLimit != -1))
                         continue;
-                    if( bottomLimit > thisChunk )
+                    if( (bottomLimit > endChunk) && (bottomLimit != -1) )
                         continue;
-                    
+
                     splits.add(split);
 
                     bytesRemaining -= splitSize;
