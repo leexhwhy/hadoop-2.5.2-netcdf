@@ -75,10 +75,10 @@ import org.apache.hadoop.mapred.NetCDFReaderWithMeta;
 /**
  * Treats keys as offset in fil`e and value as line. 
  */
-public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWritable> {
+public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, NetCDFArrayWritable> {
 
     private static final Log LOG
-            = LogFactory.getLog(NetCDFInputFormatPruner.class.getName());
+            = LogFactory.getLog(NetCDFInputFormatPrunerByFileIndex.class.getName());
 
     public static final String HIVE_QUERY = "hadoop.netcdf.hivequery.raw";
 
@@ -143,8 +143,8 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
             throws IOException {
         FileStatus[] files = listStatus(job);
 
-        LOG.info("[SAMAN][NetCDFInputFormatPruner][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
-        System.out.println("[SAMAN][NetCDFInputFormatPruner][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
+        LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
+        System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
 
         /* Analyzing Query here */
         String hiveQuery = job.get(HIVE_QUERY, "Kossher");
@@ -175,9 +175,9 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
             }
         }
 
-        System.out.println( "[SAMAN][NetCDFInputFormatPruner] QueryType = " + queryType.toString()
+        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex] QueryType = " + queryType.toString()
                 +", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit );
-        LOG.info("[SAMAN][NetCDFInputFormatPruner] QueryType = " + queryType.toString()
+        LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex] QueryType = " + queryType.toString()
                 + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit);
         /* End Analyzing Query here */
 
@@ -202,6 +202,7 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
         NetworkTopology clusterMap = new NetworkTopology();
         for (FileStatus file: files) {
             Path path = file.getPath();
+            int fileIndex = 0;
             if( queryType == QueryType.TIME || queryType == QueryType.NOLIMIT){
                 if( path.getName().contains("lat") || path.getName().contains("lon") )
                     continue;
@@ -212,10 +213,14 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                 if( !path.getName().contains("lon") )
                     continue;
             }
+            if( queryType == QueryType.TIME ){
+                String[] parts = path.getName().split("-");
+                fileIndex = Integer.valueOf(parts[1]);
+            }
 
 
-            LOG.info("[SAMAN][NetCDFInputFormatPruner][getSplits] File name is : " + path.getName());
-            System.out.println("[SAMAN][NetCDFInputFormatPruner][getSplits] File name is : " + path.getName());
+            LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
+            System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
             FileSystem fs = path.getFileSystem(job);
             long length = file.getLen();
             BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
@@ -263,15 +268,28 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                     FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
                     split.getFileSplit().startChunk = thisChunk;
                     split.getFileSplit().endChunk = endChunk;
-                    if( (topLimit < thisChunk) && (topLimit != -1)) {
-                        bytesRemaining -= splitSize;
-                        thisChunk = endChunk;
-                        continue;
-                    }
-                    if( (bottomLimit > endChunk) && (bottomLimit != -1) ) {
-                        bytesRemaining -= splitSize;
-                        thisChunk = endChunk;
-                        continue;
+                    if( queryType == QueryType.TIME ) {
+                        if ((topLimit < thisChunk + (fileIndex*netInfo.timeLength)) && (topLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        if ((bottomLimit > endChunk + (fileIndex*netInfo.timeLength)) && (bottomLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                    }else{
+                        if ((topLimit < thisChunk) && (topLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        if ((bottomLimit > endChunk) && (bottomLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
                     }
 
                     splits.add(split);
