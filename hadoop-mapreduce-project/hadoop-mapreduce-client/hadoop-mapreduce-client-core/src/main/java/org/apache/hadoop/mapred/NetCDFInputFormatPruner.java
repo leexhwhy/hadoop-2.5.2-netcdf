@@ -250,7 +250,13 @@ public class NetCDFInputFormatPruner extends FileInputFormat<Text, NetCDFArrayWr
                     FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
                     split.getFileSplit().startChunk = thisChunk;
                     split.getFileSplit().endChunk = endChunk;
+                    if( topLimit < endChunk )
+                        continue;
+                    if( bottomLimit > thisChunk )
+                        continue;
+                    
                     splits.add(split);
+
                     bytesRemaining -= splitSize;
                     thisChunk = endChunk;
                     LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
