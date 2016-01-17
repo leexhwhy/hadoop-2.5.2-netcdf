@@ -91,6 +91,9 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
         List<InputSplit> splits = new ArrayList<InputSplit>();
         NetworkTopology clusterMap = new NetworkTopology();
         for (FileStatus file: files) {
+
+            System.out.println( "[SAMAN][NetCDFInputFormat][GetSplits]  path is = " + file.getPath().getName() );
+
             Path path = file.getPath();
             FileSystem fs = path.getFileSystem(job.getConfiguration());
             long length = file.getLen();
@@ -98,6 +101,7 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
             BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
             if ((length != 0) && isSplitable(job, path)) {
                 long blockSize = file.getBlockSize();
+                System.out.println( "[SAMAN][NetCDFInputFormat][GetSplits] NetCDFInfo!" );
                 NetCDFInfo netInfo = getNetCDFInfo(path, fs);
                 long recStart      = netInfo.recStart;
                 long[] chunkSizes = netInfo.chunkSizes;
