@@ -20,7 +20,6 @@ package org.apache.hadoop.hdfs.server.blockmanagement;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.hadoop.hdfs.protocol.Block;
-import org.apache.hadoop.hdfs.server.namenode.NameNode;
 import org.apache.hadoop.hdfs.server.protocol.DatanodeStorage;
 import org.apache.hadoop.util.GSet;
 import org.apache.hadoop.util.LightWeightGSet;
@@ -103,8 +102,8 @@ class BlocksMap {
     //System.out.println( "[SAMAN] BlocksMap.addBlockCollection => Beginning, with isModifiedBlock="+b.getIsModifiedBlock() );
     BlockInfo info = blocks.get(b);
     if (info != b) {
-      NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => info != b");
-      System.out.println( "[SAMAN] BlocksMap.addBlockCollection => info != b");
+      //NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => info != b");
+      //System.out.println( "[SAMAN] BlocksMap.addBlockCollection => info != b");
       info = b;
       blocks.put(info);
     }
@@ -207,8 +206,8 @@ class BlocksMap {
    * only if it does not belong to any file and data-nodes.
    */
   boolean removeNode(Block b, DatanodeDescriptor node) {
-    NameNode.LOG.info("[SAMAN] BlocksMap.removeNode");
-    System.out.println("[SAMAN] BlocksMap.removeNode");
+    //NameNode.LOG.info("[SAMAN] BlocksMap.removeNode");
+    //System.out.println("[SAMAN] BlocksMap.removeNode");
     BlockInfo info = blocks.get(b);
     if (info == null)
       return false;

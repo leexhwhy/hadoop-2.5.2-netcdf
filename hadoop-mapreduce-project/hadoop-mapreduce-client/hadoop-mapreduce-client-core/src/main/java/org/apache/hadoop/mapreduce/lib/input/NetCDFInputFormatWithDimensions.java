@@ -148,7 +148,7 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
                     FileSplit split = new FileSplit(path, tempStart, splitSize, blkLocations[blkIndex].getHosts());
                     split.startChunk = thisChunk;
                     split.endChunk = endChunk;
-                    //System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => split.startChunk="+thisChunk+", split.endChunk="+endChunk );
+                    System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => split.startChunk="+thisChunk+", split.endChunk="+endChunk );
                     if( pruneBlocks == 1 ) {
                         if (count == 0)
                             splits.add(split);
