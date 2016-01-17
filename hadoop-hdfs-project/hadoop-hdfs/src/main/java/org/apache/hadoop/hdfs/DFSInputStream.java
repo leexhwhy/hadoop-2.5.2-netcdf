@@ -236,11 +236,11 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
 
   private long fetchLocatedBlocksAndGetLastBlockLength() throws IOException {
 
-    DFSClient.LOG.info("[SAMAN] DFSInputStream.fetchLocatedBlocksAndGetLastBlockLength");
+    //DFSClient.LOG.info("[SAMAN] DFSInputStream.fetchLocatedBlocksAndGetLastBlockLength");
 
     final LocatedBlocks newInfo = dfsClient.getLocatedBlocks(src, 0);
     if (DFSClient.LOG.isDebugEnabled()) {
-      DFSClient.LOG.debug("newInfo = " + newInfo);
+      //DFSClient.LOG.debug("newInfo = " + newInfo);
     }
     if (newInfo == null) {
       throw new IOException("Cannot open filename " + src);
@@ -415,8 +415,8 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
         assert (newBlocks != null) : "Could not find target position " + offset;
         locatedBlocks.insertRange(targetBlockIdx, newBlocks.getLocatedBlocks());
       }
-      DFSClient.LOG.info( "[SAMAN] DFSInputStream.getBlockAt => targetBlockIdx="+targetBlockIdx );
-      System.out.println("[SAMAN] DFSInputStream.getBlockAt => targetBlockIdx=" + targetBlockIdx);
+      //DFSClient.LOG.info( "[SAMAN] DFSInputStream.getBlockAt => targetBlockIdx="+targetBlockIdx );
+      //System.out.println("[SAMAN] DFSInputStream.getBlockAt => targetBlockIdx=" + targetBlockIdx);
       blk = locatedBlocks.get(targetBlockIdx);
     }
 
@@ -524,8 +524,8 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
    */
   private synchronized DatanodeInfo blockSeekTo(long target) throws IOException {
 
-    DFSClient.LOG.info( "[SAMAN] DFSInputStream.blockSeekTo, target:"+target );
-    System.out.println( "[SAMAN] DFSInputStream.blockSeekTo, target:"+target );
+    //DFSClient.LOG.info( "[SAMAN] DFSInputStream.blockSeekTo, target:"+target );
+    //System.out.println( "[SAMAN] DFSInputStream.blockSeekTo, target:"+target );
 
     if (target >= getFileLength()) {
       throw new IOException("Attempted to read past end of file");
@@ -647,7 +647,7 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
 
   @Override
   public synchronized int read() throws IOException {
-    DFSClient.LOG.info( "[SAMAN] DFSInputStream.read()" );
+    //DFSClient.LOG.info( "[SAMAN] DFSInputStream.read()" );
     int ret = read( oneByteBuf, 0, 1 );
     return ( ret <= 0 ) ? -1 : (oneByteBuf[0] & 0xff);
   }
@@ -803,8 +803,8 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
             //        "=> currentNode=blockSeekTo(pos)" );
             //System.out.println( "[SAMAN] DFSInputStream.readWithStrategy( ReaderStrategy, int, int ) " +
             //          "=> currentNode=blockSeekTo(pos)" );
-            DFSClient.LOG.info( "[SAMAN] DFSInputStream.readWithStrategy => before blockSeekTo(pos), pos="+pos );
-            System.out.println( "[SAMAN] DFSInputStream.readWithStrategy => before blockSeekTo(pos), pos="+pos );
+            //DFSClient.LOG.info( "[SAMAN] DFSInputStream.readWithStrategy => before blockSeekTo(pos), pos="+pos );
+            //System.out.println( "[SAMAN] DFSInputStream.readWithStrategy => before blockSeekTo(pos), pos="+pos );
             currentNode = blockSeekTo(pos);
             if( currentNode == null )
               return 0;
@@ -864,7 +864,7 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
   @Override
   public synchronized int read(final ByteBuffer buf) throws IOException {
 
-    DFSClient.LOG.info( "[SAMAN] DFSInputStream.read( ByteBuffer )" );
+    //DFSClient.LOG.info( "[SAMAN] DFSInputStream.read( ByteBuffer )" );
 
     ReaderStrategy byteBufferReader = new ByteBufferStrategy(buf);
 
@@ -894,12 +894,12 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
     while (true) {
       DatanodeInfo[] nodes = block.getLocations();
       if( nodes.length == 0 ) {
-        DFSClient.LOG.info("[SAMAN] DFSInputStream.chooseDataNode, nodes.length = 0");
-        System.out.println("[SAMAN] DFSInputStream.chooseDataNode, nodes.length = 0");
+        //DFSClient.LOG.info("[SAMAN] DFSInputStream.chooseDataNode, nodes.length = 0");
+        //System.out.println("[SAMAN] DFSInputStream.chooseDataNode, nodes.length = 0");
       }
       for( int i = 0; i < nodes.length; i++ ) {
-        DFSClient.LOG.info( "[SAMAN] DFSInputStream.chooseDataNode, node#"+i+"="+nodes[i].getName() );
-        System.out.println( "[SAMAN] DFSInputStream.chooseDataNode, node#"+i+"="+nodes[i].getName() );
+        //DFSClient.LOG.info( "[SAMAN] DFSInputStream.chooseDataNode, node#"+i+"="+nodes[i].getName() );
+        //System.out.println( "[SAMAN] DFSInputStream.chooseDataNode, node#"+i+"="+nodes[i].getName() );
       }
       try {
         return getBestNodeDNAddrPair(nodes, ignoredNodes);
@@ -957,16 +957,16 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
   private DNAddrPair getBestNodeDNAddrPair(final DatanodeInfo[] nodes,
       Collection<DatanodeInfo> ignoredNodes) throws IOException {
     DatanodeInfo chosenNode = bestNode(nodes, deadNodes, ignoredNodes);
-    DFSClient.LOG.info("[SAMAN] DFSInputStream.getBestNodeDNAddrPair => chosenNode="+chosenNode.getName());
-    System.out.println("[SAMAN] DFSInputStream.getBestNodeDNAddrPair => chosenNode="+chosenNode.getName());
+    //DFSClient.LOG.info("[SAMAN] DFSInputStream.getBestNodeDNAddrPair => chosenNode="+chosenNode.getName());
+    //System.out.println("[SAMAN] DFSInputStream.getBestNodeDNAddrPair => chosenNode="+chosenNode.getName());
     final String dnAddr =
         chosenNode.getXferAddr(dfsClient.getConf().connectToDnViaHostname);
     if (DFSClient.LOG.isDebugEnabled()) {
       DFSClient.LOG.debug("Connecting to datanode " + dnAddr);
     }
     InetSocketAddress targetAddr = NetUtils.createSocketAddr(dnAddr);
-    DFSClient.LOG.info("[SAMAN] DFSInputStream.getBestNodeDNAddrPain => socket created successfully!");
-    System.out.println("[SAMAN] DFSInputStream.getBestNodeDNAddrPain => socket created successfully!");
+    //DFSClient.LOG.info("[SAMAN] DFSInputStream.getBestNodeDNAddrPain => socket created successfully!");
+    //System.out.println("[SAMAN] DFSInputStream.getBestNodeDNAddrPain => socket created successfully!");
     return new DNAddrPair(chosenNode, targetAddr);
   }
 
@@ -1000,7 +1000,7 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
       Map<ExtendedBlock, Set<DatanodeInfo>> corruptedBlockMap)
       throws IOException {
 
-    DFSClient.LOG.info( "[SAMAN] DFSInputStream.fetchBlockByteRange, start:"+start+", end:"+end+", offset:"+offset );
+    //DFSClient.LOG.info( "[SAMAN] DFSInputStream.fetchBlockByteRange, start:"+start+", end:"+end+", offset:"+offset );
 
     block = getBlockAt(block.getStartOffset(), false);
     while (true) {
@@ -1040,7 +1040,7 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
       int offset, Map<ExtendedBlock, Set<DatanodeInfo>> corruptedBlockMap)
       throws IOException {
 
-    DFSClient.LOG.info( "[SAMAN] DFSInputStream.actualGetFromOneDataNode datanode:"+datanode.info.getName() );
+    //DFSClient.LOG.info( "[SAMAN] DFSInputStream.actualGetFromOneDataNode datanode:"+datanode.info.getName() );
 
     DFSClientFaultInjector.get().startFetchFromDatanode();
     int refetchToken = 1; // only need to get a new access token once

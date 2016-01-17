@@ -260,8 +260,8 @@ public class BlockManager {
   
   public BlockManager(final Namesystem namesystem, final FSClusterStats stats,
       final Configuration conf) throws IOException {
-    DFSClient.LOG.info( "[SAMAN] BlockManager.Constructor()!" );
-    System.out.println( "[SAMAN] BlockManager.Constructor()!" );
+    //DFSClient.LOG.info( "[SAMAN] BlockManager.Constructor()!" );
+    //System.out.println( "[SAMAN] BlockManager.Constructor()!" );
 
     this.namesystem = namesystem;
     datanodeManager = new DatanodeManager(this, namesystem, conf);
@@ -622,8 +622,8 @@ public class BlockManager {
     if(blkIndex < 0)
       return null;
     BlockInfo curBlock = bc.getBlocks()[blkIndex];
-    LOG.info( "[SAMAN] BlockManager.completeBlock => isModifiedBlock="+curBlock.getIsModifiedBlock() );
-    System.out.println( "[SAMAN] BlockManager.completeBlock => isModifiedBlock="+curBlock.getIsModifiedBlock() );
+    //LOG.info( "[SAMAN] BlockManager.completeBlock => isModifiedBlock="+curBlock.getIsModifiedBlock() );
+    //System.out.println( "[SAMAN] BlockManager.completeBlock => isModifiedBlock="+curBlock.getIsModifiedBlock() );
     if(curBlock.isComplete())
       return curBlock;
     BlockInfoUnderConstruction ucBlock = (BlockInfoUnderConstruction)curBlock;
@@ -636,8 +636,8 @@ public class BlockManager {
           "Cannot complete block: block has not been COMMITTED by the client");
     BlockInfo completeBlock = ucBlock.convertToCompleteBlock();
     completeBlock.setIsModifiedBlock( curBlock.getIsModifiedBlock() );
-    LOG.info( "[SAMAN] BlockManager.completeBlock => completeBlock.isModifiedBlock="+completeBlock.getIsModifiedBlock() );
-    System.out.println( "[SAMAN] BlockManager.completeBlock => completeBlock.isModifiedBlock="+completeBlock.getIsModifiedBlock() );
+    //LOG.info( "[SAMAN] BlockManager.completeBlock => completeBlock.isModifiedBlock="+completeBlock.getIsModifiedBlock() );
+    //System.out.println( "[SAMAN] BlockManager.completeBlock => completeBlock.isModifiedBlock="+completeBlock.getIsModifiedBlock() );
 
     // replace penultimate block in file
     bc.setBlock(blkIndex, completeBlock);
@@ -824,8 +824,8 @@ public class BlockManager {
     final BlockTokenSecretManager.AccessMode mode) throws IOException {
     final LocatedBlock lb = createLocatedBlock(blk, pos);
     lb.setIsModifiedBlock( blk.getIsModifiedBlock() );
-    DFSClient.LOG.info( "[SAMAN] BlockManager.createLocatedBlock => lb.isModifiedBlock="+lb.getIsModifiedBlock() );
-    System.out.println("[SAMAN] BlockManager.createLocatedBlock => lb.isModifiedBlock=" + lb.getIsModifiedBlock());
+    //DFSClient.LOG.info( "[SAMAN] BlockManager.createLocatedBlock => lb.isModifiedBlock="+lb.getIsModifiedBlock() );
+    //System.out.println("[SAMAN] BlockManager.createLocatedBlock => lb.isModifiedBlock=" + lb.getIsModifiedBlock());
     if (mode != null) {
       setBlockToken(lb, mode);
     }

@@ -617,7 +617,7 @@ class NameNodeRpcServer implements NamenodeProtocols {
                                  ExtendedBlock previous, DatanodeInfo[] excludedNodes, long fileId,
                                  String[] favoredNodes, boolean isModifiedBlock)
             throws IOException {
-        LOG.info( "[SAMAN] NameNodeRpcServer.addBlock => Beginning! with isModifiedBlock="+isModifiedBlock );
+        //LOG.info( "[SAMAN] NameNodeRpcServer.addBlock => Beginning! with isModifiedBlock="+isModifiedBlock );
         if (stateChangeLog.isDebugEnabled()) {
             stateChangeLog.debug("*BLOCK* NameNode.addBlock: file " + src
                     + " fileId=" + fileId + " for " + clientName);

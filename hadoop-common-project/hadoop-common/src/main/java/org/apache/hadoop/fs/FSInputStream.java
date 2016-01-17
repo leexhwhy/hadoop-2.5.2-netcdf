@@ -58,7 +58,7 @@ public abstract class FSInputStream extends InputStream
   public int read(long position, byte[] buffer, int offset, int length)
     throws IOException {
 
-    System.out.println( "[SAMAN] FSInputStream.read( long, byte[], int, int )" );
+    //System.out.println( "[SAMAN] FSInputStream.read( long, byte[], int, int )" );
     synchronized (this) {
       long oldPos = getPos();
       int nread = -1;

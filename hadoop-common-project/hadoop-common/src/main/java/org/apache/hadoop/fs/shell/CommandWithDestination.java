@@ -300,7 +300,7 @@ abstract class CommandWithDestination extends FsCommand {
 
     Configuration conf = new Configuration();
     String netcdfEnabled = conf.get("hadoop.netcdf.enable");
-    System.out.println( "[SAMAN] CommandWithDestination.copyFileToTarget => netcdfEnabled:"+netcdfEnabled );  
+    //System.out.println( "[SAMAN] CommandWithDestination.copyFileToTarget => netcdfEnabled:"+netcdfEnabled );
 
     src.fs.setVerifyChecksum(verifyChecksum);
     InputStream in = null;

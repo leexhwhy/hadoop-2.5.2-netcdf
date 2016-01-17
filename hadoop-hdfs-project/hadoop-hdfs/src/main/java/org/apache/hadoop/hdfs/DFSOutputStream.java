@@ -1449,8 +1449,8 @@ public class DFSOutputStream extends FSOutputSummer
         long localstart = Time.now();
         while (true) {
           try {
-            DFSClient.LOG.info("[SAMAN] DFSOutputStream.locateFollowingBlock => dfsClient.namenode.addBlock, with namenode being: " +
-                    dfsClient.namenode.getClass().getName());
+            //DFSClient.LOG.info("[SAMAN] DFSOutputStream.locateFollowingBlock => dfsClient.namenode.addBlock, with namenode being: " +
+            //        dfsClient.namenode.getClass().getName());
             if( this.isModifiedBlockEnabled ) {
               boolean isModifiedBlock = Math.random() < 0.5;
               return dfsClient.namenode.addBlock(src, dfsClient.clientName,

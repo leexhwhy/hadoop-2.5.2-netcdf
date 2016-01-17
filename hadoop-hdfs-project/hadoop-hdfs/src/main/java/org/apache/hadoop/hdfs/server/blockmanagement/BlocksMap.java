@@ -99,8 +99,8 @@ class BlocksMap {
    * Add block b belonging to the specified block collection to the map.
    */
   BlockInfo addBlockCollection(BlockInfo b, BlockCollection bc) {
-    NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => Beginning, with isModifiedBlock="+b.getIsModifiedBlock() );
-    System.out.println( "[SAMAN] BlocksMap.addBlockCollection => Beginning, with isModifiedBlock="+b.getIsModifiedBlock() );
+    //NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => Beginning, with isModifiedBlock="+b.getIsModifiedBlock() );
+    //System.out.println( "[SAMAN] BlocksMap.addBlockCollection => Beginning, with isModifiedBlock="+b.getIsModifiedBlock() );
     BlockInfo info = blocks.get(b);
     if (info != b) {
       NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => info != b");
@@ -113,19 +113,19 @@ class BlocksMap {
   }
 
   BlockInfo addBlockCollection(BlockInfo b, BlockCollection bc, boolean isModifiedBlock) {
-    NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => Beginning with isModifiedBlock = " + isModifiedBlock
-            + "!" );
+    //NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => Beginning with isModifiedBlock = " + isModifiedBlock
+    //        + "!" );
     BlockInfo info = blocks.get(b);
     if (info != b){
-      NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => info != b");
-      System.out.println( "[SAMAN] BlocksMap.addBlockCollection => info != b");
+      //NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => info != b");
+      //System.out.println( "[SAMAN] BlocksMap.addBlockCollection => info != b");
       info = b;
       blocks.put(info);
       Iterator itr = blocks.iterator();
       while( itr.hasNext() ){
           BlockInfo blockInfo = (BlockInfo)itr.next();
-          NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
-          System.out.println( "[SAMAN] BlocksMap.addBlockCollection => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
+          //NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
+          //System.out.println( "[SAMAN] BlocksMap.addBlockCollection => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
       }
     }
     info.setBlockCollection(bc);
@@ -139,8 +139,8 @@ class BlocksMap {
    * and remove all data-node locations associated with the block.
    */
   void removeBlock(Block block) {
-    NameNode.LOG.info("[SAMAN] BlocksMap.removeBlock");
-    System.out.println("[SAMAN] BlocksMap.removeBlock");
+    //NameNode.LOG.info("[SAMAN] BlocksMap.removeBlock");
+    //System.out.println("[SAMAN] BlocksMap.removeBlock");
 
     BlockInfo blockInfo = blocks.remove(block);
     if (blockInfo == null)
@@ -244,14 +244,14 @@ class BlocksMap {
    */
   BlockInfo replaceBlock(BlockInfo newBlock) {
 
-    NameNode.LOG.info("[SAMAN] BlocksMap.replaceBlock");
-    System.out.println("[SAMAN] BlocksMap.replaceBlock");
+    //NameNode.LOG.info("[SAMAN] BlocksMap.replaceBlock");
+    //System.out.println("[SAMAN] BlocksMap.replaceBlock");
 
     Iterator itr = blocks.iterator();
     while( itr.hasNext() ){
         BlockInfo blockInfo = (BlockInfo)itr.next();
-        NameNode.LOG.info( "[SAMAN] BlocksMap.replaceBlock => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
-        System.out.println( "[SAMAN] BlocksMap.replaceBlock => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
+        //NameNode.LOG.info( "[SAMAN] BlocksMap.replaceBlock => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
+        //System.out.println( "[SAMAN] BlocksMap.replaceBlock => blockInfo.isModifiedBlock="+blockInfo.getIsModifiedBlock() );
     }
 
     BlockInfo currentBlock = blocks.get(newBlock);

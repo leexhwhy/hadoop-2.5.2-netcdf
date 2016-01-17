@@ -73,8 +73,8 @@ public class IOUtils {
   public static void copyBytes(InputStream in, OutputStream out, int buffSize) 
     throws IOException {
  
-    System.out.println( "[SAMAN] IOUtils.copyBytes => outputStreamType:"+out.getClass().getName());
-    System.out.println( "[SAMAN] IOUtils.copyBytes => inputStreamType:"+in.getClass().getName() );
+    //System.out.println( "[SAMAN] IOUtils.copyBytes => outputStreamType:"+out.getClass().getName());
+    //System.out.println( "[SAMAN] IOUtils.copyBytes => inputStreamType:"+in.getClass().getName() );
 	
     PrintStream ps = out instanceof PrintStream ? (PrintStream)out : null;
     byte buf[] = new byte[buffSize];

@@ -111,7 +111,7 @@ public class RemoteBlockReader extends FSInputChecker implements BlockReader {
   public synchronized int read(byte[] buf, int off, int len) 
                                throws IOException {
 
-    System.out.println( "[SAMAN] RemoteBlockReader.read( byte[], int, int )" );
+    //System.out.println( "[SAMAN] RemoteBlockReader.read( byte[], int, int )" );
     
     // This has to be set here, *before* the skip, since we can
     // hit EOS during the skip, in the case that our entire read

@@ -335,8 +335,8 @@ public class ClientNamenodeProtocolServerSideTranslatorPB implements
       RpcController controller, GetBlockLocationsRequestProto req)
       throws ServiceException {
     try {
-      DFSClient.LOG.info( "[SAMAN] ClientNamenodeProtocolServerSideTranslatorPB.getBlockLocations!" );
-      System.out.println( "[SAMAN] ClientNamenodeProtocolServerSideTranslatorPB.getBlockLocations!" );
+      //DFSClient.LOG.info( "[SAMAN] ClientNamenodeProtocolServerSideTranslatorPB.getBlockLocations!" );
+      //System.out.println( "[SAMAN] ClientNamenodeProtocolServerSideTranslatorPB.getBlockLocations!" );
       LocatedBlocks b = server.getBlockLocations(req.getSrc(), req.getOffset(),
           req.getLength());
       Builder builder = GetBlockLocationsResponseProto
@@ -452,8 +452,8 @@ public class ClientNamenodeProtocolServerSideTranslatorPB implements
   public AddBlockResponseProto addBlock(RpcController controller,
       AddBlockRequestProto req) throws ServiceException {
 
-    DFSClient.LOG.info("[SAMAN] ClientNamenodeProtocolServerSideTranslatorPB.addBlock with isModifiedBlock = " +
-            req.getIsModifiedBlock());
+    //DFSClient.LOG.info("[SAMAN] ClientNamenodeProtocolServerSideTranslatorPB.addBlock with isModifiedBlock = " +
+    //        req.getIsModifiedBlock());
 
     try {
       List<DatanodeInfoProto> excl = req.getExcludeNodesList();

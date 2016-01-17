@@ -223,8 +223,8 @@ public class ClientNamenodeProtocolTranslatorPB implements
         .setLength(length)
         .build();
     try {
-      DFSClient.LOG.info("[SAMAN] ClientNamenodeProtocolTranslatorPB.getBlockLocations" );
-      System.out.println("[SAMAN] ClientNamenodeProtocolTranslatorPB.getBlockLocations" );
+      //DFSClient.LOG.info("[SAMAN] ClientNamenodeProtocolTranslatorPB.getBlockLocations" );
+      //System.out.println("[SAMAN] ClientNamenodeProtocolTranslatorPB.getBlockLocations" );
       GetBlockLocationsResponseProto resp = rpcProxy.getBlockLocations(null,
           req);
       return resp.hasLocations() ? 
@@ -381,7 +381,7 @@ public class ClientNamenodeProtocolTranslatorPB implements
             throws AccessControlException, FileNotFoundException,
             NotReplicatedYetException, SafeModeException, UnresolvedLinkException,
             IOException {
-        DFSClient.LOG.info("[SAMAN] ClientNamenodeProtocolTranslatorPB.addBlock with isModifiedBlock!");
+        //DFSClient.LOG.info("[SAMAN] ClientNamenodeProtocolTranslatorPB.addBlock with isModifiedBlock!");
 
         AddBlockRequestProto.Builder req = AddBlockRequestProto.newBuilder()
                 .setSrc(src).setClientName(clientName).setFileId(fileId).setIsModifiedBlock(isModifiedBlock);

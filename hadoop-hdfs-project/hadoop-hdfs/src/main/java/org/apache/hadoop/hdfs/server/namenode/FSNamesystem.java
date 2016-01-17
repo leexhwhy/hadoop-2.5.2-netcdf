@@ -1688,7 +1688,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
     int count = 1;
     while( itr.hasNext() ){
         BlockInfo bi = (BlockInfo)itr.next();
-        DFSClient.LOG.info("[SAMAN] FSNameSystem.getBlockLocations, blockinfo #"+count+", isModifiedBlock="+bi.getIsModifiedBlock());
+        //DFSClient.LOG.info("[SAMAN] FSNameSystem.getBlockLocations, blockinfo #"+count+", isModifiedBlock="+bi.getIsModifiedBlock());
         count++;
     }
 
@@ -1825,12 +1825,12 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
           length = Math.min(length, fileSize - offset);
           isUc = false;
         }
-        LOG.info("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()# = " + inode.getBlocks().length);
-        System.out.println("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()# = " + inode.getBlocks().length);
+        //LOG.info("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()# = " + inode.getBlocks().length);
+        //System.out.println("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()# = " + inode.getBlocks().length);
         BlockInfo[] blockInfos = inode.getBlocks();
         for( int i = 0; i < blockInfos.length; i++ ){
-          LOG.info("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()["+i+"].isModifiedBlock="+blockInfos[i].getIsModifiedBlock());
-          System.out.println("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()["+i+"].isModifiedBlock="+blockInfos[i].getIsModifiedBlock());
+          //LOG.info("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()["+i+"].isModifiedBlock="+blockInfos[i].getIsModifiedBlock());
+          //System.out.println("[SAMAN] FSNameSystem.getBlockLocationsUpdateTimes, inode.getBlocks()["+i+"].isModifiedBlock="+blockInfos[i].getIsModifiedBlock());
         }
         LocatedBlocks blocks =
           blockManager.createLocatedBlocks(inode.getBlocks(), fileSize,
@@ -3372,7 +3372,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
           throws IOException {
     assert hasWriteLock();
     BlockInfo b = dir.addBlock(src, inodes, newBlock, targets, isModifiedBlock);
-    DFSClient.LOG.info("[SAMAN] FSNameystem.saveAllocatedBlock, isModifiedBlock="+b.getIsModifiedBlock());
+    //DFSClient.LOG.info("[SAMAN] FSNameystem.saveAllocatedBlock, isModifiedBlock="+b.getIsModifiedBlock());
     NameNode.stateChangeLog.info("BLOCK* allocateBlock: " + src + ". "
             + getBlockPoolId() + " " + b);
     DatanodeStorageInfo.incrementBlocksScheduled(targets);

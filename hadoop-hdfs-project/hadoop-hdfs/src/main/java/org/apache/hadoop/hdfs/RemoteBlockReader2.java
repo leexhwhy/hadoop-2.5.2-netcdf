@@ -397,15 +397,15 @@ public class RemoteBlockReader2  implements BlockReader {
                                      PeerCache peerCache,
                                      CachingStrategy cachingStrategy) throws IOException {
 
-    LOG.info( "[SAMAN] RemoteBlockReader2.newBlockReader, with file:"+file+" ,clientName:"+clientName+" ,peer:"+peer.getLocalAddressString()+"|"+peer.getRemoteAddressString() );
+    //LOG.info( "[SAMAN] RemoteBlockReader2.newBlockReader, with file:"+file+" ,clientName:"+clientName+" ,peer:"+peer.getLocalAddressString()+"|"+peer.getRemoteAddressString() );
 
     // in and out will be closed when sock is closed (by the caller)
     final DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
           peer.getOutputStream()));
 
-    LOG.info("[SAMAN] RemoteBlockReader2.newBlockReader, block="+block.getBlockName()+", clientName="+
-            clientName+", startOffset="+startOffset+", len="+len+", verifyChecksum="+verifyChecksum+
-            ", cachingStrategy="+cachingStrategy.toString());
+    //LOG.info("[SAMAN] RemoteBlockReader2.newBlockReader, block="+block.getBlockName()+", clientName="+
+    //        clientName+", startOffset="+startOffset+", len="+len+", verifyChecksum="+verifyChecksum+
+    //        ", cachingStrategy="+cachingStrategy.toString());
 
     new Sender(out).readBlock(block, blockToken, clientName, startOffset, len,
         verifyChecksum, cachingStrategy);
