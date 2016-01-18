@@ -105,6 +105,7 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
                 long blockSize = file.getBlockSize();
                 System.out.println( "[SAMAN][NetCDFInputFormat][GetSplits] NetCDFInfo!" );
                 NetCDFInfo netInfo = getNetCDFInfo(path, fs);
+                System.out.println( "[SAMAN][NetCDFInputFormat][GetSplits] After NetCDFInfo!" );
                 long recStart      = netInfo.recStart;
                 long[] chunkSizes = netInfo.chunkSizes;
                 long[] chunkStarts = netInfo.chunkStarts;
@@ -118,6 +119,7 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
                 long thisChunk = 0;
                 long blockNo = 1;
                 // Added by Saman
+                System.out.println( "[SAMAN][NetCDFInputFormat][GetSplits] before prune blocks!" );
                 int pruneBlocks = job.getConfiguration().getInt("hadoop.netcdf.pruneblocks", 0);
                 //System.out.println( "[SAMAN] NetCDFInputFormat.getSplits, prubeBlocks="+pruneBlocks );
                 //LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
@@ -128,6 +130,7 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
                 //        ", thisStart = " + thisStart);
                 int count = 0;
                 while ( bytesRemaining > 0) {
+                    System.out.println( "[SAMAN][NetCDFInputFormatWithDimensions][getSplits] in while!" );
                     while ( chunkIndex < chunkStarts.length && chunkStarts[chunkIndex] < blockNo * blockSize ) {
                         chunkIndex++;
                     }
