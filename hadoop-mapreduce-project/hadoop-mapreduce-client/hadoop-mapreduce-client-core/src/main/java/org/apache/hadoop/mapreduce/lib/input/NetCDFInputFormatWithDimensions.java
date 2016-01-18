@@ -38,16 +38,19 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
 
         //traverse header and return chunk start and size arrays
         NetCDFInfo result = new NetCDFInfo();//library call
+        System.out.println( "[SAMAN][NetCDFInputFormat][getNetCDFInfo] after NetCDFInfo!" );
 
         NetcdfFile ncFile;
         Variable v;
         ncFile = null;
         try {
             ncFile = NetcdfDataset.openFile(file.toString(), null);
+            System.out.println("[SAMAN][NetCDFInputFormat][getNetCDFInfo] after opening the file!");
 
             v = ncFile.findVariable("rsut");
             //List<Variable> vs = ncFile.getVariables();
             //v = vs.get(vs.size()-1);
+            System.out.println( "[SAMAN][NetCDFInputFormat][getNetCDFInfo] after finding a variable!" );
 
             //LOG.info("Variable is "+ v.getFullName());
             result.fileSize = ncFile.vfileSize;
