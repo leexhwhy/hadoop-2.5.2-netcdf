@@ -91,6 +91,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
   public List<InputSplit> getSplits(JobContext job)
     throws IOException {
     List<FileStatus> files = listStatus(job);
+
+    System.out.println( "[SAMAN][NetCDFInputFormat][GetSplits] Beginning of getSplits!" );
     
     // Save the number of input files in the job-conf
     long totalSize = 0;                           // compute total size
@@ -110,6 +112,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
     NetworkTopology clusterMap = new NetworkTopology();
     for (FileStatus file: files) {
       Path path = file.getPath();
+
       FileSystem fs = path.getFileSystem(job.getConfiguration());
       long length = file.getLen();
       //LOG.info("get file len of "+file.getPath());

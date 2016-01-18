@@ -74,6 +74,8 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
             throws IOException {
         List<FileStatus> files = listStatus(job);
 
+        System.out.println( "[SAMAN][NetCDFInputFormatWithDimensions] Beginning of getSplits!" );
+
         // Save the number of input files in the job-conf
         long totalSize = 0;                           // compute total size
         for (FileStatus file: files) {                // check we have valid files
