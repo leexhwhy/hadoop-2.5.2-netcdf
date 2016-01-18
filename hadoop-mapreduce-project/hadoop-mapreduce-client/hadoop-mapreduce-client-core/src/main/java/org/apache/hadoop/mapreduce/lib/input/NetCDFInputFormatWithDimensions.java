@@ -56,7 +56,9 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
             result.fileSize = ncFile.vfileSize;
             result.recStart = ncFile.vrecStart;
             Long[] metaArray = v.reallyReadMeta().toArray(new Long[(int)(ncFile.vnumRecs)]);
+            System.out.println( "[SAMAN][NetCDFInputFormat][getNetCDFInfo] reading meta!" );
             result.chunkStarts =ArrayUtils.toPrimitive(metaArray);
+            System.out.println( "[SAMAN][NetCDFInputFormat][getNetCDFInfo] after reading meta!" );
             //result.chunkSizes = nc.chunkSizes;
             result.numRecs = ncFile.vnumRecs;
             result.recSize = ncFile.vrecSize;
@@ -68,6 +70,8 @@ public class NetCDFInputFormatWithDimensions extends FileInputFormat<Text, NetCD
             LOG.info("Bad... "+ e);
         }
         try{if (ncFile!=null)ncFile.close();}catch (Exception e) {LOG.info("Bad2... "+e);}
+
+        System.out.println( "[SAMAN][NetCDFInputFormat][getNetCDFInfo] getNetCDFInfo done!" );
 
         return result;
     }
