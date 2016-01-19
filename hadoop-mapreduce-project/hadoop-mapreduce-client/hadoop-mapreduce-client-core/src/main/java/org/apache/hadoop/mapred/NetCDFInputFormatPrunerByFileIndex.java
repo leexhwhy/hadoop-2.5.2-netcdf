@@ -49,6 +49,7 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
+import org.apache.hadoop.mapreduce.lib.db.IntegerSplitter;
 import org.apache.hadoop.mapreduce.security.TokenCache;
 import org.apache.hadoop.net.NetworkTopology;
 import org.apache.hadoop.net.Node;
@@ -203,6 +204,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
         for (FileStatus file: files) {
             Path path = file.getPath();
             int fileIndex = 0;
+            int dimIndex = 0;
             if( queryType == QueryType.TIME || queryType == QueryType.NOLIMIT){
                 if( path.getName().contains("lat") || path.getName().contains("lon") )
                     continue;
@@ -217,7 +219,15 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                 String[] parts = path.getName().split("-");
                 fileIndex = Integer.valueOf(parts[1]);
             }
-
+            else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
+                if( path.getName().contains("_") ){
+                    String[] parts = path.getName().split("_");
+                    fileIndex = Integer.valueOf(parts[2]);
+                    dimIndex = Integer.valueOf(parts[0].substring(7));
+                }else{
+                    dimIndex = Integer.valueOf(path.getName().substring(7));
+                }
+            }
 
             LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
             System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
@@ -279,7 +289,30 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                             thisChunk = endChunk;
                             continue;
                         }
-                    }else{
+                    } else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
+                        if( topLimit < dimIndex && (topLimit != -1) ){
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        if( bottomLimit > dimIndex && (topLimit != -1) ){
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        /*
+                        if ((topLimit < thisChunk) && (topLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        if ((bottomLimit > endChunk) && (bottomLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        */
+                    } else {
                         if ((topLimit < thisChunk) && (topLimit != -1)) {
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
