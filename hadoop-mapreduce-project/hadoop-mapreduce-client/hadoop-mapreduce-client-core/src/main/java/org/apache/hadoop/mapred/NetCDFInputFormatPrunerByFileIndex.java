@@ -85,6 +85,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
     public enum QueryType { TIME, LAT, LON, NOLIMIT }
 
+    private long blockSize = 128 * 1024 * 1024;
+
     private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job)
     {
         //traverse header and return chunk start and size arrays
@@ -247,6 +249,15 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                 long   thisStart       = recStart; // file position
                 long   thisChunk       = 0;
                 long   blockNo         = 1;
+                long numChunksPerKey = 0;
+                if( queryType == QueryType.LAT ){
+                    long chunkSize = netInfo.timeLength * netInfo.lonLength;
+                    numChunksPerKey = blockSize / chunkSize;
+                }else if( queryType == QueryType.LON ){
+                    long chunkSize = netInfo.timeLength * netInfo.latLength;
+                    numChunksPerKey = blockSize / chunkSize;
+                }
+
                 //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
                 //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
                 //        ", thisStart = " + thisStart);
@@ -290,12 +301,12 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                             continue;
                         }
                     } else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
-                        if( topLimit < dimIndex && (topLimit != -1) ){
+                        if( topLimit < dimIndex*numChunksPerKey && (topLimit != -1) ){
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
                             continue;
                         }
-                        if( bottomLimit > dimIndex && (topLimit != -1) ){
+                        if( bottomLimit > dimIndex*numChunksPerKey && (topLimit != -1) ){
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
                             continue;
