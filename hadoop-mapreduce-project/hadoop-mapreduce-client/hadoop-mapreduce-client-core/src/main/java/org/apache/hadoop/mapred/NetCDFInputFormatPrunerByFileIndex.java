@@ -251,10 +251,10 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                 long   blockNo         = 1;
                 long numChunksPerKey = 0;
                 if( queryType == QueryType.LAT ){
-                    long chunkSize = netInfo.timeLength * netInfo.lonLength;
+                    long chunkSize = netInfo.timeLength * netInfo.lonLength * 4;
                     numChunksPerKey = blockSize / chunkSize;
                 }else if( queryType == QueryType.LON ){
-                    long chunkSize = netInfo.timeLength * netInfo.latLength;
+                    long chunkSize = netInfo.timeLength * netInfo.latLength * 4;
                     numChunksPerKey = blockSize / chunkSize;
                 }
 
