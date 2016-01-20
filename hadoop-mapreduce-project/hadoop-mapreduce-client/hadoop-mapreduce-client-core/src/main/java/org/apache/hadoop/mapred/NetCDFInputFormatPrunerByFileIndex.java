@@ -258,6 +258,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                     numChunksPerKey = blockSize / chunkSize;
                 }
 
+                System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] numChunksPerKey = " + numChunksPerKey );
+
                 //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
                 //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
                 //        ", thisStart = " + thisStart);
@@ -301,6 +303,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                             continue;
                         }
                     } else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
+                        System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] file = "
+                                + path.getName() + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit + ", dimIndex = " + dimIndex );
                         if( topLimit < dimIndex*numChunksPerKey && (topLimit != -1) ){
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
