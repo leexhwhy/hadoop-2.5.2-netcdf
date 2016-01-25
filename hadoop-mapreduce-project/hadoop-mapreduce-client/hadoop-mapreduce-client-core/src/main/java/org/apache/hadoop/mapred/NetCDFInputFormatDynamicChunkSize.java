@@ -199,6 +199,7 @@ public class NetCDFInputFormatDynamicChunkSize extends FileInputFormat<Text, Net
                     thisChunk = endChunk;
                     LOG.info( "[SAMAN] NetCDFInputFormatDynamicChunkSize.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
                     System.out.println( "[SAMAN] NetCDFInputFormatDynamicChunkSize.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
+                    break;
                 }
 
             } else if (length != 0) {
