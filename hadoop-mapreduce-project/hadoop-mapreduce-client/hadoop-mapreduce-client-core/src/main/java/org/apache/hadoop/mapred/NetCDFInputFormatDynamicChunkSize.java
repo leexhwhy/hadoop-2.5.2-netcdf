@@ -172,6 +172,7 @@ public class NetCDFInputFormatDynamicChunkSize extends FileInputFormat<Text, Net
                         chunkIndex++;
                         if( chunkCounter >= chunkSizeLimit ) break;
                     }
+                    chunkCounter = 0;
                     long tempStart       = thisStart;
                     long endChunk;
                     if (chunkIndex >= chunkStarts.length) {
