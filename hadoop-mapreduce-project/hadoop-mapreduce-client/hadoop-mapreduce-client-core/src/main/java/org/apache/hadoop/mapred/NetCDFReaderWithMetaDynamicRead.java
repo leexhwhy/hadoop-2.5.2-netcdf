@@ -94,7 +94,7 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
     public synchronized boolean next(Text key, NetCDFArrayWritable value)
             throws IOException {
 
-        FloatWritable[] fw;
+        FloatWritable[] fw = null;
         //for( int attempt = 1; attempt <= readSizeLimit; attempt++ ) {
             if (pos < end) {
                 key.set(String.valueOf(pos));
