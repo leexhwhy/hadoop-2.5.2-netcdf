@@ -36,7 +36,6 @@ import org.apache.hadoop.io.compress.CompressionCodecFactory;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
-import java.lang.reflect.Array;
 import java.util.List;
 import ucar.nc2.*;
 import ucar.nc2.iosp.*;
