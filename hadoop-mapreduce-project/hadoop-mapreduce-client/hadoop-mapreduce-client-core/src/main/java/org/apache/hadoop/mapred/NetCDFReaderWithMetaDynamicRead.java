@@ -71,6 +71,8 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
 
         readSizeLimit = Integer.valueOf(job.get(DYNAMIC_READSIZE_LIMIT, "1"));
 
+        System.out.println( "[SAMAN][NetCDFReaderWithMetaDynamicRead] readSizeLimit="+readSizeLimit );
+
         //LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
 
         ncFile = NetcdfDataset.openFile(file.toString(), null);
@@ -130,6 +132,9 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
             }
         //}
         for( int attempts = 2; attempts <= readSizeLimit; attempts++ ){
+
+            System.out.println( "[SAMAN][NetCDFReaderWithMetaDynamicRead][next] attempt = " + attempts );
+
             if (pos < end) {
                 //key.set(String.valueOf(pos));
                 Array chunk = null;
@@ -166,6 +171,7 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
         }
 
         if( fw != null ){
+            System.out.println("[SAMAN][NetCDFReaderWithMetaDynamicRead][next] fw.length = " + fw.length );
             value.set(fw);
             return true;
         }else {
