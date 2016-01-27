@@ -150,7 +150,7 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
                 //LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
                 int dimensionsSize = v.getDimensions().size();
                 float[] my = (float[]) chunk.get1DJavaArray(Float.class);
-                FloatWritable[] fwSecond = new FloatWritable[my.length + dimensionsSize + 1];
+                FloatWritable[] fwSecond = new FloatWritable[my.length];
                 //fw[0] = new FloatWritable(dimensionsSize);
                 //fw[1] = new FloatWritable(pos);
                 //for (int i = 2; i < dimensionsSize + 1; i++) {
