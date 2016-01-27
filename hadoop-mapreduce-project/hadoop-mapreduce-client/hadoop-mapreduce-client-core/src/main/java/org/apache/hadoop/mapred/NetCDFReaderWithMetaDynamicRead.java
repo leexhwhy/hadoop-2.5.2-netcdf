@@ -113,7 +113,11 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
                 //LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
                 int dimensionsSize = v.getDimensions().size();
                 float[] my = (float[]) chunk.get1DJavaArray(Float.class);
-                fw = new FloatWritable[my.length + dimensionsSize + 1];
+
+                int myLength = my.length;
+                long arraySizeFactor =  Math.min(end - pos, readSizeLimit);
+
+                fw = new FloatWritable[my.length*(int)arraySizeFactor + dimensionsSize + 1];
                 fw[0] = new FloatWritable(dimensionsSize);
                 fw[1] = new FloatWritable(pos);
                 for (int i = 2; i < dimensionsSize + 1; i++) {
@@ -150,19 +154,19 @@ public class NetCDFReaderWithMetaDynamicRead implements RecordReader<Text, NetCD
                 //LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
                 int dimensionsSize = v.getDimensions().size();
                 float[] my = (float[]) chunk.get1DJavaArray(Float.class);
-                FloatWritable[] fwSecond = new FloatWritable[my.length];
+                //FloatWritable[] fwSecond = new FloatWritable[my.length];
                 //fw[0] = new FloatWritable(dimensionsSize);
                 //fw[1] = new FloatWritable(pos);
                 //for (int i = 2; i < dimensionsSize + 1; i++) {
                 //    fw[i] = new FloatWritable(v.getDimensions().get(i - 1).getLength());
                 //}
                 for (int i = 0; i < my.length; i++) {
-                    fwSecond[i] = new FloatWritable(my[i]);
+                    fw[i+(attempts-1)*my.length+dimensionsSize+1] = new FloatWritable(my[i]);
                 }
 
                 //System.out.println("[SAMAN][NetCDFReaderWithMetaDynamicRead][Next] fw[0]=" + fwSecond[0].toString());
 
-                fw = (FloatWritable[])ArrayUtils.addAll( fw, fwSecond );
+                //fw = (FloatWritable[])ArrayUtils.addAll( fw, fwSecond );
                 //value.set(fw);
                 pos++;
                 //return true;
