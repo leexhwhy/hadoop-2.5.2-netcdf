@@ -116,6 +116,8 @@ public class NetCDFReaderWithMetaDynamicReadMicro implements RecordReader<Text, 
                 my = (float[])chunk.get1DJavaArray(Float.class);
 
             int fwRightSize = Math.min( readSizeLimit, my.length - microPos );
+            System.out.println( "[SAMAN][NetCDFReaderWithMetaDynamicReadMicro][next] readSizeLimit="+readSizeLimit
+                                +",my.length-microPos="+(my.length-microPos)+",fwRightSize="+fwRightSize);
 
             FloatWritable[] fw = new FloatWritable[fwRightSize + dimensionsSize + 1];
             fw[0] = new FloatWritable( dimensionsSize );
@@ -124,6 +126,7 @@ public class NetCDFReaderWithMetaDynamicReadMicro implements RecordReader<Text, 
                 fw[i] = new FloatWritable(v.getDimensions().get(i-1).getLength());
             }
             for (int i=dimensionsSize+1; i< fwRightSize+dimensionsSize+1; i++) {
+                System.out.println( "[SAMAN][NetCDFReaderWithMetaDynamicReadMicro][next] i="+(i-dimensionsSize-1+microPos) );
                 fw[i]=new FloatWritable(my[i-dimensionsSize-1+microPos]);
                 microPos++;
             }
