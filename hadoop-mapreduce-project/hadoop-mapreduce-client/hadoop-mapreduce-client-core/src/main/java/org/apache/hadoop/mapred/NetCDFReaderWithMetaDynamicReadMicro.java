@@ -133,7 +133,7 @@ public class NetCDFReaderWithMetaDynamicReadMicro implements RecordReader<Text, 
             value.set(fw);
             //pos ++;
 
-            if( microPos == my.length -1 ){
+            if( microPos >= my.length -1 ){
                 microPos = 0;
                 pos++;
             }
