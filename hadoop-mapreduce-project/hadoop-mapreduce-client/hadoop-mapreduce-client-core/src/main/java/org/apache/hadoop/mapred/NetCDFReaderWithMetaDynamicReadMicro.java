@@ -125,9 +125,10 @@ public class NetCDFReaderWithMetaDynamicReadMicro implements RecordReader<Text, 
             for (int i = 2; i < dimensionsSize+1; i++ ){
                 fw[i] = new FloatWritable(v.getDimensions().get(i-1).getLength());
             }
+            int prevMicroPos = microPos;
             for (int i=dimensionsSize+1; i< fwRightSize+dimensionsSize+1; i++) {
-                System.out.println( "[SAMAN][NetCDFReaderWithMetaDynamicReadMicro][next] i="+(i-dimensionsSize-1+microPos) );
-                fw[i]=new FloatWritable(my[i-dimensionsSize-1+microPos]);
+                System.out.println( "[SAMAN][NetCDFReaderWithMetaDynamicReadMicro][next] i="+(i-dimensionsSize-1+prevMicroPos) );
+                fw[i]=new FloatWritable(my[i-dimensionsSize-1+prevMicroPos]);
                 microPos++;
             }
 
