@@ -214,6 +214,9 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 outputFile.addGroupAttribute(null, new Attribute("modeling_realm", "atmos"));
                 outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
 
+                long first1 = System.nanoTime();
+
+
                 ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLat;");
                 Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
@@ -279,6 +282,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
+                long first2 = System.nanoTime();
+
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
                 Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 Array dataRsut = Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
@@ -309,6 +314,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
+                long first3 = System.nanoTime();
+
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
                 outputFile.create();
                 outputFile.write(vlatNew, dataLat);
@@ -327,7 +334,11 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
                 long third = System.nanoTime();
 
-                System.out.println( "[SAMAN][NetCDFOutputFormat][write] first=" + first + ", second=" + second + ", third=" + third  );
+                System.out.println( "[SAMAN][NetCDFOutputFormat][write] first=" + first + ", first1=" + first1 +
+                        ", first2=" + first2 +
+                        ", first3=" + first3 +
+                        ", second=" + second +
+                        ", third=" + third  );
 
             } catch (Exception e) {
                 System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());
