@@ -260,8 +260,8 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
     Iterator itr = locatedBlocks.getLocatedBlocks().iterator();
     while( itr.hasNext() ){
       LocatedBlock locatedBlock = (LocatedBlock)itr.next();
-      DFSClient.LOG.info( "[SAMAN] DFSInputStream.fetchLocatedBlocksAndGetLastBlockLength, isModifiedBlock="+locatedBlock.getIsModifiedBlock() );
-      System.out.println( "[SAMAN] DFSInputStream.fetchLocatedBlocksAndGetLastBlockLength, isModifiedBlock="+locatedBlock.getIsModifiedBlock() );
+      //DFSClient.LOG.info( "[SAMAN] DFSInputStream.fetchLocatedBlocksAndGetLastBlockLength, isModifiedBlock="+locatedBlock.getIsModifiedBlock() );
+      //System.out.println( "[SAMAN] DFSInputStream.fetchLocatedBlocksAndGetLastBlockLength, isModifiedBlock="+locatedBlock.getIsModifiedBlock() );
     }
     long lastBlockBeingWrittenLength = 0;
     if (!locatedBlocks.isLastBlockComplete()) {
@@ -554,8 +554,8 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
       assert (target==pos) : "Wrong postion " + pos + " expect " + target;
       long offsetIntoBlock = target - targetBlock.getStartOffset();
 
-      DFSClient.LOG.info("[SAMAN] DFSInputStream.blockSeekTo, startOffSet="+targetBlock.getStartOffset()+", offsetIntroBlock="+offsetIntoBlock+", length="
-              +(int)(targetBlock.getBlock().getNumBytes() - offsetIntoBlock));
+      //DFSClient.LOG.info("[SAMAN] DFSInputStream.blockSeekTo, startOffSet="+targetBlock.getStartOffset()+", offsetIntroBlock="+offsetIntoBlock+", length="
+      //        +(int)(targetBlock.getBlock().getNumBytes() - offsetIntoBlock));
 
       // TODO: Added By Saman
       // if( offsetIntoBlock < 0 )
@@ -1021,7 +1021,7 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
       final ByteBuffer bb,
       final Map<ExtendedBlock, Set<DatanodeInfo>> corruptedBlockMap) {
 
-    DFSClient.LOG.info("[SAMAN] DFSInputStream.info, datanode:"+datanode.info.getName());
+    //DFSClient.LOG.info("[SAMAN] DFSInputStream.info, datanode:"+datanode.info.getName());
 
     return new Callable<ByteBuffer>() {
       @Override
@@ -1315,7 +1315,7 @@ implements ByteBufferReadable, CanSetDropBehind, CanSetReadahead,
   public int read(long position, byte[] buffer, int offset, int length)
     throws IOException {
 
-    DFSClient.LOG.info( "[SAMAN] DFSInputStream.read( long, byte[], int, int )" );
+    //DFSClient.LOG.info( "[SAMAN] DFSInputStream.read( long, byte[], int, int )" );
 
     // sanity checks
     dfsClient.checkOpen();

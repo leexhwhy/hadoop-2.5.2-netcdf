@@ -72,7 +72,7 @@ public class NetCDFTransposeCompact2 {
                 NetCDFArrayWritable resultNetCDF = new NetCDFArrayWritable();
                 result[0] = new FloatWritable(Float.valueOf(i));
                 result[1] = new FloatWritable(Float.valueOf(key.toString()));
-                System.out.println( "[SAMAN][NetCDFTransposeCompact2][Map] key="+(i/numChunksPerKey) );
+                //System.out.println( "[SAMAN][NetCDFTransposeCompact2][Map] key="+(i/numChunksPerKey) );
                 java.lang.System.arraycopy(records, i*lonSize, result, 2, lonSize);
                 resultNetCDF.set(result);
                 context.write( new Text(Integer.toString(i/numChunksPerKey)+","+timeSize+","+latSize+","+lonSize), resultNetCDF );
@@ -133,10 +133,10 @@ public class NetCDFTransposeCompact2 {
             Collections.sort(listNetCDFArrayWritable);
 
             itr = listNetCDFArrayWritable.iterator();
-            while( itr.hasNext() ){
-                NetCDFArrayWritable array = (NetCDFArrayWritable)itr.next();
-                System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
-            }
+            //while( itr.hasNext() ){
+            //    NetCDFArrayWritable array = (NetCDFArrayWritable)itr.next();
+                //System.out.println( "[SAMAN][NetCDFTransposeCompact2][reduce] latIndex="+array.get()[0]+", timeIndex="+array.get()[1] );
+            //}
 
             /*
             FloatWritable[] fw = new FloatWritable[numChunksPerKey*timeDim*lonDim];
@@ -159,7 +159,7 @@ public class NetCDFTransposeCompact2 {
 
 
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
+            //System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Ending!" );
 
             context.write( key, listNetCDFArrayWritable );
 
@@ -174,7 +174,7 @@ public class NetCDFTransposeCompact2 {
                            Context context )
                 throws IOException, InterruptedException {
 
-            System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
+            //System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Reducer Beginning!" );
 
             String fileName = "hdfs://master:9000/rsutout";
             NetcdfFile dataFile = null;
@@ -190,11 +190,11 @@ public class NetCDFTransposeCompact2 {
                 Variable vlon_bnds = dataFile.findVariable("lon_bnds");
                 Variable vrsut = dataFile.findVariable("rsut");
 
-                System.out.println("sizes are = vtime.size=" + vtime.getSize() + ", vtime_bnds.size=" + vtime_bnds.getSize() + ", vlat.size=" + vlat.getSize() +
-                        ", vlat_bnds.size=" + vlat_bnds.getSize() + ", vlon.size=" + vlon.getSize() + ", vlon_bnds.size=" + vlon_bnds.getSize() +
-                        ", vrsut.size=" + vrsut.getSize());
-                System.out.println("dimension names are = " + vtime.getDimensionsString() + "," + vlat.getDimensionsString() + "," +
-                        vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
+                //System.out.println("sizes are = vtime.size=" + vtime.getSize() + ", vtime_bnds.size=" + vtime_bnds.getSize() + ", vlat.size=" + vlat.getSize() +
+                //        ", vlat_bnds.size=" + vlat_bnds.getSize() + ", vlon.size=" + vlon.getSize() + ", vlon_bnds.size=" + vlon_bnds.getSize() +
+                //        ", vrsut.size=" + vrsut.getSize());
+                //System.out.println("dimension names are = " + vtime.getDimensionsString() + "," + vlat.getDimensionsString() + "," +
+                //        vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
             }catch( Exception e ){
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] Exception!" );
                 System.out.println( "[SAMAN][NetCDFTranspose][Reducer] " + e.getMessage() );
