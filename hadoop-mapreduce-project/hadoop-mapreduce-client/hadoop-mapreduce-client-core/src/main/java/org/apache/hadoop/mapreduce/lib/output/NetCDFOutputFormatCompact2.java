@@ -109,6 +109,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
             NetcdfFile dataFile = null;
             NetcdfFileWriter outputFile = null;
 
+            long first = System.nanoTime();
+
             try {
                 dataFile = NetcdfFile.open(fileName, null);
                 outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, outputFileName);
@@ -127,16 +129,16 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                         vlon.getDimensionsString() + "," + vrsut.getDimensionsString());
 
                 //Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Dimensions.");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Dimensions.");
                 Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), latIndexesSize);
                 Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
                 Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
                 Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] After Dimensions.");
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] latDim: " + latDim.getLength());
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] After Dimensions.");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] latDim: " + latDim.getLength());
 
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before List Dimensions;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before List Dimensions;");
                 java.util.List<Dimension> time_bnds_dim = new ArrayList<Dimension>();
                 java.util.List<Dimension> lat_bnds_dim = new ArrayList<Dimension>();
                 java.util.List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
@@ -152,7 +154,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 rsut_dim.add(timeDim);
                 rsut_dim.add(lonDim);
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Variables, with vlat Dimension string: " + vlat.getDimensionsString());
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Variables, with vlat Dimension string: " + vlat.getDimensionsString());
                 Variable vlatNew = outputFile.addVariable(null, vlat.getShortName(), vlat.getDataType(), vlat.getDimensionsString());
                 Variable vlatbndsNew = outputFile.addVariable(null, vlat_bnds.getShortName(), vlat_bnds.getDataType(), lat_bnds_dim);
                 Variable vtimeNew = outputFile.addVariable(null, vtime.getShortName(), vtime.getDataType(), vtime.getDimensionsString());
@@ -162,7 +164,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 Variable vrsutNew = outputFile.addVariable(null, vrsut.getShortName(), vrsut.getDataType(), rsut_dim);
 
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Attributes;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Attributes;");
                 java.util.List<Attribute> attributes = vtime.getAttributes();
                 Iterator itr = attributes.iterator();
                 while (itr.hasNext()) {
@@ -213,7 +215,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
 
                 ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLat;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLat;");
                 Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
                 int[] shape;
                 for( int i = 0; i < latIndexesSize; i++ ){
@@ -221,7 +223,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     dataLat.setDouble(i, Double.valueOf(latArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i)));
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;");
                 ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
                 Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize, 2});
                 shape = dataLatBnds.getShape();
@@ -237,7 +239,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataTime;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataTime;");
                 ArrayDouble.D1 timeArray = (ArrayDouble.D1) vtime.read();
                 Array dataTime = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize())});
                 shape = timeArray.getShape();
@@ -245,7 +247,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     dataTime.setDouble(i, timeArray.get(i));
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataTimeBnds;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataTimeBnds;");
                 ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
                 Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize()), 2});
                 shape = dataTimeBnds.getShape();
@@ -257,7 +259,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLon;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLon;");
                 ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
                 Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize())});
                 shape = lonArray.getShape();
@@ -265,7 +267,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     dataLon.setDouble(i, lonArray.get(i));
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLonBnds;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLonBnds;");
                 ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
                 Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize()), 2});
                 shape = dataLonBnds.getShape();
@@ -277,7 +279,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
                 Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 Array dataRsut = Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 int globalIndex = 0;
@@ -307,7 +309,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
-                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
+                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
                 outputFile.create();
                 outputFile.write(vlatNew, dataLat);
                 outputFile.write(vlatbndsNew, dataLatBnds);
@@ -318,8 +320,14 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
+                long second = System.nanoTime();
+
                 //_fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
                 _fs.moveFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
+
+                long third = System.nanoTime();
+
+                System.out.println( "[SAMAN][NetCDFOutputFormat][write] first=" + first + ", second=" + second + ", third=" + third  );
 
             } catch (Exception e) {
                 System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());
