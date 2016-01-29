@@ -218,17 +218,23 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
 
                 ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
+                long first111 = System.nanoTime();
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLat;");
                 Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
+                long first112 = System.nanoTime();
                 int[] shape;
                 for( int i = 0; i < latIndexesSize; i++ ){
                     //System.out.println( "[SAMAN][NetCDFOutputFormatCompact][Write] getting lat: " + (Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i) );
                     dataLat.setDouble(i, Double.valueOf(latArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i)));
                 }
+                long first113 = System.nanoTime();
 
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLatBnds;");
                 ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
+
+                long first121 = System.nanoTime();
                 Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize, 2});
+                long first122 = System.nanoTime();
                 shape = dataLatBnds.getShape();
                 Index2D idx = new Index2D(new int[]{latIndexesSize, 2});
                 //idx.set(0, 0);
@@ -241,18 +247,30 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                         dataLatBnds.setDouble(idx, latBndsArray.get(Integer.valueOf(currentCumulativeLat)*numChunksPerKey+i, j));
                     }
                 }
+                long first123 = System.nanoTime();
 
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataTime;");
                 ArrayDouble.D1 timeArray = (ArrayDouble.D1) vtime.read();
+
+                long first131 = System.nanoTime();
+
                 Array dataTime = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize())});
+                long first132 = System.nanoTime();
                 shape = timeArray.getShape();
                 for (int i = 0; i < shape[0]; i++) {
                     dataTime.setDouble(i, timeArray.get(i));
                 }
+                long first133 = System.nanoTime();
 
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataTimeBnds;");
                 ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
+
+                long first141 = System.nanoTime();
+
                 Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize()), 2});
+
+                long first142 = System.nanoTime();
+
                 shape = dataTimeBnds.getShape();
                 idx = new Index2D(new int[]{(int) (vtime.getSize()), 2});
                 for (int i = 0; i < shape[0]; i++) {
@@ -262,17 +280,33 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                     }
                 }
 
+                long first143 = System.nanoTime();
+
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLon;");
                 ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
+
+                long first151 = System.nanoTime();
+
                 Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize())});
+
+                long first152 = System.nanoTime();
+
                 shape = lonArray.getShape();
                 for (int i = 0; i < shape[0]; i++) {
                     dataLon.setDouble(i, lonArray.get(i));
                 }
 
+                long first153 = System.nanoTime();
+
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataLonBnds;");
                 ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
+
+                long first161 = System.nanoTime();
+
                 Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize()), 2});
+
+                long first162 = System.nanoTime();
+
                 shape = dataLonBnds.getShape();
                 idx = new Index2D(new int[]{(int) (vlon.getSize()), 2});
                 for (int i = 0; i < shape[0]; i++) {
@@ -281,6 +315,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                         dataLonBnds.setDouble(idx, lonBndsArray.get(i, j));
                     }
                 }
+
 
                 long first2 = System.nanoTime();
 
@@ -334,11 +369,29 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
                 long third = System.nanoTime();
 
-                System.out.println( "[SAMAN][NetCDFOutputFormat][write] first=" + first + ", first1=" + first1 +
-                        ", first2=" + first2 +
-                        ", first3=" + first3 +
-                        ", second=" + second +
-                        ", third=" + third  );
+                System.out.println( "[SAMAN][NetCDFOutputFormat][write]" +
+                        " first-first1=" + (first-first1) +
+                        ", first111-first1=" + (first111-first1) +
+                        ", first112-first111=" + (first112 - first111) +
+                        ", first113-first112=" + (first113 - first112) +
+                        ", first121-first113=" + (first121-first113) +
+                        ", first122-first121=" + (first122-first121) +
+                        ", first123-first122=" + (first123-first122) +
+                        ", first131-first123=" + (first131-first123) +
+                        ", first132-first131=" + (first132-first131) +
+                        ", first133-first132=" + (first133-first132) +
+                        ", first141-first133=" + (first141-first133) +
+                        ", first142-first141=" + (first142-first141) +
+                        ", first143-first142=" + (first143-first142) +
+                        ", first151-first143=" + (first151-first143) +
+                        ", first152-first151=" + (first152-first151) +
+                        ", first153-first152=" + (first153-first152) +
+                        ", first161-first153=" + (first161-first153) +
+                        ", first162-first161=" + (first162-first161) +
+                        ", first2-first162=" + (first2-first162) +
+                        ", first3-first2=" + (first3-first2) +
+                        ", second-first3=" + (second-first3) +
+                        ", third-second=" + (third-second)  );
 
             } catch (Exception e) {
                 System.out.println("[SAMAN][NetCDFOutputFormat][write] Exception in end = " + e.getMessage());
