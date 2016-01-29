@@ -232,7 +232,7 @@ public class NetCDFInputFormatDynamicReadSize extends FileInputFormat<Text, NetC
         reporter.setStatus(genericSplit.toString());
         //LOG.info( "[SAMAN] return getRecordReader" );
         //System.out.println( "[SAMAN] return getRecordReader" );
-        return new NetCDFReaderWithMetaDynamicRead(job, (FileSplit) genericSplit);
+        return new NetCDFReaderWithMetaDynamicReadMicro(job, (FileSplit) genericSplit);
     }
 
 
