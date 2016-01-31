@@ -301,7 +301,7 @@ public class NetCDFOutputFormatCompact2Reduced<Text, List> extends FileOutputFor
 
                 long first152 = System.nanoTime();
 
-                shape = lonArray.getShape();
+                shape = dataLon.getShape();
                 for (int i = 0; i < shape[0]; i++) {
                     dataLon.setDouble(i, (double)i);
                 }
