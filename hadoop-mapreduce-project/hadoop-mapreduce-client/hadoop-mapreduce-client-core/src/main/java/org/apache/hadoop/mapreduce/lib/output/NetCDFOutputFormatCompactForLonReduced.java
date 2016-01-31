@@ -236,7 +236,7 @@ public class NetCDFOutputFormatCompactForLonReduced<Text, List> extends FileOutp
                         if( j == 0 ){
                             dataLonBnds.setDouble(idx, (double)(Integer.valueOf(currentCumulativeLon)*numChunksPerKey+i) - 0.5);
                         }else if( j == 1 ){
-                            dataLonBnds.setDouble(idx, (double)(Integer.valueOf(currentCumulativeLon)*numChunksPerKey+i)= + 0.5);
+                            dataLonBnds.setDouble(idx, (double)(Integer.valueOf(currentCumulativeLon)*numChunksPerKey+i) + 0.5);
                         }
                         //dataLonBnds.setDouble(idx, lonBndsArray.get(Integer.valueOf(currentCumulativeLon)*numChunksPerKey+i, j));
                     }
