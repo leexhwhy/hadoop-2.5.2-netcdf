@@ -261,7 +261,7 @@ public class NetCDFOutputFormatCompact2Reduced<Text, List> extends FileOutputFor
 
                 Array dataTime = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize())});
                 long first132 = System.nanoTime();
-                shape = timeArray.getShape();
+                shape = dataTime.getShape();
                 for (int i = 0; i < shape[0]; i++) {
                     dataTime.setDouble(i, (double)i);
                 }

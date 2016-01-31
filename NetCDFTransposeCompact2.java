@@ -36,6 +36,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact;
 import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact2;
+import org.apache.hadoop.mapreduce.lib.output.NetCDFOutputFormatCompact2Reduced;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
 import org.apache.hadoop.mapred.JobConf;
@@ -242,7 +243,7 @@ public class NetCDFTransposeCompact2 {
         job.setMapOutputValueClass(NetCDFArrayWritable.class);
         job.setOutputValueClass(List.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
-        job.setOutputFormatClass(NetCDFOutputFormatCompact2.class);
+        job.setOutputFormatClass(NetCDFOutputFormatCompact2Reduced.class);
         job.setNumReduceTasks(59);
         String singleInput = otherArgs[0];
         conf.set( NetCDFOutputFormat.NETCDF_INPUT_PATH, singleInput );
