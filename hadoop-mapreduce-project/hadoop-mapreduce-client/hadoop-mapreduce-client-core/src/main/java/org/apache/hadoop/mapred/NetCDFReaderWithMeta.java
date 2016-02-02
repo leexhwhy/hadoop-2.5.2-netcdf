@@ -63,7 +63,7 @@
         end = split.getFileSplit().endChunk; //start + split.getLength();
         final Path file = split.getPath();
 
-        //LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
+        LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
 
         ncFile = NetcdfDataset.openFile(file.toString(), null);
         List<Variable> vs = ncFile.getVariables();
