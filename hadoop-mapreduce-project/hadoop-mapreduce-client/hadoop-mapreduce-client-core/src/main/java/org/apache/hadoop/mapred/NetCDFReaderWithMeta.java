@@ -96,7 +96,8 @@
             LOG.info("section error " + e);
           }
           if (chunk == null) {LOG.info("chunk is null");return false;}
-          //LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
+          LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
+            System.out.println(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
           int dimensionsSize = v.getDimensions().size();
           float[] my = (float[])chunk.get1DJavaArray(Float.class);
           FloatWritable[] fw = new FloatWritable[my.length + dimensionsSize + 1];
@@ -109,7 +110,7 @@
             fw[i]=new FloatWritable(my[i-dimensionsSize-1]);
           }
 
-          System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] fw[0]="+fw[0].toString() );
+          //System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] fw[0]="+fw[0].toString() );
 
           value.set(fw);
           pos ++;
