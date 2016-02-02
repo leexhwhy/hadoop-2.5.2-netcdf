@@ -131,11 +131,11 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
     throws IOException {
     FileStatus[] files = listStatus(job);
 
-    LOG.info("[SAMAN][NetCDFInputFormat][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
-    System.out.println("[SAMAN][NetCDFInputFormat][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
+    //LOG.info("[SAMAN][NetCDFInputFormat][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
+    //System.out.println("[SAMAN][NetCDFInputFormat][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
 	
-    System.out.println( "[SAMAN] beginning of getSplits" );
-    LOG.info( "[SAMAN] beginning of getSplits" );
+    //System.out.println( "[SAMAN] beginning of getSplits" );
+    //LOG.info( "[SAMAN] beginning of getSplits" );
     //System.out.println( "[SAMAN] " + files.length );	
     //LOG.info( "[SAMAN] " + files.length ); 	
     // Save the number of input files in the job-conf
@@ -155,8 +155,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
     NetworkTopology clusterMap = new NetworkTopology();
     for (FileStatus file: files) {
       Path path = file.getPath();
-      LOG.info("[SAMAN][NetCDFInputFormat][getSplits] File name is : " + path.getName());
-      System.out.println("[SAMAN][NetCDFInputFormat][getSplits] File name is : " + path.getName());
+      //LOG.info("[SAMAN][NetCDFInputFormat][getSplits] File name is : " + path.getName());
+      //System.out.println("[SAMAN][NetCDFInputFormat][getSplits] File name is : " + path.getName());
       FileSystem fs = path.getFileSystem(job);
       long length = file.getLen();
       BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
@@ -173,12 +173,12 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
         long   thisStart       = recStart;  //file position
         long   thisChunk       = 0;
         long   blockNo         = 1;
-        LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
-                ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
-                ", thisStart = " + thisStart);
-        System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
-                ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
-                ", thisStart = " + thisStart);
+        //LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
+        //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
+        //        ", thisStart = " + thisStart);
+        //System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
+        //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
+        //        ", thisStart = " + thisStart);
         while ( bytesRemaining > 0) {
           while ( chunkIndex < chunkStarts.length && chunkStarts[chunkIndex] < blockNo * blockSize ) {
             chunkIndex++;
@@ -196,10 +196,10 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           }
           endChunk            = chunkIndex;
           blockNo++;          
-          LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
-                    ", endChunk="+endChunk+", blockNo="+blockNo);
-          System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
-                    ", endChunk="+endChunk+", blockNo="+blockNo);
+          //LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
+          //          ", endChunk="+endChunk+", blockNo="+blockNo);
+          //System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
+          //          ", endChunk="+endChunk+", blockNo="+blockNo);
           String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
           FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
           split.getFileSplit().startChunk = thisChunk;
@@ -207,8 +207,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           splits.add(split);
           bytesRemaining -= splitSize;
           thisChunk = endChunk;
-          LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
-          System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
+          //LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
+          //System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
         }
         
       } else if (length != 0) {

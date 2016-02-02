@@ -244,7 +244,7 @@ public class NetCDFTransposeCompactForLon {
         job.setMapOutputValueClass(NetCDFArrayWritable.class);
         job.setOutputValueClass(List.class);
         job.setInputFormatClass(NetCDFInputFormatWithDimensions.class);
-        job.setOutputFormatClass(NetCDFOutputFormatCompactForLonReduced.class);
+        job.setOutputFormatClass(NetCDFOutputFormatCompactForLon.class);
         job.setNumReduceTasks(16);
         String singleInput = otherArgs[0];
         conf.set( NetCDFOutputFormat.NETCDF_INPUT_PATH, singleInput );
