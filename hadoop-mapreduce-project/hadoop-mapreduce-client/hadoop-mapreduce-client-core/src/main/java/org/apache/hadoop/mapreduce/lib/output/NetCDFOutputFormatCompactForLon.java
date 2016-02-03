@@ -128,9 +128,10 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
 
                 //Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Dimensions.");
-                Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
-                Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
                 Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), lonIndexesSize);
+                lonDim.setUnlimited(true);
+                Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
+                Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
                 Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] After Dimensions.");
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] latDim: " + latDim.getLength());
@@ -142,12 +143,12 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
                 java.util.List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
                 java.util.List<Dimension> rsut_dim = new ArrayList<Dimension>();
 
+                lon_bnds_dim.add(lonDim);
+                lon_bnds_dim.add(bndDim);
                 time_bnds_dim.add(timeDim);
                 time_bnds_dim.add(bndDim);
                 lat_bnds_dim.add(latDim);
                 lat_bnds_dim.add(bndDim);
-                lon_bnds_dim.add(lonDim);
-                lon_bnds_dim.add(bndDim);
                 rsut_dim.add(lonDim);
                 rsut_dim.add(timeDim);
                 rsut_dim.add(latDim);
@@ -163,7 +164,15 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
 
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Attributes;");
-                java.util.List<Attribute> attributes = vtime.getAttributes();
+
+                java.util.List<Attribute> attributes = vlon.getAttributes();
+                itr = attributes.iterator();
+                while (itr.hasNext()) {
+                    Attribute attribute = (Attribute) itr.next();
+                    vlonNew.addAttribute(attribute);
+                }
+
+                attributes = vtime.getAttributes();
                 Iterator itr = attributes.iterator();
                 while (itr.hasNext()) {
                     Attribute attribute = (Attribute) itr.next();
@@ -175,13 +184,6 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
                 while (itr.hasNext()) {
                     Attribute attribute = (Attribute) itr.next();
                     vlatNew.addAttribute(attribute);
-                }
-
-                attributes = vlon.getAttributes();
-                itr = attributes.iterator();
-                while (itr.hasNext()) {
-                    Attribute attribute = (Attribute) itr.next();
-                    vlonNew.addAttribute(attribute);
                 }
 
                 attributes = vrsut.getAttributes();
