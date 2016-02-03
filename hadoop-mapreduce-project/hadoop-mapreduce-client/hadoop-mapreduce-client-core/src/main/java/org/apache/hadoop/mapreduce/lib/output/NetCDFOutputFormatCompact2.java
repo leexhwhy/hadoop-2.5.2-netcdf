@@ -131,6 +131,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 //Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Dimensions.");
                 Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), latIndexesSize);
+                latDim.setUnlimited(true);
                 Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
                 Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
                 Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
