@@ -100,11 +100,14 @@ public class NetCDFReaderWithMetaShrinked implements RecordReader<Text, NetCDFAr
         //LOG.info("Variable is "+ v.getFullName());
 
         if( fileType == FileType.Lat ){
-            latVarSize = vs.get(0).getSize();
+            //latVarSize = vs.get(0).getSize();
+            // I know it's crazy to hardcode this thing, but that's how it works now :|
+            latVarSize = 241;
             timeVarSize = vs.get(2).getSize();
             lonVarSize = vs.get(4).getSize();
         }else if( fileType == FileType.Lon ){
-            lonVarSize = vs.get(0).getSize();
+            //lonVarSize = vs.get(0).getSize();
+            lonVarSize = 480;
             timeVarSize = vs.get(2).getSize();
             latVarSize = vs.get(4).getSize();
         }else{
