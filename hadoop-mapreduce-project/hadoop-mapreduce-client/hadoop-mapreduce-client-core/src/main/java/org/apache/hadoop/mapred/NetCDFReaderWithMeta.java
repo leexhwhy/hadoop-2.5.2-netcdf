@@ -90,7 +90,14 @@
           key.set(String.valueOf(pos));
           Array chunk = null;
           try{
+
+            long first = System.currentTimeMillis();
+
             chunk = ncFile.readSection("rsut("+pos+":"+pos+",:,:)");
+
+            long second = System.currentTimeMillis();
+            LOG.info( "[SAMAN][NetCDFReaderWithMeta][Next] read time = " + (second - first) );
+
           } catch (ucar.ma2.InvalidRangeException e)
           {
             LOG.info("section error " + e);
@@ -99,7 +106,15 @@
           LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
             System.out.println(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
           int dimensionsSize = v.getDimensions().size();
+
+          long third = System.currentTimeMillis();
+
           float[] my = (float[])chunk.get1DJavaArray(Float.class);
+
+          long fourth = System.currentTimeMillis();
+
+          System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] chunk array time = " + (fourth-third) );
+
           FloatWritable[] fw = new FloatWritable[my.length + dimensionsSize + 1];
           fw[0] = new FloatWritable( dimensionsSize );
           fw[1] = new FloatWritable( pos );
