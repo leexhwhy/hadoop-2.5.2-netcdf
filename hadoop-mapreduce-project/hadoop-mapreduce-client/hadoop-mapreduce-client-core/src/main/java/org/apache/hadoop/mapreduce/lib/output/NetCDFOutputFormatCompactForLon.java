@@ -166,14 +166,14 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Attributes;");
 
                 java.util.List<Attribute> attributes = vlon.getAttributes();
-                itr = attributes.iterator();
+                Iterator itr = attributes.iterator();
                 while (itr.hasNext()) {
                     Attribute attribute = (Attribute) itr.next();
                     vlonNew.addAttribute(attribute);
                 }
 
                 attributes = vtime.getAttributes();
-                Iterator itr = attributes.iterator();
+                 itr = attributes.iterator();
                 while (itr.hasNext()) {
                     Attribute attribute = (Attribute) itr.next();
                     vtimeNew.addAttribute(attribute);
