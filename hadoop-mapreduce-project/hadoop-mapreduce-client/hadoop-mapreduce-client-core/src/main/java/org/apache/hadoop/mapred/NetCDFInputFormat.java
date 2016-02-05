@@ -71,6 +71,7 @@ import org.apache.hadoop.mapred.InputSplit;
 import org.apache.hadoop.mapred.RecordReader;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.NetCDFReaderWithMeta;
+import org.apache.hadoop.mapred.NetCDFReaderWithMetaShrinked;
 /**
  * Treats keys as offset in fil`e and value as line. 
  */
@@ -232,7 +233,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
     reporter.setStatus(genericSplit.toString());
     //LOG.info( "[SAMAN] return getRecordReader" );
     //System.out.println( "[SAMAN] return getRecordReader" );	 	
-    return new NetCDFReaderWithMeta(job, (FileSplit) genericSplit);
+    return new NetCDFReaderWithMetaShrinked(job, (FileSplit) genericSplit);
   }
 
 
