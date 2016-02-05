@@ -147,14 +147,14 @@ public class NetCDFReaderWithMetaShrinked implements RecordReader<Text, NetCDFAr
                     long to = from + Math.min( latVarSize, timeVarSize-from ) - 1;
                     chunk = ncFile.readSection("rsut("+pos+":"+pos+","+from+":"+to+",:)");
                     LOG.info("[SAMAN][NetCDFReaderWithMetaShrinked][next] "+"rsut("+pos+":"+pos+","+from+":"+to+",:)");
-                    this.secondPos += Math.min(latVarSize, latVarSize-from);
+                    this.secondPos += Math.min(latVarSize, timeVarSize-from);
                     secondPosReadLength = from - to;
                 }else if( fileType == FileType.Lon ){
                     long from = this.secondPos;
                     long to = from + Math.min( lonVarSize, timeVarSize-from )-1;
                     chunk = ncFile.readSection("rsut("+pos+":"+pos+","+from+":"+to+",:)");
                     LOG.info("[SAMAN][NetCDFReaderWithMetaShrinked][next] "+"rsut("+pos+":"+pos+","+from+":"+to+",:)");
-                    this.secondPos += Math.min(lonVarSize, lonVarSize-from);
+                    this.secondPos += Math.min(lonVarSize, timeVarSize-from);
                     secondPosReadLength = from - to;
                 }else{
                     chunk = ncFile.readSection("rsut("+pos+":"+pos+",:,:)");
