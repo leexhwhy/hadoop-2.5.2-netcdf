@@ -68,9 +68,9 @@ public class NetCDFReaderWithMetaShrinked implements RecordReader<Text, NetCDFAr
 
     private long secondPos;
 
-    private int timeVarSize = -1;
-    private int lonVarSize = -1;
-    private int latVarSize = -1;
+    private long timeVarSize = -1;
+    private long lonVarSize = -1;
+    private long latVarSize = -1;
 
     FileType fileType = null;
 
