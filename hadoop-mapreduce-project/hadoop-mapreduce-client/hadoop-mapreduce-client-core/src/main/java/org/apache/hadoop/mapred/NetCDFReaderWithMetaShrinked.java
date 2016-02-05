@@ -146,12 +146,14 @@ public class NetCDFReaderWithMetaShrinked implements RecordReader<Text, NetCDFAr
                     long from = this.secondPos;
                     long to = from + Math.min( latVarSize, timeVarSize-from ) - 1;
                     chunk = ncFile.readSection("rsut("+pos+":"+pos+","+from+":"+to+",:)");
+                    LOG.info("[SAMAN][NetCDFReaderWithMetaShrinked][next] "+"rsut("+pos+":"+pos+","+from+":"+to+",:)");
                     this.secondPos += Math.min(latVarSize, latVarSize-from);
                     secondPosReadLength = from - to;
                 }else if( fileType == FileType.Lon ){
                     long from = this.secondPos;
                     long to = from + Math.min( lonVarSize, timeVarSize-from )-1;
                     chunk = ncFile.readSection("rsut("+pos+":"+pos+","+from+":"+to+",:)");
+                    LOG.info("[SAMAN][NetCDFReaderWithMetaShrinked][next] "+"rsut("+pos+":"+pos+","+from+":"+to+",:)");
                     this.secondPos += Math.min(lonVarSize, lonVarSize-from);
                     secondPosReadLength = from - to;
                 }else{
@@ -209,11 +211,13 @@ public class NetCDFReaderWithMetaShrinked implements RecordReader<Text, NetCDFAr
             //pos ++;
             if( fileType == FileType.Lat ){
                 if( this.secondPos >= this.timeVarSize ){
+                    LOG.info( "[SAMAN][NetCDFReaderWithMetaShrinked][next] resetting!" );
                     pos++;
                     this.secondPos = 0;
                 }
             }else if( fileType == FileType.Lon ){
-                if( secondPosReadLength >= this.timeVarSize ){
+                if( this.secondPos >= this.timeVarSize ){
+                    LOG.info( "[SAMAN][NetCDFReaderWithMetaShrinked][next] resetting!" );
                     pos++;
                     this.secondPos = 0;
                 }
