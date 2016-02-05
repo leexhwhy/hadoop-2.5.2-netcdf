@@ -166,7 +166,7 @@ public class NetCDFReaderWithMetaShrinked implements RecordReader<Text, NetCDFAr
             }
             if (chunk == null) {LOG.info("chunk is null");return false;}
             LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
-            System.out.println(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
+            //System.out.println(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
             int dimensionsSize = v.getDimensions().size();
 
             long third = System.currentTimeMillis();
