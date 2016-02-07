@@ -233,7 +233,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
     reporter.setStatus(genericSplit.toString());
     //LOG.info( "[SAMAN] return getRecordReader" );
     //System.out.println( "[SAMAN] return getRecordReader" );	 	
-    return new NetCDFReaderWithMetaShrinked(job, (FileSplit) genericSplit);
+    return new NetCDFReaderWithMeta(job, (FileSplit) genericSplit);
   }
 
 
