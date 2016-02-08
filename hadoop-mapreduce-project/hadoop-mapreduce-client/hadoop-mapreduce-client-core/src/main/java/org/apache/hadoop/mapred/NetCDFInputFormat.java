@@ -188,7 +188,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           long endChunk;
           if (chunkIndex >= chunkStarts.length) {
             splitSize = chunkStarts[chunkStarts.length-1] + recSize - thisStart - smallSize;
-            thisStart = chunkStarts[chunkIndex];
+            //thisStart = chunkStarts[chunkIndex];
             
             //bytesRemaining should be 0 after this round
           }
