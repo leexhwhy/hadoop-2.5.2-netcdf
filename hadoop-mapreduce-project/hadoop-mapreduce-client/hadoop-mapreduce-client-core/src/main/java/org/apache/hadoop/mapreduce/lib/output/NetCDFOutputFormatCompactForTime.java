@@ -322,7 +322,7 @@ public class NetCDFOutputFormatCompactForTime<Text, List> extends FileOutputForm
 
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
                 Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vlat.getSize()), (int) (vlon.getSize())});
-                Array dataRsut = Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vlat.getSize()), (int) (vlon.getSize())});
+                Array dataRsut = Array.factory(DataType.FLOAT, new int[]{timeIndexesSize, (int) (vlat.getSize()), (int) (vlon.getSize())});
                 int globalIndex = 0;
 
                 for( int i = 0; i < timeIndexesSize; i++ ) {
