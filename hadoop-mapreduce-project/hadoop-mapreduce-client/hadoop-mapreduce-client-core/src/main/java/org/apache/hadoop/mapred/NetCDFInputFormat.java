@@ -188,6 +188,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           long endChunk;
           if (chunkIndex >= chunkStarts.length) {
             splitSize = chunkStarts[chunkStarts.length-1] + recSize - thisStart - smallSize;
+            thisStart = chunkStarts[chunkIndex];
             
             //bytesRemaining should be 0 after this round
           }
@@ -196,6 +197,9 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
             thisStart         = chunkStarts[chunkIndex];
           }
           endChunk            = chunkIndex;
+          if( endChunk == thisChunk )
+            break;
+
           blockNo++;          
           LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
                     ", endChunk="+endChunk+", blockNo="+blockNo);
