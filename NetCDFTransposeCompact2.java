@@ -57,7 +57,7 @@ public class NetCDFTransposeCompact2 {
         public void map(Text key, NetCDFArrayWritable value, Context context )
                 throws IOException, InterruptedException {
 
-            int blockSize = 128*1024*1024;
+            int blockSize = 1024*1024*1024;
 
             FloatWritable[] records = (FloatWritable[]) value.toArray();
 
@@ -91,7 +91,7 @@ public class NetCDFTransposeCompact2 {
                            Context context)
                 throws IOException, InterruptedException {
 
-            int blockSize = 128*1024*1024;
+            int blockSize = 1024*1024*1024;
 
             System.out.println( "[SAMAN][NetCDFTranspose2][Reducer] Reducer Beginning!" );
             //for( Text value : values ){

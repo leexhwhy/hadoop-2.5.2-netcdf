@@ -72,7 +72,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
             System.out.println( "Lat is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
                     +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
 
-            int blockSize = 128*1024*1024;
+            int blockSize = 1024*1024*1024;
             int chunkSize = Integer.valueOf(timeDimSize)*Integer.valueOf(lonDimSize)*4;
             int numChunksPerKey = (blockSize/chunkSize);
             //boolean isBreak = false;
@@ -365,8 +365,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
                 long second = System.nanoTime();
 
-                //_fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
-                _fs.moveFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
+                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
+                //_fs.moveFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
 
                 long third = System.nanoTime();
 
