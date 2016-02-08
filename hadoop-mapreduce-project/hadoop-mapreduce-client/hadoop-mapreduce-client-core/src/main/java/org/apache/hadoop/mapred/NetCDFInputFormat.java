@@ -197,8 +197,8 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
             thisStart         = chunkStarts[chunkIndex];
           }
           endChunk            = chunkIndex;
-          if( endChunk == thisChunk )
-            break;
+          //if( endChunk == thisChunk )
+            //break;
 
           blockNo++;          
           LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
