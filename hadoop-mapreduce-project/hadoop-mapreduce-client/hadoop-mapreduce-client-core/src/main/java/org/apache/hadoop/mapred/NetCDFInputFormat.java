@@ -189,7 +189,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           if (chunkIndex >= chunkStarts.length) {
             splitSize = chunkStarts[chunkStarts.length-1] + recSize - thisStart - smallSize;
             //thisStart = chunkStarts[chunkIndex];
-            
+
             //bytesRemaining should be 0 after this round
           }
           else {
@@ -200,7 +200,7 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           //if( endChunk == thisChunk )
             //break;
 
-          blockNo++;          
+          blockNo++;
           LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
                     ", endChunk="+endChunk+", blockNo="+blockNo);
           System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
@@ -215,7 +215,6 @@ public class NetCDFInputFormat extends FileInputFormat<Text, NetCDFArrayWritable
           //LOG.info( "[SAMAN] NetCDFInputFormat.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
           //System.out.println( "[SAMAN] NetCDFInputFormat.getSplits => bytesRemaining="+bytesRemaining+", thisChunk="+thisChunk );
         }
-        
       } else if (length != 0) {
         String[] splitHosts = getSplitHosts(blkLocations,0,length,clusterMap);
         splits.add(new FileSplit(path, 0, length, splitHosts));
