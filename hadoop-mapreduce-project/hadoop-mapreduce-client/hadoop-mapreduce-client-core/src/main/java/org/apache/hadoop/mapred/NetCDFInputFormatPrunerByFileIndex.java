@@ -307,12 +307,23 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                     } else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
                         System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] file = "
                                 + path.getName() + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit + ", dimIndex = " + dimIndex );
+                        /*
                         if( topLimit < dimIndex*numChunksPerKey && (topLimit != -1) ){
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
                             continue;
                         }
                         if( bottomLimit > dimIndex*numChunksPerKey && (bottomLimit != -1) ){
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }*/
+                        if ((topLimit < thisChunk && (topLimit != -1)) {
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        if ((bottomLimit > endChunk && (bottomLimit != -1)) {
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
                             continue;
