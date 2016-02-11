@@ -318,12 +318,12 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                             thisChunk = endChunk;
                             continue;
                         }*/
-                        if ((topLimit < thisChunk && (topLimit != -1)) {
+                        if (topLimit < thisChunk && (topLimit != -1)) {
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
                             continue;
                         }
-                        if ((bottomLimit > endChunk && (bottomLimit != -1)) {
+                        if (bottomLimit > endChunk && (bottomLimit != -1)) {
                             bytesRemaining -= splitSize;
                             thisChunk = endChunk;
                             continue;
