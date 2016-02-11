@@ -227,7 +227,9 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                     fileIndex = Integer.valueOf(parts[2]);
                     dimIndex = Integer.valueOf(parts[0].substring(7));
                 }else{
-                    dimIndex = Integer.valueOf(path.getName().substring(7));
+                    //dimIndex = Integer.valueOf(path.getName().substring(7));
+                    String[] parts = path.getName().split("-");
+                    dimIndex = Integer.valueOf(parts[1]);
                 }
             }
 
