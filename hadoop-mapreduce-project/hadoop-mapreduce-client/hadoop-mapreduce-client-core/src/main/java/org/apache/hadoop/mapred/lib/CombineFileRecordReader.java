@@ -21,6 +21,8 @@ package org.apache.hadoop.mapred.lib;
 import java.io.*;
 import java.lang.reflect.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.FileSystem;
 
 import org.apache.hadoop.mapred.*;
@@ -39,6 +41,8 @@ import org.apache.hadoop.conf.Configuration;
 @InterfaceAudience.Public
 @InterfaceStability.Stable
 public class CombineFileRecordReader<K, V> implements RecordReader<K, V> {
+
+  private static final Log LOG = LogFactory.getLog(CombineFileRecordReader.class);
 
   static final Class [] constructorSignature = new Class [] 
                                          {CombineFileSplit.class, 
@@ -127,6 +131,9 @@ public class CombineFileRecordReader<K, V> implements RecordReader<K, V> {
    */
   protected boolean initNextRecordReader() throws IOException {
 
+    LOG.info( "[SAMAN][CombineFileRecordReader][initNextRecordReader] beginning!" );
+
+
     if (curReader != null) {
       curReader.close();
       curReader = null;
@@ -137,6 +144,9 @@ public class CombineFileRecordReader<K, V> implements RecordReader<K, V> {
 
     // if all chunks have been processed, nothing more to do.
     if (idx == split.getNumPaths()) {
+
+      LOG.info( "[SAMAN][CombineFileRecordReader][initNextRecordReader] nothing more to process!" );
+
       return false;
     }
 
@@ -148,6 +158,11 @@ public class CombineFileRecordReader<K, V> implements RecordReader<K, V> {
                             {split, jc, reporter, Integer.valueOf(idx)});
 
       // setup some helper config variables.
+
+      LOG.info( "[SAMAN][CombineFileRecordReader][initNextRecordReader] Path="+split.getPath(idx).toString()
+              +",Start="+split.getOffset(idx)
+              +",Length="+split.getLength(idx));
+
       jc.set(JobContext.MAP_INPUT_FILE, split.getPath(idx).toString());
       jc.setLong(JobContext.MAP_INPUT_START, split.getOffset(idx));
       jc.setLong(JobContext.MAP_INPUT_PATH, split.getLength(idx));
