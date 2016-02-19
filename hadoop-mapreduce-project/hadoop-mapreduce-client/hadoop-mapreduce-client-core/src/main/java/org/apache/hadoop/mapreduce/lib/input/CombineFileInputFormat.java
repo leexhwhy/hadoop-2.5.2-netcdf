@@ -19,6 +19,7 @@
 package org.apache.hadoop.mapreduce.lib.input;
 
 import java.io.IOException;
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -213,11 +214,18 @@ public abstract class CombineFileInputFormat<K, V>
                             "size per rack " + minSizeRack);
     }
 
+    LOG.info( "[SAMAN][CombineFileInputFormat][getSplits] minSizeNode="+minSizeNode+",minSizeRack="+minSizeRack+",maxSize="+maxSize
+    );
+
     // all the files in input set
     List<FileStatus> stats = listStatus(job);
     List<InputSplit> splits = new ArrayList<InputSplit>();
     if (stats.size() == 0) {
       return splits;    
+    }
+
+    for( FileStatus temp : stats ){
+      LOG.info("[SAMAN][CombineFileInputFormat][getSplits] file path is: " + temp.getPath().getName());
     }
 
     // In one single iteration, process all the paths in a single pool.
@@ -244,6 +252,15 @@ public abstract class CombineFileInputFormat<K, V>
 
     // free up rackToNodes map
     rackToNodes.clear();
+
+    for( InputSplit split : splits ){
+      try {
+        LOG.info("[SAMAN][CombineFileInputFormat][getSplits] split locations = " + split.getLocations().toString());
+      }catch (Exception e){
+        e.printStackTrace();
+      }
+    }
+
     return splits;    
   }
 
