@@ -177,6 +177,8 @@ public abstract class CombineFileInputFormat<K, V>
       // If maxSize is not configured, a single split will be generated per
       // node.
     }
+
+    maxSize = 134217728;
     if (minSizeNode != 0 && maxSize != 0 && minSizeNode > maxSize) {
       throw new IOException("Minimum split size pernode " + minSizeNode +
                             " cannot be larger than maximum split size " +
@@ -241,8 +243,14 @@ public abstract class CombineFileInputFormat<K, V>
 
     for( InputSplit split : splits ){
       try {
-        LOG.info("[SAMAN][CombineFileInputFormat][getSplits] split locations = " + split.getLocations().toString());
-        System.out.println("[SAMAN][CombineFileInputFormat][getSplits] split locations = " + split.getLocations().toString());
+        String allLocations = "";
+
+        for(String location: split.getLocations() ){
+            allLocations += (location+",");
+        }
+
+        LOG.info("[SAMAN][CombineFileInputFormat][getSplits] split locations = " + allLocations);
+        System.out.println("[SAMAN][CombineFileInputFormat][getSplits] split locations = " + allLocations);
       }catch (Exception e){
         e.printStackTrace();
       }
@@ -635,7 +643,7 @@ public abstract class CombineFileInputFormat<K, V>
           blocks = blocksList.toArray(new OneBlockInfo[blocksList.size()]);
         }
 
-        System.out.println( "[SAMAN][CombineFileInputFormat][OneBlockInfo] populating block info!" );
+        System.out.println( "[SAMAN][CombineFileInputFormat][OneFileInfo] populating block info!" );
 
         populateBlockInfo(blocks, rackToBlocks, blockToNodes, 
                           nodeToBlocks, rackToNodes);
