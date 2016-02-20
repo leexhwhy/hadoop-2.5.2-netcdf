@@ -207,23 +207,30 @@ public abstract class CombineFileInputFormat<K, V>
       System.out.println("[SAMAN][CombineFileInputFormat][getSplits] file path is: " + temp.getPath().getName());
     }
 
+      int counter = 0;
     // In one single iteration, process all the paths in a single pool.
     // Processing one pool at a time ensures that a split contains paths
     // from a single pool only.
     for (MultiPathFilter onepool : pools) {
+
+        System.out.println( "[SAMAN][CombineFileInputFormat][getSplits] counter is: #"+counter );
+
       ArrayList<FileStatus> myPaths = new ArrayList<FileStatus>();
       
       // pick one input path. If it matches all the filters in a pool,
       // add it to the output set
       for (Iterator<FileStatus> iter = stats.iterator(); iter.hasNext();) {
         FileStatus p = iter.next();
+        System.out.println( "[SAMAN][CombineFileInputFormat][getSplits] FileStatus Path is: " + p.getPath().getName() );
         if (onepool.accept(p.getPath())) {
+          System.out.println( "[SAMAN][CombineFileInputFormat][getSplits] OnePool accepted!" );
           myPaths.add(p); // add it to my output set
           iter.remove();
         }
       }
       // create splits for all files in this pool.
       getMoreSplits(job, myPaths, maxSize, minSizeNode, minSizeRack, splits);
+      counter++;
     }
 
     // create splits for all files that are not in any pool.
@@ -272,6 +279,8 @@ public abstract class CombineFileInputFormat<K, V>
     if (stats.size() == 0) {
       return; 
     }
+
+    System.out.println( "[SAMAN][CombineFileInputFormat][getSplits] stats.size = " + stats.size() );
 
     // populate all the blocks for all files
     long totLength = 0;
