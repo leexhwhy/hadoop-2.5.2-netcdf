@@ -597,6 +597,8 @@ public abstract class CombineFileInputFormat<K, V>
           blocks[0] = new OneBlockInfo(stat.getPath(), 0, fileSize,
               locations[0].getHosts(), locations[0].getTopologyPaths());
         } else {
+
+          System.out.println( "[SAMAN][CombineFileInputStream][OneFileInfo] We are in else!" ) ;
           ArrayList<OneBlockInfo> blocksList = new ArrayList<OneBlockInfo>(
               locations.length);
           for (int i = 0; i < locations.length; i++) {
@@ -632,7 +634,9 @@ public abstract class CombineFileInputFormat<K, V>
           }
           blocks = blocksList.toArray(new OneBlockInfo[blocksList.size()]);
         }
-        
+
+        System.out.println( "[SAMAN][CombineFileInputFormat][OneBlockInfo] populating block info!" );
+
         populateBlockInfo(blocks, rackToBlocks, blockToNodes, 
                           nodeToBlocks, rackToNodes);
       }
