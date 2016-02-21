@@ -526,7 +526,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
         reporter.setStatus(genericSplit.toString());
         //LOG.info( "[SAMAN] return getRecordReader" );
         //System.out.println( "[SAMAN] return getRecordReader" );
-        return new NetCDFReaderWithMeta(job, (FileSplit) genericSplit);
+        return new NetCDFReaderWithMeta(job, (NetCDFFileSplit) genericSplit);
     }
 
 
