@@ -413,6 +413,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
             singleSplitSize = filledSize;
         }
+
+        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] singleSplitSize = " + singleSplitSize );
+
         if( filledSize > blockSize / 2 )
             return splits.toArray(new FileSplit[splits.size()]);
         else{
@@ -429,6 +432,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     Map.Entry<String, Set<NetCDFFileSplit>> one = iter.next();
                     String node = one.getKey();
 
+                    System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] node is = " + node );
+
                     // Skip the node if it has previously been marked as completed.
                     if (completedNodes.contains(node)) {
                         continue;
@@ -443,6 +448,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     while (oneBlockIter.hasNext()) {
                         NetCDFFileSplit oneblock = oneBlockIter.next();
 
+                        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                                            "split is: " + oneblock.getFileSplit().getPath());
+
                         // Remove all blocks which may already have been assigned to other
                         // splits.
                         if(!blockToNodes.containsKey(oneblock)) {
@@ -454,12 +462,19 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                         blockToNodes.remove(oneblock);
                         curSplitSize += singleSplitSize;
 
+                        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                                            "Added to valid blocks!" );
+
                         // if the accumulated split size exceeds the maximum, then
                         // create this split.
                         if (blockSize != 0 && curSplitSize >= blockSize) {
                             // create an input split and add it to the splits array
                             addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
                             //totalLength -= curSplitSize;
+
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                                                "addCreatedSplit called!" );
+
                             curSplitSize = 0;
 
                             splitsPerNode.add(node);
@@ -548,7 +563,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
         // add this split to the list that is returned
         NetCDFFileSplit thissplit = new NetCDFFileSplit(fl, offset,
-                length, locations.toArray(new String[0]));
+                length, locations.toArray(new String[0]), startChunk, endChunk);
         splitList.add(thissplit);
     }
 

@@ -72,6 +72,16 @@ public class NetCDFFileSplit extends InputSplit implements Writable {
         this.hosts = hosts;
     }
 
+    public NetCDFFileSplit( List<Path> paths, List<Long> starts, List<Long> lengths, String[] hosts,
+                            List<Long> startChunks, List<Long> endChunks){
+        this.file = paths;
+        this.start = starts;
+        this.length = lengths;
+        this.hosts = hosts;
+        this.startChunk = startChunks;
+        this.endChunk = endChunks;
+    }
+
     /** Constructs a split with host and cached-blocks information
      *
      * @param file the file name

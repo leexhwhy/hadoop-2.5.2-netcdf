@@ -75,6 +75,11 @@ public class NetCDFFileSplit extends org.apache.hadoop.mapreduce.InputSplit
         fs = new org.apache.hadoop.mapreduce.lib.input.NetCDFFileSplit( files, starts, lengths, hosts );
     }
 
+    public NetCDFFileSplit( List<Path> files, List<Long> starts, List<Long> lengths, String[] hosts,
+                            List<Long> startChunks, List<Long> endChunks){
+        fs = new org.apache.hadoop.mapreduce.lib.input.NetCDFFileSplit( files, starts, lengths, hosts, startChunks, endChunks );
+    }
+
     /** Constructs a split with host information
      *
      * @param file the file name
