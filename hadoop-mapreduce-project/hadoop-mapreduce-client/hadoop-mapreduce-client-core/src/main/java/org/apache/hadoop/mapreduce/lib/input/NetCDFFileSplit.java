@@ -32,6 +32,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -96,15 +97,23 @@ public class NetCDFFileSplit extends InputSplit implements Writable {
         }
     }
 
-    /** The file containing this split's data. */
-    public Path getPath() { return file; }
+    /** files containing this split's data. */
+    public List<Path> getPath() { return file; }
 
     /** The position of the first byte in the file to process. */
-    public long getStart() { return start; }
+    public long getStart() { return start.get(0); }
 
     /** The number of bytes in the file to process. */
     @Override
-    public long getLength() { return length; }
+    public long getLength() {
+        long totalLength = 0;
+        Iterator itr = length.iterator();
+        while( itr.hasNext() ){
+            totalLength += (Long)itr.next();
+        }
+
+        return totalLength;
+    }
 
     @Override
     public String toString() { return file + ":" + start + "+" + length; }
@@ -116,17 +125,17 @@ public class NetCDFFileSplit extends InputSplit implements Writable {
     @Override
     public void write(DataOutput out) throws IOException {
         Text.writeString(out, file.toString());
-        out.writeLong(start);
-        out.writeLong(length);
+        //out.writeLong(start.get(0));
+        //out.writeLong(length.get(0));
         //out.writeLong(startChunk);
         //out.writeLong(endChunk);
     }
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        file = new Path(Text.readString(in));
-        start = in.readLong();
-        length = in.readLong();
+        //file = new Path(Text.readString(in));
+        //start = in.readLong();
+        //length = in.readLong();
         //startChunk = in.readLong();
         //endChunk = in.readLong();
         hosts = null;
