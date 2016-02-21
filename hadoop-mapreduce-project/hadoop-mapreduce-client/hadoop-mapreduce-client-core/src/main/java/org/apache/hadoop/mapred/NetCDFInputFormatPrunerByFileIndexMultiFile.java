@@ -529,7 +529,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             }
 
 
-                return finalSplits.toArray(new FileSplit[splits.size()]);
+                return finalSplits.toArray(new NetCDFFileSplit[finalSplits.size()]);
 
         }
 
