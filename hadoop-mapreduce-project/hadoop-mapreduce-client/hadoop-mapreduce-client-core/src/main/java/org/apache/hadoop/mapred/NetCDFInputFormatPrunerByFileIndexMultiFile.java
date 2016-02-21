@@ -183,10 +183,10 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             }
         }
 
-        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex] QueryType = " + queryType.toString()
-                +", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit );
-        LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex] QueryType = " + queryType.toString()
-                + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit);
+        //System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex] QueryType = " + queryType.toString()
+        //        +", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit );
+        //LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex] QueryType = " + queryType.toString()
+        //        + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit);
         /* End Analyzing Query here */
 
         System.out.println( "[SAMANPruner] beginning of getSplits" );
@@ -239,8 +239,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                 }
             }
 
-            LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
-            System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
+            //LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
+            //System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
             FileSystem fs = path.getFileSystem(job);
             long length = file.getLen();
             BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
@@ -266,7 +266,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     numChunksPerKey = blockSize / chunkSize;
                 }
 
-                System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] numChunksPerKey = " + numChunksPerKey );
+                //System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] numChunksPerKey = " + numChunksPerKey );
 
                 //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
                 //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
@@ -312,8 +312,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                         split.getFileSplit().startChunk.add(thisChunk);
                         split.getFileSplit().endChunk.add(endChunk);
                     } else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
-                        System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] file = "
-                                + path.getName() + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit + ", dimIndex = " + dimIndex );
+                        //System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] file = "
+                        //        + path.getName() + ", topLimit = " + topLimit + ", bottomLimit = " + bottomLimit + ", dimIndex = " + dimIndex );
                         /*
                         if( topLimit < dimIndex*numChunksPerKey && (topLimit != -1) ){
                             bytesRemaining -= splitSize;
@@ -477,6 +477,42 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     }
 
                 }
+
+            Iterator itr = finalSplits.iterator();
+            while( itr.hasNext() ){
+
+                NetCDFFileSplit temp = (NetCDFFileSplit)itr.next();
+
+                String[] locations = temp.getFileSplit().getLocations();
+                String locationsString = "";
+                for( int i = 0; i < locations.length; i++ )
+                    locationsString += locations[i];
+
+                String pathsString = "";
+                List<Path> paths = temp.getFileSplit().getPath();
+                for( Path path : paths )
+                    pathsString += path.getName()+",";
+
+                String startsString = "";
+                List<Long> starts = temp.getFileSplit().startChunk;
+                for( Long start : starts )
+                    startsString += (start+",");
+
+
+                String endsString = "";
+                List<Long> ends = temp.getFileSplit().endChunk;
+                for( Long end : ends )
+                    endsString += (end+",");
+
+                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                        "locations="+locationsString+","+
+                        "paths="+pathsString+","+
+                        "starts="+startsString+","+
+                        "ends="+endsString+",");
+
+
+            }
+
 
                 return finalSplits.toArray(new FileSplit[splits.size()]);
 
