@@ -58,9 +58,9 @@
       private Variable v;
 
       public NetCDFReaderWithMeta(Configuration job,
-                              FileSplit split) throws IOException {
-        start = split.getFileSplit().startChunk; //split.getStart();
-        end = split.getFileSplit().endChunk; //start + split.getLength();
+                              NetCDFFileSplit split) throws IOException {
+        start = split.getFileSplit().startChunk.get(0); //split.getStart();
+        end = split.getFileSplit().endChunk.get(0); //start + split.getLength();
         final Path file = split.getPath();
 
         LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
