@@ -553,7 +553,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
 
         for (int i = 0; i < validBlocks.size(); i++) {
-            fl.add(validBlocks.get(i).getFileSplit().getPath().get(0));
+            fl.add(validBlocks.get(i).getFileSplit().getPaths().get(0));
             offset.add(validBlocks.get(i).getFileSplit().getStart());
             length.add(validBlocks.get(i).getFileSplit().getLength());
             startChunk.add(validBlocks.get(i).getFileSplit().startChunk.get(0));
