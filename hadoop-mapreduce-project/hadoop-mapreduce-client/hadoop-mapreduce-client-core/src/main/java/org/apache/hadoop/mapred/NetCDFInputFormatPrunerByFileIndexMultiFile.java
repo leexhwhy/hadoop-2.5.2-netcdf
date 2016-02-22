@@ -504,7 +504,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     locationsString += locations[i];
 
                 String pathsString = "";
-                List<Path> paths = temp.getFileSplit().getPath();
+                List<Path> paths = temp.getFileSplit().getPaths();
                 for( Path path : paths )
                     pathsString += path.getName()+",";
 

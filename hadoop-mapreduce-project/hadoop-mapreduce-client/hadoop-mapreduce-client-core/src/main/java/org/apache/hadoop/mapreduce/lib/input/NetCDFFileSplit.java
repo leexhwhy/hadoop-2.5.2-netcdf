@@ -110,6 +110,8 @@ public class NetCDFFileSplit extends InputSplit implements Writable {
     /** files containing this split's data. */
     public Path getPath() { return file.get(0); }
 
+    public List<Path> getPaths() { return file; }
+
     /** The position of the first byte in the file to process. */
     public long getStart() { return start.get(0); }
 
