@@ -198,7 +198,7 @@ public class NetCDFFileSplit extends InputSplit implements Writable {
         for( int i = 0; i < numberOfEndChunks; i++ )
             endChunk.add( in.readLong() );
 
-        hosts = null;
+        //hosts = null;
     }
 
     @Override
