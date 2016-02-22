@@ -34,7 +34,7 @@ import java.util.List;
  */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
-public class NetCDFFileSplit extends org.apache.hadoop.mapreduce.InputSplit
+public class NetCDFFileSplit extends org.apache.hadoop.mapred.FileSplit
         implements InputSplitWithLocationInfo {
     org.apache.hadoop.mapreduce.lib.input.NetCDFFileSplit fs;
 

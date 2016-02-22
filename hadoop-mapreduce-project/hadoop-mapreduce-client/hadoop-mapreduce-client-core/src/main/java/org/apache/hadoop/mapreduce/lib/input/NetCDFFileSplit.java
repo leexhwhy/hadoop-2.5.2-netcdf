@@ -41,7 +41,7 @@ import java.util.List;
  * {@link InputFormat#createRecordReader(InputSplit,TaskAttemptContext)}. */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
-public class NetCDFFileSplit extends InputSplit implements Writable {
+public class NetCDFFileSplit extends FileSplit implements Writable {
     private List<Path> file = new LinkedList<Path>();
     private List<Long> start = new LinkedList<Long>();
     private List<Long> length = new LinkedList<Long>();
