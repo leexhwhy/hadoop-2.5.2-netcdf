@@ -76,7 +76,7 @@ public class NetCDFReaderWithMetaMultiFile implements RecordReader<Text, NetCDFA
             LOG.info("Map is reading from input: " + file + " start chunk " + start + " end chunk " + end);
 
             ncFile.add(NetcdfDataset.openFile(file.toString(), null));
-            List<Variable> vs = ncFile.getVariables();
+            List<Variable> vs = ncFile.get(i).getVariables();
             v.add(vs.get(vs.size() - 1));
             //LOG.info("Variable is "+ v.getFullName());
 
