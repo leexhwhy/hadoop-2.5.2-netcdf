@@ -99,7 +99,7 @@ public class NetCDFFileSplit extends org.apache.hadoop.mapreduce.InputSplit
     }
 
     /** The file containing this split's data. */
-    //public Path getPath() { return fs.getPath(); }
+    public Path getPath() { return fs.getPath(); }
 
     /** The position of the first byte in the file to process. */
     public long getStart() { return fs.getStart(); }
