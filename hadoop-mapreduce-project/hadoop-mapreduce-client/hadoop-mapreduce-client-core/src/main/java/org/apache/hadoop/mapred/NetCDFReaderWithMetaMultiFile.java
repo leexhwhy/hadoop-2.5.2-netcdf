@@ -35,6 +35,7 @@ import org.apache.hadoop.io.compress.CompressionCodecFactory;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
+import java.util.LinkedList;
 import java.util.List;
 import ucar.nc2.*;
 import ucar.nc2.iosp.*;
@@ -51,11 +52,11 @@ public class NetCDFReaderWithMetaMultiFile implements RecordReader<Text, NetCDFA
     private static final Log LOG
             = LogFactory.getLog(LineRecordReader.class.getName());
 
-    private List<Long> start;
+    private List<Long> start = new LinkedList<Long>();
 
-    private List<Long> end;
-    private List<NetcdfFile> ncFile;
-    private List<Variable> v;
+    private List<Long> end = new LinkedList<Long>();
+    private List<NetcdfFile> ncFile = new LinkedList<NetcdfFile>();
+    private List<Variable> v = new LinkedList<Variable>();
     private long pos;
     private int numberOfElements;
 
