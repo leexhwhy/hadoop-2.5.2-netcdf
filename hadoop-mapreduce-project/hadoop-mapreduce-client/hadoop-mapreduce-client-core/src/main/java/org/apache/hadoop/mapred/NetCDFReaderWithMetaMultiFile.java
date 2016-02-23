@@ -70,7 +70,7 @@ public class NetCDFReaderWithMetaMultiFile implements RecordReader<Text, NetCDFA
         for( int i = 0; i < numberOfElements; i++ ) {
 
             start.add(split.getFileSplit().startChunk.get(i)); //split.getStart();
-            end.add(split.getFileSplit().endChunk.get(0)); //start + split.getLength();
+            end.add(split.getFileSplit().endChunk.get(i)); //start + split.getLength();
             final Path file = split.getFileSplit().getPaths().get(i);
 
             LOG.info("Map is reading from input: " + file + " start chunk " + start + " end chunk " + end);
