@@ -349,7 +349,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                                 //        + records[j * Integer.valueOf(lonDimSize) + k].get());
                                 //dataRsut.setFloat(idx3, records[2 + k].get());
                                 //dataRsut.setFloat(idx3, (((FloatWritable[])netCDFArrayWritable.get())[2+k]).get());
-                                dataRsut.setFloat( i,j,k, (((FloatWritable[])netCDFArrayWritable.get())[2+k]).get());
+                                dataRsut.set( i,j,k, (((FloatWritable[])netCDFArrayWritable.get())[2+k]).get());
                                 long first233 = System.nanoTime();
                                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first233-first232=" + (first233-first232) );
 
