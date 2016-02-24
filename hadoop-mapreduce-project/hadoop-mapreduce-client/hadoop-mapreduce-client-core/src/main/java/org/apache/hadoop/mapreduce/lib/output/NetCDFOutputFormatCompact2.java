@@ -325,7 +325,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 long first2 = System.nanoTime();
 
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
-                //Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
+                Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 Array dataRsut = Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
                 int globalIndex = 0;
@@ -343,7 +343,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                             try {
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
                                 //long first231 = System.nanoTime();
-                                //idx3.set(i, j, k);
+                                idx3.set(i, j, k);
                                 long first232 = System.nanoTime();
                                 //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first232-first231=" + (first232-first231) );
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after idx.set("+i+"," + j + "," + k + ")");
@@ -352,8 +352,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] value is: "
                                 //        + records[j * Integer.valueOf(lonDimSize) + k].get());
                                 //dataRsut.setFloat(idx3, records[2 + k].get());
-                                //dataRsut.setFloat(idx3, (((FloatWritable[])netCDFArrayWritable.get())[2+k]).get());
-                                dataRsut.set(i, j, k, (((FloatWritable[]) netCDFArrayWritable.get())[2+k]).get());
+                                dataRsut.setFloat(idx3, (((FloatWritable[])netCDFArrayWritable.get())[2+k]).get());
+                                //dataRsut.set(i, j, k, (((FloatWritable[]) netCDFArrayWritable.get())[2+k]).get());
                                 long first233 = System.nanoTime();
                                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first233-first232=" + (first233-first232) );
 
