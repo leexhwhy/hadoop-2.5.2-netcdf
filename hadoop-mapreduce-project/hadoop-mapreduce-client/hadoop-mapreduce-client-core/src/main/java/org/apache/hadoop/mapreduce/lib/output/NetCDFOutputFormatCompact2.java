@@ -336,6 +336,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                         long first22 = System.nanoTime();
 
                         NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
+
                         //FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
                         long first221 = System.nanoTime();
                         //((java.util.List<NetCDFArrayWritable>)value).addAll((java.util.List<NetCDFArrayWritable>)value);

@@ -328,14 +328,15 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 //Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())}));
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
-                int globalIndex = 0;
+                //int globalIndex = 0;
 
-                for( int i = 0; i < latIndexesSize; i++ ) {
-                    long first21 = System.nanoTime();
-                    for (int j = 0; j < vtime.getSize(); j++) {
-                        long first22 = System.nanoTime();
 
-                        NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
+                //for( int i = 0; i < latIndexesSize; i++ ) {
+                //    long first21 = System.nanoTime();
+                //    for (int j = 0; j < vtime.getSize(); j++) {
+                //        long first22 = System.nanoTime();
+
+                //        NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
 
                         //dataRsut.addNetCDFElement(netCDFArrayWritable);
                         //FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
@@ -370,13 +371,17 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                          //   long first24 = System.nanoTime();
                          //   System.out.println( "[SAMAN][NetCDFOutputFormat][write] first24-first23=" + (first24-first23) );
 
-                        globalIndex++;
-                        long first25 = System.nanoTime();
-                        System.out.println( "[SAMAN][NetCDFOutputFormat][write] first25-first22=" + (first25-first22) );
-                    }
-                    long first26 = System.nanoTime();
-                    System.out.println( "[SAMAN][NetCDFOutputFormat][write] first26-first21=" + (first26-first21) );
-                }
+                //        globalIndex++;
+                //        long first25 = System.nanoTime();
+                //        System.out.println( "[SAMAN][NetCDFOutputFormat][write] first25-first22=" + (first25-first22) );
+                //    }
+                //    long first26 = System.nanoTime();
+                //    System.out.println( "[SAMAN][NetCDFOutputFormat][write] first26-first21=" + (first26-first21) );
+                //}
+
+                dataRsut.setUseDirectNetCDF(true);
+                dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length - 2 );
+                dataRsut.setNetcdfContents( (java.util.List<NetCDFArrayWritable>)value );
 
                 long first3 = System.nanoTime();
 
