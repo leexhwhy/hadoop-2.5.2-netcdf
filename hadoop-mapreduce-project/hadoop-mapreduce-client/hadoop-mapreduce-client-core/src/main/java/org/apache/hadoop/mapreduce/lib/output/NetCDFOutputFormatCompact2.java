@@ -327,10 +327,13 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 int globalIndex = 0;
 
                 for( int i = 0; i < latIndexesSize; i++ ) {
+                    long first21 = System.nanoTime();
                     for (int j = 0; j < vtime.getSize(); j++) {
+                        long first22 = System.nanoTime();
                         NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
                         FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
                         for (int k = 0; k < vlon.getSize(); k++) {
+                            long first23 = System.nanoTime();
                             try {
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
                                 idx3.set(i, j, k);
@@ -346,9 +349,15 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage());
                                 throw e;
                             }
+                            long first24 = System.nanoTime();
+                            System.out.println( "[SAMAN][NetCDFOutputFormat][write] first24-first23=" + (first24-first23) );
                         }
                         globalIndex++;
+                        long first25 = System.nanoTime();
+                        System.out.println( "[SAMAN][NetCDFOutputFormat][write] first25-first22=" + (first25-first22) );
                     }
+                    long first26 = System.nanoTime();
+                    System.out.println( "[SAMAN][NetCDFOutputFormat][write] first26-first21=" + (first26-first21) );
                 }
 
                 long first3 = System.nanoTime();
