@@ -336,7 +336,8 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                         long first22 = System.nanoTime();
 
                         NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
-                        dataRsut.addNetCDFElement(netCDFArrayWritable);
+
+                        //dataRsut.addNetCDFElement(netCDFArrayWritable);
                         //FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
                         //long first221 = System.nanoTime();
                         //((java.util.List<NetCDFArrayWritable>)value).addAll((java.util.List<NetCDFArrayWritable>)value);
