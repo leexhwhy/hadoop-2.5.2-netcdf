@@ -34,7 +34,7 @@ import java.util.List;
  */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
-public class NetCDFFileSplit extends org.apache.hadoop.mapreduce.InputSplit
+public class NetCDFFileSplit extends org.apache.hadoop.mapred.FileSplit
         implements InputSplitWithLocationInfo {
     org.apache.hadoop.mapreduce.lib.input.NetCDFFileSplit fs;
 
@@ -99,7 +99,7 @@ public class NetCDFFileSplit extends org.apache.hadoop.mapreduce.InputSplit
     }
 
     /** The file containing this split's data. */
-    //public Path getPath() { return fs.getPath(); }
+    public Path getPath() { return fs.getPath(); }
 
     /** The position of the first byte in the file to process. */
     public long getStart() { return fs.getStart(); }
