@@ -332,17 +332,25 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                         long first22 = System.nanoTime();
                         NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
                         FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
+                        long first221 = System.nanoTime();
+                        System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first221-first22=" + (first221-first22) );
                         for (int k = 0; k < vlon.getSize(); k++) {
                             long first23 = System.nanoTime();
                             try {
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
+                                long first231 = System.nanoTime();
                                 idx3.set(i, j, k);
+                                long first232 = System.nanoTime();
+                                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first231-first232=" + (first231-first232) );
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after idx.set("+i+"," + j + "," + k + ")");
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] idx3 is: " + idx3);
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] index to get: " + (j * Integer.valueOf(lonDimSize) + k));
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] value is: "
                                 //        + records[j * Integer.valueOf(lonDimSize) + k].get());
-                                dataRsut.setFloat(idx3, records[2+k].get());
+                                dataRsut.setFloat(idx3, records[2 + k].get());
+                                long first233 = System.nanoTime();
+                                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first231-first232=" + (first232-first233) );
+
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after dataRsut.setFloat(..)");
                             } catch (Exception e) {
                                 e.printStackTrace();
