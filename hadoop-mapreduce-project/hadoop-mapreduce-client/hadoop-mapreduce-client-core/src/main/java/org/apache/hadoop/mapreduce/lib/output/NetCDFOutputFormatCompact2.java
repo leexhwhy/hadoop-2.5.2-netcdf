@@ -105,7 +105,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
             // Need to be taken out of being static.
 
             String fileName = "hdfs://c3n2:9000/rsut";
-            String outputFileName = "/data/saman/lat-" + currentCumulativeLat + ".nc";
+            //String outputFileName = "/data/saman/lat-" + currentCumulativeLat + ".nc";
+            String outputFileName = "hdfs://c3n2:9000/rsutlatout";
             NetcdfFile dataFile = null;
             NetcdfFileWriter outputFile = null;
 
@@ -365,7 +366,7 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
 
                 long second = System.nanoTime();
 
-                _fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
+                //_fs.copyFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
                 //_fs.moveFromLocalFile(new Path(outputFileName), new Path(_output_path + "/rsutlat" + currentCumulativeLat));
 
                 long third = System.nanoTime();
