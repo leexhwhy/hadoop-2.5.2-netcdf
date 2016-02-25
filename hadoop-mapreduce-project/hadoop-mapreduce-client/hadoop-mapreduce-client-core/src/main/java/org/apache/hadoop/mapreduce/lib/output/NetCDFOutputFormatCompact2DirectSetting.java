@@ -385,7 +385,7 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
 
                 long first3 = System.nanoTime();
 
-                //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
+                System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
                 outputFile.create();
                 outputFile.write(vlatNew, dataLat);
                 outputFile.write(vlatbndsNew, dataLatBnds);
