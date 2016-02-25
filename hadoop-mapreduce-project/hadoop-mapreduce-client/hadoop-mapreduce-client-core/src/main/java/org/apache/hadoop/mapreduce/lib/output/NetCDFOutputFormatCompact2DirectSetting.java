@@ -327,9 +327,19 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
                 //Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())}));
-                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
-                //int globalIndex = 0;
+                float[][] arrayVersion = new float[((java.util.List)value).size()][];
+                Iterator valueItr = ((java.util.List) value).iterator();
+                int counter = 0;
+                while( valueItr.hasNext() ){
+                    NetCDFArrayWritable temp = (NetCDFArrayWritable)valueItr.next();
+                    arrayVersion[counter] = (float[])temp.toArrayFloat();
+                }
+                dataRsut.setUseDirectNetCDF(true);
+                dataRsut.setNetcdfContentSize( ((java.util.List)value).size() );
+                dataRsut.setNetcdfContents( arrayVersion );
 
+                //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
+                //int globalIndex = 0
 
                 //for( int i = 0; i < latIndexesSize; i++ ) {
                 //    long first21 = System.nanoTime();
@@ -379,16 +389,16 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 //    System.out.println( "[SAMAN][NetCDFOutputFormat][write] first26-first21=" + (first26-first21) );
                 //}
 
-                dataRsut.setUseDirectNetCDF(true);
-                dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length - 2 );
-                dataRsut.setNetcdfContents( (java.util.List<NetCDFArrayWritable>)value );
+                //dataRsut.setUseDirectNetCDF(true);
+                //dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length - 2 );
+                //dataRsut.setNetcdfContents( (java.util.List<NetCDFArrayWritable>)value );
 
                 long first3 = System.nanoTime();
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
 
-                int storageListSize = dataRsut.getStorageSize();
-                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] storage size at this moment is: " + storageListSize );
+                //int storageListSize = dataRsut.getStorageSize();
+                //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] storage size at this moment is: " + storageListSize );
 
                 dataRsut.getStorageFirstHundred();
                 outputFile.create();
@@ -398,6 +408,7 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 outputFile.write(vtimebndsNew, dataTimeBnds);
                 outputFile.write(vlonNew, dataLon);
                 outputFile.write(vlonbndsNew, dataLonBnds);
+
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
