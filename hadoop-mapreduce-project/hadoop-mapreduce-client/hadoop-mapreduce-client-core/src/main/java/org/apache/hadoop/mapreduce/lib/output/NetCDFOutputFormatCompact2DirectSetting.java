@@ -390,6 +390,7 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 int storageListSize = dataRsut.getStorageSize();
                 System.out.println( "[SAMAN][NetCDFOutputFormat][Write] storage size at this moment is: " + storageListSize );
 
+                dataRsut.getStorageFirstHundred();
                 outputFile.create();
                 outputFile.write(vlatNew, dataLat);
                 outputFile.write(vlatbndsNew, dataLatBnds);
