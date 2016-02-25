@@ -89,7 +89,7 @@ public class ArrayWritable implements Writable {
   public Object toArrayFloat() {
     Object result = Array.newInstance(float.class, values.length);
     for (int i = 0; i < values.length; i++) {
-      Array.set(result, i, values[i]);
+      Array.set(result, i, ((FloatWritable)values[i]).get());
     }
     return result;
   }
