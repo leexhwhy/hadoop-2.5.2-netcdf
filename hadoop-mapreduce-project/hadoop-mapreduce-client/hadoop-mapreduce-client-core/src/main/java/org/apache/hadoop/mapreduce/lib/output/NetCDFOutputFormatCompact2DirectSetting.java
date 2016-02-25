@@ -338,6 +338,13 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length );
                 dataRsut.setNetcdfContents( arrayVersion );
 
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxBxC = " + latIndexesSize * (int)(vtime.getSize()) * (int)(vlon.getSize()) );
+
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxB = " + ((java.util.List)value).size()*((java.util.List<NetCDFArrayWritable>)value).get(0).get().length );
+
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] bigIndex size is: " + ((java.util.List)value).size() );
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] content size is: " + ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length );
+
                 //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
                 //int globalIndex = 0
 
