@@ -335,7 +335,7 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                     arrayVersion[counter] = (float[])temp.toArrayFloat();
                 }
                 dataRsut.setUseDirectNetCDF(true);
-                dataRsut.setNetcdfContentSize( ((java.util.List)value).size() );
+                dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length );
                 dataRsut.setNetcdfContents( arrayVersion );
 
                 //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
