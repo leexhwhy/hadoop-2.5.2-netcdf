@@ -333,21 +333,21 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                 for( int i = 0; i < latIndexesSize; i++ ) {
                     long first21 = System.nanoTime();
                     for (int j = 0; j < vtime.getSize(); j++) {
-                        long first22 = System.nanoTime();
+                        //long first22 = System.nanoTime();
 
                         NetCDFArrayWritable netCDFArrayWritable = ((java.util.List<NetCDFArrayWritable>)value).get(globalIndex);
 
                         //FloatWritable[] records = (FloatWritable[])netCDFArrayWritable.toArray();
-                        long first221 = System.nanoTime();
+                        //long first221 = System.nanoTime();
                         //((java.util.List<NetCDFArrayWritable>)value).addAll((java.util.List<NetCDFArrayWritable>)value);
-                        System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first221-first22=" + (first221-first22) );
+                        //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first221-first22=" + (first221-first22) );
                         for (int k = 0; k < vlon.getSize(); k++) {
-                            long first23 = System.nanoTime();
+                            //long first23 = System.nanoTime();
                             try {
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] before idx.set("+i+"," + j + "," + k + ")");
                                 //long first231 = System.nanoTime();
                                 //idx3.set(i, j, k);
-                                long first232 = System.nanoTime();
+                                //long first232 = System.nanoTime();
                                 //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first232-first231=" + (first232-first231) );
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after idx.set("+i+"," + j + "," + k + ")");
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] idx3 is: " + idx3);
@@ -357,8 +357,8 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                                 //dataRsut.setFloat(idx3, records[2 + k].get());
                                 //dataRsut.setFloat(idx3, (((FloatWritable[])netCDFArrayWritable.get())[2+k]).get());
                                 dataRsut.set(i, j, k, (((FloatWritable[]) netCDFArrayWritable.get())[2+k]).get());
-                                long first233 = System.nanoTime();
-                                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first233-first232=" + (first233-first232) );
+                                //long first233 = System.nanoTime();
+                                //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] first233-first232=" + (first233-first232) );
 
                                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] after dataRsut.setFloat(..)");
                             } catch (Exception e) {
@@ -366,15 +366,15 @@ public class NetCDFOutputFormatCompact2<Text, List> extends FileOutputFormat<Tex
                                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage());
                                 throw e;
                             }
-                            long first24 = System.nanoTime();
-                            System.out.println( "[SAMAN][NetCDFOutputFormat][write] first24-first23=" + (first24-first23) );
+                            //long first24 = System.nanoTime();
+                            //System.out.println( "[SAMAN][NetCDFOutputFormat][write] first24-first23=" + (first24-first23) );
                         }
                         globalIndex++;
-                        long first25 = System.nanoTime();
-                        System.out.println( "[SAMAN][NetCDFOutputFormat][write] first25-first22=" + (first25-first22) );
+                        //long first25 = System.nanoTime();
+                        //System.out.println( "[SAMAN][NetCDFOutputFormat][write] first25-first22=" + (first25-first22) );
                     }
-                    long first26 = System.nanoTime();
-                    System.out.println( "[SAMAN][NetCDFOutputFormat][write] first26-first21=" + (first26-first21) );
+                    //long first26 = System.nanoTime();
+                    //System.out.println( "[SAMAN][NetCDFOutputFormat][write] first26-first21=" + (first26-first21) );
                 }
 
                 long first3 = System.nanoTime();
