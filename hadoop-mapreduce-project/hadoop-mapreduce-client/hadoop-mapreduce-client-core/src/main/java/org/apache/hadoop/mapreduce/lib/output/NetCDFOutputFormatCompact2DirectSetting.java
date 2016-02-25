@@ -328,12 +328,14 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 //Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())}));
                 float[][] arrayVersion = new float[((java.util.List)value).size()][];
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] arrayVersion size = " + arrayVersion.length );
                 Iterator valueItr = ((java.util.List) value).iterator();
                 int counter = 0;
                 while( valueItr.hasNext() ){
                     NetCDFArrayWritable temp = (NetCDFArrayWritable)valueItr.next();
                     System.out.println( "[SAMAN][NetCDFRecordWriter][write] Current array size = " + (temp.get().length-2) );
                     arrayVersion[counter] = (float[])temp.toArrayFloat();
+                    counter++;
                 }
                 dataRsut.setUseDirectNetCDF(true);
                 dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2 );
@@ -344,7 +346,7 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxB = " + ((java.util.List)value).size()*(((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2) );
 
                 System.out.println( "[SAMAN][NetCDFRecordWriter][write] bigIndex size is: " + ((java.util.List)value).size() );
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] content size is: " + (((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2) );
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] content size is: " + (((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2)    );
 
                 //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
                 //int globalIndex = 0
