@@ -408,7 +408,6 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 outputFile.write(vtimebndsNew, dataTimeBnds);
                 outputFile.write(vlonNew, dataLon);
                 outputFile.write(vlonbndsNew, dataLonBnds);
-
                 outputFile.write(vrsutNew, dataRsut);
                 outputFile.close();
 
