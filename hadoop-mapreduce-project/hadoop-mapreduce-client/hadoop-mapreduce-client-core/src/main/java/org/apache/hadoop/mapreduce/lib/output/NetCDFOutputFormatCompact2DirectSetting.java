@@ -327,8 +327,10 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 //System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before DataRsut;");
                 //Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())}));
-                float[][] arrayVersion = new float[((java.util.List)value).size()][];
+                float[][] arrayVersion = new float[((java.util.List<NetCDFArrayWritable>)value).size()][];
+                System.out.println( "[SAMAN][NetCDFRecordWriter][write] ((java.util.List<NetCDFArrayWritable>)value).size() = " + ((java.util.List<NetCDFArrayWritable>)value).size() );
                 System.out.println( "[SAMAN][NetCDFRecordWriter][write] arrayVersion size = " + arrayVersion.length );
+
                 Iterator valueItr = ((java.util.List) value).iterator();
                 int counter = 0;
                 while( valueItr.hasNext() ){
