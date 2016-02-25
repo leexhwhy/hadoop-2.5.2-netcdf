@@ -386,6 +386,10 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 long first3 = System.nanoTime();
 
                 System.out.println("[SAMAN][NetCDFOutputFormat][Write] Before Write;");
+
+                int storageListSize = dataRsut.getStorageSize();
+                System.out.println( "[SAMAN][NetCDFOutputFormat][Write] storage size at this moment is: " + storageListSize );
+
                 outputFile.create();
                 outputFile.write(vlatNew, dataLat);
                 outputFile.write(vlatbndsNew, dataLatBnds);
