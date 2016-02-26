@@ -87,8 +87,10 @@ public class ArrayWritable implements Writable {
   }
 
   public Object toArrayFloat() {
+    //System.out.println( "[SAMAN][ArrayWritable][toArrayFloat]" );
     Object result = Array.newInstance(float.class, values.length-2);
-    for (int i = 2; i < values.length; i++) {
+
+    for (int i = 0; i < values.length-2; i++) {
       Array.set(result, i, ((FloatWritable)values[i]).get());
     }
     return result;
