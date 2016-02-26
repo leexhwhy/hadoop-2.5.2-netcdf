@@ -328,20 +328,22 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 //Index3D idx3 = new Index3D(new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())});
                 ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{latIndexesSize, (int) (vtime.getSize()), (int) (vlon.getSize())}));
                 float[][] arrayVersion = new float[((java.util.List<NetCDFArrayWritable>)value).size()][];
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] ((java.util.List<NetCDFArrayWritable>)value).size() = " + ((java.util.List<NetCDFArrayWritable>)value).size() );
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] arrayVersion size = " + arrayVersion.length );
+                //System.out.println( "[SAMAN][NetCDFRecordWriter][write] ((java.util.List<NetCDFArrayWritable>)value).size() = " + ((java.util.List<NetCDFArrayWritable>)value).size() );
+                //System.out.println( "[SAMAN][NetCDFRecordWriter][write] arrayVersion size = " + arrayVersion.length );
 
                 Iterator valueItr = ((java.util.List) value).iterator();
                 int counter = 0;
                 while( valueItr.hasNext() ){
                     NetCDFArrayWritable temp = (NetCDFArrayWritable)valueItr.next();
-                    System.out.println( "[SAMAN][NetCDFRecordWriter][write] Current array size = " + (temp.get().length-2) );
+                    //System.out.println( "[SAMAN][NetCDFRecordWriter][write] Current array size = " + (temp.get().length-2) );
+                    /*
                     if( temp == null )
                         System.out.println( "[SAMAN][NetCDFRecordWriter][write] temp is null!" );
                     if( temp.toArrayFloat() == null )
                         System.out.println( "[SAMAN][NetCDFRecordWriter][write] temp.toArrayFloat() is null!" );
                     if( arrayVersion[counter] == null )
                         System.out.println( "[SAMAN][NetCDFRecordWriter][write] arrayVersion[counter] is null!" );
+                    */
                     arrayVersion[counter] = (float[])temp.toArrayFloat();
                     counter++;
                 }
@@ -349,12 +351,12 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 dataRsut.setNetcdfContentSize( ((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2 );
                 dataRsut.setNetcdfContents( arrayVersion );
 
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxBxC = " + latIndexesSize * (int)(vtime.getSize()) * (int)(vlon.getSize()) );
+                //System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxBxC = " + latIndexesSize * (int)(vtime.getSize()) * (int)(vlon.getSize()) );
 
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxB = " + ((java.util.List)value).size()*(((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2) );
+                //System.out.println( "[SAMAN][NetCDFRecordWriter][write] AxB = " + ((java.util.List)value).size()*(((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2) );
 
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] bigIndex size is: " + ((java.util.List)value).size() );
-                System.out.println( "[SAMAN][NetCDFRecordWriter][write] content size is: " + (((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2)    );
+                //System.out.println( "[SAMAN][NetCDFRecordWriter][write] bigIndex size is: " + ((java.util.List)value).size() );
+                //System.out.println( "[SAMAN][NetCDFRecordWriter][write] content size is: " + (((java.util.List<NetCDFArrayWritable>)value).get(0).get().length-2)    );
 
                 //System.out.println( "[SAMAN][NetCDFOutputFormat][Write] class is: " + dataRsut.getClass().getName() );
                 //int globalIndex = 0
