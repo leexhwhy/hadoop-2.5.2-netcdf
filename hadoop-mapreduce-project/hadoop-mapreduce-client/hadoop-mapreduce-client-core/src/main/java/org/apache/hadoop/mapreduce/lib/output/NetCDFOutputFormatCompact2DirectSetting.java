@@ -336,6 +336,12 @@ public class NetCDFOutputFormatCompact2DirectSetting<Text, List> extends FileOut
                 while( valueItr.hasNext() ){
                     NetCDFArrayWritable temp = (NetCDFArrayWritable)valueItr.next();
                     System.out.println( "[SAMAN][NetCDFRecordWriter][write] Current array size = " + (temp.get().length-2) );
+                    if( temp == null )
+                        System.out.println( "[SAMAN][NetCDFRecordWriter][write] temp is null!" );
+                    if( temp.toArrayFloat() == null )
+                        System.out.println( "[SAMAN][NetCDFRecordWriter][write] temp.toArrayFloat() is null!" );
+                    if( arrayVersion[counter] == null )
+                        System.out.println( "[SAMAN][NetCDFRecordWriter][write] arrayVersion[counter] is null!" );
                     arrayVersion[counter] = (float[])temp.toArrayFloat();
                     counter++;
                 }
