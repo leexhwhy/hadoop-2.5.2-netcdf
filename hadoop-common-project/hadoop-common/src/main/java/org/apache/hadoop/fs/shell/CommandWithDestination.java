@@ -305,6 +305,8 @@ abstract class CommandWithDestination extends FsCommand {
     src.fs.setVerifyChecksum(verifyChecksum);
     InputStream in = null;
     try {
+      System.out.println( "[SAMAN][CommandWithDestination][copyFileToTarget] src.fs type is: "
+              + src.fs.getClass().getName() );
       in = src.fs.open(src.path);
       copyStreamToTarget(in, target);
       preserveAttributes(src, target);
@@ -326,8 +328,12 @@ abstract class CommandWithDestination extends FsCommand {
     if (target.exists && (target.stat.isDirectory() || !overwrite)) {
       throw new PathExistsException(target.toString());
     }
+    System.out.println( "[SAMAN][CommandWithDestination][copyStreamToTarget] target.fs type is: "
+            + target.fs.getClass().getName() );
     TargetFileSystem targetFs = new TargetFileSystem(target.fs);
-    try {
+    System.out.println( "[SAMAN][CommandWithDestination][copyStreamToTarget] targetFs type is: "
+            + targetFs.getClass().getName() );
+      try {
       PathData tempTarget = target.suffix("._COPYING_");
       targetFs.setWriteChecksum(writeChecksum);
       targetFs.writeStreamToFile(in, tempTarget);
@@ -398,6 +404,8 @@ abstract class CommandWithDestination extends FsCommand {
       FSDataOutputStream out = null;
       try {
         out = create(target);
+        System.out.println( "[SAMAN][TargetFileSystem][writeStreamToFile] out type is: "
+                + out.getClass().getName() );
         IOUtils.copyBytes(in, out, getConf(), true);
       } finally {
         IOUtils.closeStream(out); // just in case copyBytes didn't
