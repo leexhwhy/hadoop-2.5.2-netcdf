@@ -518,7 +518,7 @@ public class DFSOutputStream extends FSOutputSummer
               System.out.println( "[SAMAN][DFSOutputStream][run] heartbeat packet!" );
               one = new Packet();  // heartbeat packet
             } else {
-              System.out.println( "[SAMAN][DFSOutputStream][run] regular data packet!" );
+              //System.out.println( "[SAMAN][DFSOutputStream][run] regular data packet!" );
               one = dataQueue.getFirst(); // regular data packet
             }
           }
@@ -539,8 +539,6 @@ public class DFSOutputStream extends FSOutputSummer
             }
             setupPipelineForAppendOrRecovery();
             initDataStreaming();
-          }else{
-            System.out.println( "[SAMAN][DFSOutputStream][run] Stage is something else!" );
           }
 
           long lastByteOffsetInBlock = one.getLastByteOffsetBlock();
