@@ -1748,6 +1748,8 @@ public class DFSOutputStream extends FSOutputSummer
     }
 
     if (currentPacket == null) {
+      System.out.println( "[SAMAN][DFSOutputStream][writeChunk] currentPacket is null! PacketSize="
+              + packetSize +", ChunksPerPacket="+chunksPerPacket+", BytesCurBlock="+bytesCurBlock );
       currentPacket = new Packet(packetSize, chunksPerPacket, 
           bytesCurBlock);
       if (DFSClient.LOG.isDebugEnabled()) {
