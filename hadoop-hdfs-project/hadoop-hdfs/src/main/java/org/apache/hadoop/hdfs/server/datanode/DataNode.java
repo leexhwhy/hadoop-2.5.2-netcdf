@@ -1727,9 +1727,13 @@ public class DataNode extends Configured
   public void runDatanodeDaemon() throws IOException {
     blockPoolManager.startAll();
 
+    System.out.println( "[SAMAN][DataNode][runDatanodeDaemon] dateXceiverServer type is: "
+            + dataXceiverServer.getClass().getName() );
     // start dataXceiveServer
     dataXceiverServer.start();
     if (localDataXceiverServer != null) {
+      System.out.println( "[SAMAN][DataNode][runDatanodeDaemon] localDataXceiverServer type is: "
+              + localDataXceiverServer.getClass().getName() );
       localDataXceiverServer.start();
     }
     ipcServer.start();
