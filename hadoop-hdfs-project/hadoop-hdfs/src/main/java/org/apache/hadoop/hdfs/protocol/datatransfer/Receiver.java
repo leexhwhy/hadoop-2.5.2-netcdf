@@ -65,30 +65,39 @@ public abstract class Receiver implements DataTransferProtocol {
   protected final void processOp(Op op) throws IOException {
     switch(op) {
     case READ_BLOCK:
+      System.out.println( "[SAMAN][Receiver][processOp] READ_BLOCK" );
       opReadBlock();
       break;
     case WRITE_BLOCK:
+      System.out.println( "[SAMAN][Receiver][processOp] WRITE_BLOCK" );
       opWriteBlock(in);
       break;
     case REPLACE_BLOCK:
+      System.out.println( "[SAMAN][Receiver][processOp] REPLACE_BLOCK" );
       opReplaceBlock(in);
       break;
     case COPY_BLOCK:
+      System.out.println( "[SAMAN][Receiver][processOp] COPY_BLOCK" );
       opCopyBlock(in);
       break;
     case BLOCK_CHECKSUM:
+      System.out.println( "[SAMAN][Receiver][processOp] BLOCK_CHECKSUM" );
       opBlockChecksum(in);
       break;
     case TRANSFER_BLOCK:
+      System.out.println( "[SAMAN][Receiver][processOp] TRANSFER_BLOCK" );
       opTransferBlock(in);
       break;
     case REQUEST_SHORT_CIRCUIT_FDS:
+      System.out.println( "[SAMAN][Receiver][processOp] REQUEST_SHORT_CIRCUIT_FDS" );
       opRequestShortCircuitFds(in);
       break;
     case RELEASE_SHORT_CIRCUIT_FDS:
+      System.out.println( "[SAMAN][Receiver][processOp] RELEASE_SHORT_CIRCUIT_FDS" );
       opReleaseShortCircuitFds(in);
       break;
     case REQUEST_SHORT_CIRCUIT_SHM:
+      System.out.println( "[SAMAN][Receiver][processOp] REQUEST_SHORT_CIRCUIT_SHM" );
       opRequestShortCircuitShm(in);
       break;
     default:

@@ -167,6 +167,7 @@ class DataXceiver extends Receiver implements Runnable {
    */
   @Override
   public void run() {
+    System.out.println( "[SAMAN][DataXceiver][Run] run()!" );
     int opsProcessed = 0;
     Op op = null;
 
@@ -208,6 +209,7 @@ class DataXceiver extends Receiver implements Runnable {
           } else {
             peer.setReadTimeout(dnConf.socketTimeout);
           }
+          System.out.println( "[SAMAN][DataXceiver][Run] Reading Op!" );
           op = readOp();
         } catch (InterruptedIOException ignored) {
           // Time out while we wait for client rpc
@@ -229,7 +231,7 @@ class DataXceiver extends Receiver implements Runnable {
         if (opsProcessed != 0) {
           peer.setReadTimeout(dnConf.socketTimeout);
         }
-
+        System.out.println( "[SAMAN][DataXceiver][Run] Processinf Op!" );
         opStartTime = now();
         processOp(op);
         ++opsProcessed;
