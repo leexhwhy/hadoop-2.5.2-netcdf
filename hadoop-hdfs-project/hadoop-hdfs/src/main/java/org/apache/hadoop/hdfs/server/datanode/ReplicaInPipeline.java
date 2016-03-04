@@ -177,7 +177,8 @@ public class ReplicaInPipeline extends ReplicaInfo
       DataChecksum requestedChecksum) throws IOException {
     File blockFile = getBlockFile();
 
-    System.out.println( "[SAMAN][ReplicaInPipeline][createStreams] file locations is: " + blockFile.getPath() );
+    System.out.println( "[SAMAN][ReplicaInPipeline][createStreams] file locations name is: " + blockFile.getName()
+                        + ", dir: " + getDir() + ", blockName: " + getBlockName() );
 
     File metaFile = getMetaFile();
     if (DataNode.LOG.isDebugEnabled()) {
