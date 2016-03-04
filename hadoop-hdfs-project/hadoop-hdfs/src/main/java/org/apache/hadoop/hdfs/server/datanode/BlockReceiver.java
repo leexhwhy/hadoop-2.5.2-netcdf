@@ -724,6 +724,14 @@ class BlockReceiver implements Closeable {
       mirrorAddr = mirrAddr;
       throttler = throttlerArg;
 
+    String downstreamNodes = new String();
+
+    for( int i = 0; i < downstreams.length; i++ ){
+        downstreamNodes += downstreams[i].getName() + ",";
+    }
+    System.out.println( "[SAMAN][BlockReceiver][receiveBlock] downStreamNodes are: " + downstreamNodes );
+
+
     try {
       if (isClient && !isTransfer) {
         responder = new Daemon(datanode.threadGroup, 
@@ -731,6 +739,7 @@ class BlockReceiver implements Closeable {
         responder.start(); // start thread to processes responses
       }
 
+      System.out.println( "[SAMAN][BlockReceiver][receiveBlock] start receivePacket()!" );
       while (receivePacket() >= 0) { /* Receive until the last packet */ }
 
       // wait for all outstanding packet responses. And then

@@ -601,6 +601,9 @@ class DataXceiver extends Receiver implements Runnable {
     block.setNumBytes(dataXceiverServer.estimateBlockSize);
     LOG.info("Receiving " + block + " src: " + remoteAddress + " dest: "
         + localAddress);
+    System.out.println( "[SAMAN][DataXceiver][writeBlock] Receiving " + block
+            + " src: " + remoteAddress
+            + " dest: " + localAddress );
 
     // reply to upstream datanode or client 
     final DataOutputStream replyOut = new DataOutputStream(
