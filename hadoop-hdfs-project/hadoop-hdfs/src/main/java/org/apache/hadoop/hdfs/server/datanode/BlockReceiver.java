@@ -625,9 +625,12 @@ class BlockReceiver implements Closeable {
                 checksumBuf.array(),
                 checksumBuf.arrayOffset() + checksumBuf.position() + checksumLen - checksumSize,
                 checksumBuf.arrayOffset() + checksumBuf.position() + checksumLen);
-            //checksumOut.write(checksumBuf.array(),
-            //    checksumBuf.arrayOffset() + checksumBuf.position(),
-            //    checksumLen);
+            if( datanode.getDnConf().verifyChecksum == true ) {
+                System.out.println( "[SAMAN][BlockReceiver][receiveBlock] verify checksum is true!" );
+                checksumOut.write(checksumBuf.array(),
+                        checksumBuf.arrayOffset() + checksumBuf.position(),
+                        checksumLen);
+            }
           }
           /// flush entire packet, sync if requested
           flushOrSync(syncBlock);

@@ -299,7 +299,16 @@ abstract class CommandWithDestination extends FsCommand {
   protected void copyFileToTarget(PathData src, PathData target) throws IOException {
 
     Configuration conf = new Configuration();
-    String netcdfEnabled = conf.get("hadoop.netcdf.enable");
+    //String netcdfEnabled = conf.get("hadoop.netcdf.enable");
+    String confVerifyChecksum = conf.get( "dfs.checksum.verify" );
+    System.out.println( "[SAMAN][CommandWithDestination][copyFileToTarget] confVerifyChecksum="+confVerifyChecksum );
+    if( confVerifyChecksum != null ) {
+        if (confVerifyChecksum == "true") {
+            verifyChecksum = true;
+        } else {
+            verifyChecksum = false;
+        }
+    }
     //System.out.println( "[SAMAN] CommandWithDestination.copyFileToTarget => netcdfEnabled:"+netcdfEnabled );
 
     src.fs.setVerifyChecksum(verifyChecksum);
