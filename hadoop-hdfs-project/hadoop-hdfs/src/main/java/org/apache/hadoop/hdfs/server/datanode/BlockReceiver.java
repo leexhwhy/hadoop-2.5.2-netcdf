@@ -592,7 +592,7 @@ class BlockReceiver implements Closeable {
           System.out.println( "[SAMAN][BlockReceiver][receivePacket] out.write, " +
                   "startByteToDisk="+startByteToDisk+
                   ",numBytesToDisk="+numBytesToDisk );
-          System.out.println( "[SAMAN][BlockReceiver][receivePacket] out = " + out.toString() );
+          //System.out.println( "[SAMAN][BlockReceiver][receivePacket] out = " + out.toString() );
           out.write(dataBuf.array(), startByteToDisk, numBytesToDisk);
           long duration = Time.monotonicNow() - begin;
           if (duration > datanodeSlowLogThresholdMs) {
@@ -625,9 +625,9 @@ class BlockReceiver implements Closeable {
                 checksumBuf.array(),
                 checksumBuf.arrayOffset() + checksumBuf.position() + checksumLen - checksumSize,
                 checksumBuf.arrayOffset() + checksumBuf.position() + checksumLen);
-            checksumOut.write(checksumBuf.array(),
-                checksumBuf.arrayOffset() + checksumBuf.position(),
-                checksumLen);
+            //checksumOut.write(checksumBuf.array(),
+            //    checksumBuf.arrayOffset() + checksumBuf.position(),
+            //    checksumLen);
           }
           /// flush entire packet, sync if requested
           flushOrSync(syncBlock);
