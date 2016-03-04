@@ -589,6 +589,9 @@ class BlockReceiver implements Closeable {
           
           // Write data to disk.
           long begin = Time.monotonicNow();
+          System.out.println( "[SAMAN][BlockReceiver][receivePacket] out.write, " +
+                  "startByteToDisk="+startByteToDisk+
+                  ",numBytesToDisk="+numBytesToDisk );
           out.write(dataBuf.array(), startByteToDisk, numBytesToDisk);
           long duration = Time.monotonicNow() - begin;
           if (duration > datanodeSlowLogThresholdMs) {
