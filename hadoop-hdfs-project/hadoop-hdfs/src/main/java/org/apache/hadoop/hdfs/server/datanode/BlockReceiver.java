@@ -1558,7 +1558,7 @@ class BlockReceiver implements Closeable {
       }
 
       ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
-      shape = dataTimeBnds.getShape();
+      shape = timeBndsArray.getShape();
       Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
       idx = new Index2D(new int[]{shape[0], shape[1]});
       for (int i = 0; i < shape[0]; i++) {
@@ -1576,7 +1576,7 @@ class BlockReceiver implements Closeable {
       }
 
       ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
-      shape = dataLonBnds.getShape();
+      shape = lonBndsArray.getShape();
       Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
       idx = new Index2D(new int[]{shape[0], shape[1]});
       for (int i = 0; i < shape[0]; i++) {
@@ -1588,7 +1588,7 @@ class BlockReceiver implements Closeable {
 
       ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{(int) (vlat.getSize()), (int) (vtime.getSize()), (int) (vlon.getSize())}));
       ArrayFloat.D3 rsutArray = (ArrayFloat.D3) vrsut.read();
-      for( int i = 0; i < vlat.gertSize(); i++ ) {
+      for( int i = 0; i < vlat.getSize(); i++ ) {
         for (int j = 0; j < vtime.getSize(); j++) {
           for (int k = 0; k < vlon.getSize(); k++) {
             try {
@@ -1724,9 +1724,9 @@ class BlockReceiver implements Closeable {
       }
 
       ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
-      shape = dataLonBnds.getShape();
+      shape = lonBndsArray.getShape();
       Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
-      idx = new Index2D(new int[]{shape[0], shape[1]});
+      Index2D idx = new Index2D(new int[]{shape[0], shape[1]});
       for (int i = 0; i < shape[0]; i++) {
         for (int j = 0; j < shape[1]; j++) {
           idx.set(i, j);
@@ -1762,7 +1762,7 @@ class BlockReceiver implements Closeable {
       ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
       shape = latBndsArray.getShape();
       Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
-      Index2D idx = new Index2D(new int[]{shape[0], shape[1]});
+      idx = new Index2D(new int[]{shape[0], shape[1]});
       for (int i = 0; i < shape[0]; i++) {
         for (int j = 0; j < shape[1]; j++) {
           idx.set(i, j);
