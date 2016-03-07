@@ -1533,8 +1533,8 @@ class BlockReceiver implements Closeable {
       outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
 
       ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
-      Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
-      int[] shape = latArray.getShape();;
+      Array dataLat = Array.factory(DataType.DOUBLE, new int[]{(int)(vlat.getSize())});
+      int[] shape = latArray.getShape();
       for( int i = 0; i < shape[0]; i++ ){
         dataLat.setDouble(i, latArray.get(i));
       }
@@ -1718,7 +1718,7 @@ class BlockReceiver implements Closeable {
 
       ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
       Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize())});
-      shape = lonArray.getShape();
+      int[] shape = lonArray.getShape();
       for (int i = 0; i < shape[0]; i++) {
         dataLon.setDouble(i, lonArray.get(i));
       }
@@ -1753,8 +1753,8 @@ class BlockReceiver implements Closeable {
       }
 
       ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
-      Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
-      int[] shape = latArray.getShape();;
+      Array dataLat = Array.factory(DataType.DOUBLE, new int[]{(int)(vlat.getSize())});
+      shape = latArray.getShape();
       for( int i = 0; i < shape[0]; i++ ){
         dataLat.setDouble(i, latArray.get(i));
       }
