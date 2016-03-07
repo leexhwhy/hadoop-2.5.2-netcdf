@@ -1742,7 +1742,7 @@ class BlockReceiver implements Closeable {
       }
 
       ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
-      shape = dataTimeBnds.getShape();
+      shape = timeBndsArray.getShape();
       Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
       idx = new Index2D(new int[]{shape[0], shape[1]});
       for (int i = 0; i < shape[0]; i++) {
@@ -1772,7 +1772,7 @@ class BlockReceiver implements Closeable {
 
       ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{(int) (vlon.getSize()), (int) (vtime.getSize()), (int) (vlat.getSize())}));
       ArrayFloat.D3 rsutArray = (ArrayFloat.D3) vrsut.read();
-      for( int i = 0; i < vlon.gertSize(); i++ ) {
+      for( int i = 0; i < vlon.getSize(); i++ ) {
         for (int j = 0; j < vtime.getSize(); j++) {
           for (int k = 0; k < vlat.getSize(); k++) {
             try {
