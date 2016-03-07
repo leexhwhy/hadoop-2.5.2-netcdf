@@ -754,8 +754,20 @@ class BlockReceiver implements Closeable {
       }
 
       System.out.println( "[SAMAN][BlockReceiver][receiveBlock] start receivePacket()!" );
+
+      if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
+        System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file exist before receivePacket()"  );
+      }else{
+        System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file not exist before receivePacket()"  );
+      }
+
       while (receivePacket() >= 0) { /* Receive until the last packet */ }
 
+      if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
+        System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file exist after receivePacket()"  );
+      }else{
+        System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file not exist after receivePacket()"  );
+      }
 
       // wait for all outstanding packet responses. And then
       // indicate responder to gracefully shutdown.

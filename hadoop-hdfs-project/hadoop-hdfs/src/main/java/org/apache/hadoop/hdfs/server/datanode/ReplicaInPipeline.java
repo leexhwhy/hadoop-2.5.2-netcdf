@@ -243,6 +243,7 @@ public class ReplicaInPipeline extends ReplicaInfo
         blockOut.getChannel().position(blockDiskSize);
         crcOut.getChannel().position(crcDiskSize);
       }
+
       return new ReplicaOutputStreams(blockOut, crcOut, checksum);
     } catch (IOException e) {
       IOUtils.closeStream(blockOut);
