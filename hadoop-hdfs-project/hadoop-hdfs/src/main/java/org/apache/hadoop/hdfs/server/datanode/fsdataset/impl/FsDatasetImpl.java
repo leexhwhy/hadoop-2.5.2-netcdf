@@ -929,6 +929,7 @@ class FsDatasetImpl implements FsDatasetSpi<FsVolumeImpl> {
       throw new IOException("Cannot finalize block from Interrupted Thread");
     }
     ReplicaInfo replicaInfo = getReplicaInfo(b);
+    System.out.println( "[SAMAN][FSDatasetImpl][finaluzeBlock] replicaInfo location is: " + replicaInfo.getBlockFile().getAbsolutePath() );
     if (replicaInfo.getState() == ReplicaState.FINALIZED) {
       // this is legal, when recovery happens on a file that has
       // been opened for append but never modified
@@ -955,6 +956,7 @@ class FsDatasetImpl implements FsDatasetSpi<FsVolumeImpl> {
 
       File dest = v.addBlock(bpid, replicaInfo, f);
       newReplicaInfo = new FinalizedReplica(replicaInfo, v, dest.getParentFile());
+      System.out.println( "[SAMAN][FSDatasetImpl][finalizeReplica] newReplicaInfo location is: " + newReplicaInfo.getBlockFile().getAbsolutePath() );
     }
     volumeMap.add(bpid, newReplicaInfo);
     return newReplicaInfo;
