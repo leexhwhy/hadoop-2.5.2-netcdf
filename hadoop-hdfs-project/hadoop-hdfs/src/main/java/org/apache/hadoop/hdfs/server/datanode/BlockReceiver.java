@@ -769,8 +769,8 @@ class BlockReceiver implements Closeable {
       // This part has beed added by me(SAMAN), for the netcdf project. By default, it's not working.
       // So you don't need to be worried about it.
       if( datanode.getDnConf().isnetcdf == true ){
-        if(((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().exists()){
-          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file size:" + ((ReplicaInPipeline) replicaInfo).getNetCDFBlockFile().length() );
+        if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file size:" + ((ReplicaInPipeline) replicaInfo).getBlockFile().length() );
         }
         if( downstreams.length == 2 ){
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 2" );
