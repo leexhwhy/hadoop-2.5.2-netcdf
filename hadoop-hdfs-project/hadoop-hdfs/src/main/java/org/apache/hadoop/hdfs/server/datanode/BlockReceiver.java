@@ -774,6 +774,8 @@ class BlockReceiver implements Closeable {
           transformNetCDFSortedByLongitude();
           ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
         }
+      }else{
+        System.out.println( "[SAMAN][BlockReceiver][receiveBlock] isnetcdf == false" );
       }
 
       // wait for all outstanding packet responses. And then
