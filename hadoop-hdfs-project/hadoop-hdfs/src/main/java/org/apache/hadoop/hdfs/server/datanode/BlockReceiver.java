@@ -1445,13 +1445,13 @@ class BlockReceiver implements Closeable {
       inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
       outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
 
-      Variable vtime = dataFile.findVariable("time");
-      Variable vtime_bnds = dataFile.findVariable("time_bnds");
-      Variable vlat = dataFile.findVariable("lat");
-      Variable vlat_bnds = dataFile.findVariable("lat_bnds");
-      Variable vlon = dataFile.findVariable("lon");
-      Variable vlon_bnds = dataFile.findVariable("lon_bnds");
-      Variable vrsut = dataFile.findVariable("rsut");
+      Variable vtime = inputFile.findVariable("time");
+      Variable vtime_bnds = inputFile.findVariable("time_bnds");
+      Variable vlat = inputFile.findVariable("lat");
+      Variable vlat_bnds = inputFile.findVariable("lat_bnds");
+      Variable vlon = inputFile.findVariable("lon");
+      Variable vlon_bnds = inputFile.findVariable("lon_bnds");
+      Variable vrsut = inputFile.findVariable("rsut");
 
       Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
       latDim.setUnlimited(true);
@@ -1629,13 +1629,13 @@ class BlockReceiver implements Closeable {
       inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
       outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
 
-      Variable vtime = dataFile.findVariable("time");
-      Variable vtime_bnds = dataFile.findVariable("time_bnds");
-      Variable vlat = dataFile.findVariable("lat");
-      Variable vlat_bnds = dataFile.findVariable("lat_bnds");
-      Variable vlon = dataFile.findVariable("lon");
-      Variable vlon_bnds = dataFile.findVariable("lon_bnds");
-      Variable vrsut = dataFile.findVariable("rsut");
+      Variable vtime = inputFile.findVariable("time");
+      Variable vtime_bnds = inputFile.findVariable("time_bnds");
+      Variable vlat = inputFile.findVariable("lat");
+      Variable vlat_bnds = inputFile.findVariable("lat_bnds");
+      Variable vlon = inputFile.findVariable("lon");
+      Variable vlon_bnds = inputFile.findVariable("lon_bnds");
+      Variable vrsut = inputFile.findVariable("rsut");
 
       Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
       lonDim.setUnlimited(true);
