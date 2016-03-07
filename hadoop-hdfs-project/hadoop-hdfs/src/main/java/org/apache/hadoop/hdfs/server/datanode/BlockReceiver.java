@@ -761,12 +761,15 @@ class BlockReceiver implements Closeable {
       // So you don't need to be worried about it.
       if( datanode.getDnConf().isnetcdf == true ){
         if( downstreams.length == 2 ){
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 2" );
           // In this case we would keep the file in it's original version.
         }else if( downstreams.length == 1 ){
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 1" );
           // In this case we would transform it into sorted by latitude.
           transformNetCDFSortedByLatitude();
           ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
         }else{
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 0" );
           // In this case we would transform it into sorted by longitude
           transformNetCDFSortedByLongitude();
           ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
@@ -1784,12 +1787,12 @@ class BlockReceiver implements Closeable {
           }
         }
         outputFile.create();
-        outputFile.write(vlatNew, dataLat);
-        outputFile.write(vlatbndsNew, dataLatBnds);
-        outputFile.write(vtimeNew, dataTime);
-        outputFile.write(vtimebndsNew, dataTimeBnds);
         outputFile.write(vlonNew, dataLon);
         outputFile.write(vlonbndsNew, dataLonBnds);
+        outputFile.write(vtimeNew, dataTime);
+        outputFile.write(vtimebndsNew, dataTimeBnds);
+        outputFile.write(vlatNew, dataLat);
+        outputFile.write(vlatbndsNew, dataLatBnds);
         outputFile.write(vrsutNew, dataRsut);
       }
 
