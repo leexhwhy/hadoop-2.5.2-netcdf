@@ -756,10 +756,22 @@ class BlockReceiver implements Closeable {
       System.out.println( "[SAMAN][BlockReceiver][receiveBlock] start receivePacket()!" );
       while (receivePacket() >= 0) { /* Receive until the last packet */ }
 
+
+      // wait for all outstanding packet responses. And then
+      // indicate responder to gracefully shutdown.
+      // Mark that responder has been closed for future processing
+      if (responder != null) {
+        ((PacketResponder)responder.getRunnable()).close();
+        responderClosed = true;
+      }
+
       // Here we need to do the transformation.
       // This part has beed added by me(SAMAN), for the netcdf project. By default, it's not working.
       // So you don't need to be worried about it.
       if( datanode.getDnConf().isnetcdf == true ){
+        if(((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().exists()){
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file size:" + ((ReplicaInPipeline) replicaInfo).getNetCDFBlockFile().length() );
+        }
         if( downstreams.length == 2 ){
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 2" );
           // In this case we would keep the file in it's original version.
@@ -776,14 +788,6 @@ class BlockReceiver implements Closeable {
         }
       }else{
         System.out.println( "[SAMAN][BlockReceiver][receiveBlock] isnetcdf == false" );
-      }
-
-      // wait for all outstanding packet responses. And then
-      // indicate responder to gracefully shutdown.
-      // Mark that responder has been closed for future processing
-      if (responder != null) {
-        ((PacketResponder)responder.getRunnable()).close();
-        responderClosed = true;
       }
 
       // If this write is for a replication or transfer-RBW/Finalized,
