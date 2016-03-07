@@ -670,4 +670,6 @@ public class DFSConfigKeys extends CommonConfigurationKeys {
 
    public static final String DFS_VERIFY_CHECKSUM = "dfs.checksum.verify";
 
+   public static final String DFS_IS_NETCDF = "dfs.isnetcdf";
+
 }

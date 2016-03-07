@@ -113,6 +113,15 @@ abstract public class ReplicaInfo extends Block implements Replica {
   public File getBlockFile() {
     return new File(getDir(), getBlockName());
   }
+
+  /**
+   * Get the full path of this replica's temp Netcdf
+   * transposed file.
+   * @return the full path of this replica's temp Netcdf data file
+   */
+  public File getNetCDFBlockFile() {
+    return new File(getDir(), getBlockName()+"_netcdftmp");
+  }
   
   /**
    * Get the full path of this replica's meta file

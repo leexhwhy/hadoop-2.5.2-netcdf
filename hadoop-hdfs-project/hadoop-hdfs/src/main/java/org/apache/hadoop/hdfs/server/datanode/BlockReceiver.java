@@ -30,7 +30,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.zip.Checksum;
 
@@ -50,12 +52,17 @@ import org.apache.hadoop.hdfs.server.datanode.fsdataset.ReplicaOutputStreams;
 import org.apache.hadoop.hdfs.server.datanode.ReplicaInPipeline;
 import org.apache.hadoop.hdfs.server.protocol.DatanodeRegistration;
 import org.apache.hadoop.hdfs.util.DataTransferThrottler;
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.io.NetCDFArrayWritable;
 import org.apache.hadoop.io.nativeio.NativeIO;
 import org.apache.hadoop.util.Daemon;
 import org.apache.hadoop.util.DataChecksum;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.util.Time;
+
+import ucar.ma2.*;
+import ucar.nc2.*;
 
 import com.google.common.annotations.VisibleForTesting;
 
@@ -749,6 +756,23 @@ class BlockReceiver implements Closeable {
       System.out.println( "[SAMAN][BlockReceiver][receiveBlock] start receivePacket()!" );
       while (receivePacket() >= 0) { /* Receive until the last packet */ }
 
+      // Here we need to do the transformation.
+      // This part has beed added by me(SAMAN), for the netcdf project. By default, it's not working.
+      // So you don't need to be worried about it.
+      if( datanode.getDnConf().isnetcdf == true ){
+        if( downstreams.length == 2 ){
+          // In this case we would keep the file in it's original version.
+        }else if( downstreams.length == 1 ){
+          // In this case we would transform it into sorted by latitude.
+          transformNetCDFSortedByLatitude();
+          ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
+        }else{
+          // In this case we would transform it into sorted by longitude
+          transformNetCDFSortedByLongitude();
+          ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
+        }
+      }
+
       // wait for all outstanding packet responses. And then
       // indicate responder to gracefully shutdown.
       // Mark that responder has been closed for future processing
@@ -1413,4 +1437,373 @@ class BlockReceiver implements Closeable {
         + ")";
     }
   }
+
+  public void transformNetCDFSortedByLatitude() {
+    NetcdfFile inputFile = null;
+    NetcdfFileWriter outputFile = null;
+    try{
+      inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
+      outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
+
+      Variable vtime = dataFile.findVariable("time");
+      Variable vtime_bnds = dataFile.findVariable("time_bnds");
+      Variable vlat = dataFile.findVariable("lat");
+      Variable vlat_bnds = dataFile.findVariable("lat_bnds");
+      Variable vlon = dataFile.findVariable("lon");
+      Variable vlon_bnds = dataFile.findVariable("lon_bnds");
+      Variable vrsut = dataFile.findVariable("rsut");
+
+      Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
+      latDim.setUnlimited(true);
+      Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
+      Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
+      Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
+
+      java.util.List<Dimension> time_bnds_dim = new ArrayList<Dimension>();
+      java.util.List<Dimension> lat_bnds_dim = new ArrayList<Dimension>();
+      java.util.List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
+      java.util.List<Dimension> rsut_dim = new ArrayList<Dimension>();
+
+      time_bnds_dim.add(timeDim);
+      time_bnds_dim.add(bndDim);
+      lat_bnds_dim.add(latDim);
+      lat_bnds_dim.add(bndDim);
+      lon_bnds_dim.add(lonDim);
+      lon_bnds_dim.add(bndDim);
+      rsut_dim.add(latDim);
+      rsut_dim.add(timeDim);
+      rsut_dim.add(lonDim);
+
+      Variable vlatNew = outputFile.addVariable(null, vlat.getShortName(), vlat.getDataType(), vlat.getDimensionsString());
+      Variable vlatbndsNew = outputFile.addVariable(null, vlat_bnds.getShortName(), vlat_bnds.getDataType(), lat_bnds_dim);
+      Variable vtimeNew = outputFile.addVariable(null, vtime.getShortName(), vtime.getDataType(), vtime.getDimensionsString());
+      Variable vtimebndsNew = outputFile.addVariable(null, vtime_bnds.getShortName(), vtime_bnds.getDataType(), time_bnds_dim);
+      Variable vlonNew = outputFile.addVariable(null, vlon.getShortName(), vlon.getDataType(), vlon.getDimensionsString());
+      Variable vlonbndsNew = outputFile.addVariable(null, vlon_bnds.getShortName(), vlon_bnds.getDataType(), lon_bnds_dim);
+      Variable vrsutNew = outputFile.addVariable(null, vrsut.getShortName(), vrsut.getDataType(), rsut_dim);
+
+      java.util.List<Attribute> attributes = vtime.getAttributes();
+      Iterator itr = attributes.iterator();
+
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vtimeNew.addAttribute(attribute);
+      }
+
+      attributes = vlat.getAttributes();
+      itr = attributes.iterator();
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vlatNew.addAttribute(attribute);
+      }
+
+      attributes = vlon.getAttributes();
+      itr = attributes.iterator();
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vlonNew.addAttribute(attribute);
+      }
+
+      attributes = vrsut.getAttributes();
+      itr = attributes.iterator();
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vrsutNew.addAttribute(attribute);
+      }
+
+      outputFile.addGroupAttribute(null, new Attribute("institution", "European Centre for Medium-Range Weather Forecasts"));
+      outputFile.addGroupAttribute(null, new Attribute("institute_id", "ECMWF"));
+      outputFile.addGroupAttribute(null, new Attribute("experiment_id", "ERA-Interim"));
+      outputFile.addGroupAttribute(null, new Attribute("source", "ERA Interim, Synoptic Monthly Means, Full Resolution"));
+      outputFile.addGroupAttribute(null, new Attribute("model_id", "IFS-Cy31r2"));
+      outputFile.addGroupAttribute(null, new Attribute("contact", "ECMWF, Dick Dee (dick.dee@ecmwf.int)"));
+      outputFile.addGroupAttribute(null, new Attribute("references", "http://www.ecmwf.int"));
+      outputFile.addGroupAttribute(null, new Attribute("tracking_id", "df4494d9-1d4b-4156-8804-ce238542a777"));
+      outputFile.addGroupAttribute(null, new Attribute("mip_specs", "CMIP5"));
+      outputFile.addGroupAttribute(null, new Attribute("source_id", "ERA-Interim"));
+      outputFile.addGroupAttribute(null, new Attribute("product", "reanalysis"));
+      outputFile.addGroupAttribute(null, new Attribute("frequency", "mon"));
+      outputFile.addGroupAttribute(null, new Attribute("creation_date", "2014-04-28T21:55:14Z"));
+      outputFile.addGroupAttribute(null, new Attribute("history", "2014-04-28T21:54:28Z CMOR rewrote data to comply with CF standards and ana4MIPs requirements."));
+      outputFile.addGroupAttribute(null, new Attribute("Conventions", "CF-1.4"));
+      outputFile.addGroupAttribute(null, new Attribute("project_id", "ana4MIPs"));
+      outputFile.addGroupAttribute(null, new Attribute("table_id", "Table Amon_ana (10 March 2011) fb925e593e0cbb86dd6e96fbbcb352e0"));
+      outputFile.addGroupAttribute(null, new Attribute("title", "Reanalysis output prepared for ana4MIPs "));
+      outputFile.addGroupAttribute(null, new Attribute("modeling_realm", "atmos"));
+      outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
+
+      ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
+      Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
+      int[] shape = latArray.getShape();;
+      for( int i = 0; i < shape[0]; i++ ){
+        dataLat.setDouble(i, latArray.get(i));
+      }
+
+      ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
+      shape = latBndsArray.getShape();
+      Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
+      Index2D idx = new Index2D(new int[]{shape[0], shape[1]});
+      for (int i = 0; i < shape[0]; i++) {
+        for (int j = 0; j < shape[1]; j++) {
+          idx.set(i, j);
+          dataLatBnds.setDouble(idx, latBndsArray.get(i,j));
+        }
+      }
+
+      ArrayDouble.D1 timeArray = (ArrayDouble.D1) vtime.read();
+      Array dataTime = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize())});
+      shape = timeArray.getShape();
+      for (int i = 0; i < shape[0]; i++) {
+        dataTime.setDouble(i, timeArray.get(i));
+      }
+
+      ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
+      shape = dataTimeBnds.getShape();
+      Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
+      idx = new Index2D(new int[]{shape[0], shape[1]});
+      for (int i = 0; i < shape[0]; i++) {
+        for (int j = 0; j < shape[1]; j++) {
+          idx.set(i, j);
+          dataTimeBnds.setDouble(idx, timeBndsArray.get(i, j));
+        }
+      }
+
+      ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
+      Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize())});
+      shape = lonArray.getShape();
+      for (int i = 0; i < shape[0]; i++) {
+        dataLon.setDouble(i, lonArray.get(i));
+      }
+
+      ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
+      shape = dataLonBnds.getShape();
+      Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
+      idx = new Index2D(new int[]{shape[0], shape[1]});
+      for (int i = 0; i < shape[0]; i++) {
+        for (int j = 0; j < shape[1]; j++) {
+          idx.set(i, j);
+          dataLonBnds.setDouble(idx, lonBndsArray.get(i, j));
+        }
+      }
+
+      ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{(int) (vlat.getSize()), (int) (vtime.getSize()), (int) (vlon.getSize())}));
+      ArrayFloat.D3 rsutArray = (ArrayFloat.D3) vrsut.read();
+      for( int i = 0; i < vlat.gertSize(); i++ ) {
+        for (int j = 0; j < vtime.getSize(); j++) {
+          for (int k = 0; k < vlon.getSize(); k++) {
+            try {
+              dataRsut.set(i, j, k, rsutArray.get(j,i,k));
+            } catch (Exception e) {
+              System.out.println("[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage());
+              throw e;
+            }
+          }
+        }
+        outputFile.create();
+        outputFile.write(vlatNew, dataLat);
+        outputFile.write(vlatbndsNew, dataLatBnds);
+        outputFile.write(vtimeNew, dataTime);
+        outputFile.write(vtimebndsNew, dataTimeBnds);
+        outputFile.write(vlonNew, dataLon);
+        outputFile.write(vlonbndsNew, dataLonBnds);
+        outputFile.write(vrsutNew, dataRsut);
+      }
+
+    }catch (Exception e){
+      e.printStackTrace();
+    } finally {
+      if( outputFile != null ){
+        try{
+          outputFile.close();
+        }catch (IOException e){
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  public void transformNetCDFSortedByLongitude() {
+    NetcdfFile inputFile = null;
+    NetcdfFileWriter outputFile = null;
+    try{
+      inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
+      outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
+
+      Variable vtime = dataFile.findVariable("time");
+      Variable vtime_bnds = dataFile.findVariable("time_bnds");
+      Variable vlat = dataFile.findVariable("lat");
+      Variable vlat_bnds = dataFile.findVariable("lat_bnds");
+      Variable vlon = dataFile.findVariable("lon");
+      Variable vlon_bnds = dataFile.findVariable("lon_bnds");
+      Variable vrsut = dataFile.findVariable("rsut");
+
+      Dimension lonDim = outputFile.addDimension(null, vlon.getDimensionsString(), (int) (vlon.getSize()));
+      lonDim.setUnlimited(true);
+      Dimension timeDim = outputFile.addDimension(null, vtime.getDimensionsString(), (int) (vtime.getSize()));
+      Dimension latDim = outputFile.addDimension(null, vlat.getDimensionsString(), (int) (vlat.getSize()));
+      Dimension bndDim = outputFile.addDimension(null, "bnds", 2);
+
+      java.util.List<Dimension> time_bnds_dim = new ArrayList<Dimension>();
+      java.util.List<Dimension> lat_bnds_dim = new ArrayList<Dimension>();
+      java.util.List<Dimension> lon_bnds_dim = new ArrayList<Dimension>();
+      java.util.List<Dimension> rsut_dim = new ArrayList<Dimension>();
+
+      time_bnds_dim.add(timeDim);
+      time_bnds_dim.add(bndDim);
+      lat_bnds_dim.add(latDim);
+      lat_bnds_dim.add(bndDim);
+      lon_bnds_dim.add(lonDim);
+      lon_bnds_dim.add(bndDim);
+      rsut_dim.add(latDim);
+      rsut_dim.add(timeDim);
+      rsut_dim.add(lonDim);
+
+      Variable vlonNew = outputFile.addVariable(null, vlon.getShortName(), vlon.getDataType(), vlon.getDimensionsString());
+      Variable vlonbndsNew = outputFile.addVariable(null, vlon_bnds.getShortName(), vlon_bnds.getDataType(), lon_bnds_dim);
+      Variable vtimeNew = outputFile.addVariable(null, vtime.getShortName(), vtime.getDataType(), vtime.getDimensionsString());
+      Variable vtimebndsNew = outputFile.addVariable(null, vtime_bnds.getShortName(), vtime_bnds.getDataType(), time_bnds_dim);
+      Variable vlatNew = outputFile.addVariable(null, vlat.getShortName(), vlat.getDataType(), vlat.getDimensionsString());
+      Variable vlatbndsNew = outputFile.addVariable(null, vlat_bnds.getShortName(), vlat_bnds.getDataType(), lat_bnds_dim);
+      Variable vrsutNew = outputFile.addVariable(null, vrsut.getShortName(), vrsut.getDataType(), rsut_dim);
+
+      java.util.List<Attribute> attributes = vtime.getAttributes();
+      Iterator itr = attributes.iterator();
+
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vtimeNew.addAttribute(attribute);
+      }
+
+      attributes = vlat.getAttributes();
+      itr = attributes.iterator();
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vlatNew.addAttribute(attribute);
+      }
+
+      attributes = vlon.getAttributes();
+      itr = attributes.iterator();
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vlonNew.addAttribute(attribute);
+      }
+
+      attributes = vrsut.getAttributes();
+      itr = attributes.iterator();
+      while (itr.hasNext()) {
+        Attribute attribute = (Attribute) itr.next();
+        vrsutNew.addAttribute(attribute);
+      }
+
+      outputFile.addGroupAttribute(null, new Attribute("institution", "European Centre for Medium-Range Weather Forecasts"));
+      outputFile.addGroupAttribute(null, new Attribute("institute_id", "ECMWF"));
+      outputFile.addGroupAttribute(null, new Attribute("experiment_id", "ERA-Interim"));
+      outputFile.addGroupAttribute(null, new Attribute("source", "ERA Interim, Synoptic Monthly Means, Full Resolution"));
+      outputFile.addGroupAttribute(null, new Attribute("model_id", "IFS-Cy31r2"));
+      outputFile.addGroupAttribute(null, new Attribute("contact", "ECMWF, Dick Dee (dick.dee@ecmwf.int)"));
+      outputFile.addGroupAttribute(null, new Attribute("references", "http://www.ecmwf.int"));
+      outputFile.addGroupAttribute(null, new Attribute("tracking_id", "df4494d9-1d4b-4156-8804-ce238542a777"));
+      outputFile.addGroupAttribute(null, new Attribute("mip_specs", "CMIP5"));
+      outputFile.addGroupAttribute(null, new Attribute("source_id", "ERA-Interim"));
+      outputFile.addGroupAttribute(null, new Attribute("product", "reanalysis"));
+      outputFile.addGroupAttribute(null, new Attribute("frequency", "mon"));
+      outputFile.addGroupAttribute(null, new Attribute("creation_date", "2014-04-28T21:55:14Z"));
+      outputFile.addGroupAttribute(null, new Attribute("history", "2014-04-28T21:54:28Z CMOR rewrote data to comply with CF standards and ana4MIPs requirements."));
+      outputFile.addGroupAttribute(null, new Attribute("Conventions", "CF-1.4"));
+      outputFile.addGroupAttribute(null, new Attribute("project_id", "ana4MIPs"));
+      outputFile.addGroupAttribute(null, new Attribute("table_id", "Table Amon_ana (10 March 2011) fb925e593e0cbb86dd6e96fbbcb352e0"));
+      outputFile.addGroupAttribute(null, new Attribute("title", "Reanalysis output prepared for ana4MIPs "));
+      outputFile.addGroupAttribute(null, new Attribute("modeling_realm", "atmos"));
+      outputFile.addGroupAttribute(null, new Attribute("cmor_version", "2.8.3"));
+
+      ArrayDouble.D1 lonArray = (ArrayDouble.D1) vlon.read();
+      Array dataLon = Array.factory(DataType.DOUBLE, new int[]{(int) (vlon.getSize())});
+      shape = lonArray.getShape();
+      for (int i = 0; i < shape[0]; i++) {
+        dataLon.setDouble(i, lonArray.get(i));
+      }
+
+      ArrayDouble.D2 lonBndsArray = (ArrayDouble.D2) vlon_bnds.read();
+      shape = dataLonBnds.getShape();
+      Array dataLonBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
+      idx = new Index2D(new int[]{shape[0], shape[1]});
+      for (int i = 0; i < shape[0]; i++) {
+        for (int j = 0; j < shape[1]; j++) {
+          idx.set(i, j);
+          dataLonBnds.setDouble(idx, lonBndsArray.get(i, j));
+        }
+      }
+
+      ArrayDouble.D1 timeArray = (ArrayDouble.D1) vtime.read();
+      Array dataTime = Array.factory(DataType.DOUBLE, new int[]{(int) (vtime.getSize())});
+      shape = timeArray.getShape();
+      for (int i = 0; i < shape[0]; i++) {
+        dataTime.setDouble(i, timeArray.get(i));
+      }
+
+      ArrayDouble.D2 timeBndsArray = (ArrayDouble.D2) vtime_bnds.read();
+      shape = dataTimeBnds.getShape();
+      Array dataTimeBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
+      idx = new Index2D(new int[]{shape[0], shape[1]});
+      for (int i = 0; i < shape[0]; i++) {
+        for (int j = 0; j < shape[1]; j++) {
+          idx.set(i, j);
+          dataTimeBnds.setDouble(idx, timeBndsArray.get(i, j));
+        }
+      }
+
+      ArrayDouble.D1 latArray = (ArrayDouble.D1) vlat.read();
+      Array dataLat = Array.factory(DataType.DOUBLE, new int[]{latIndexesSize});
+      int[] shape = latArray.getShape();;
+      for( int i = 0; i < shape[0]; i++ ){
+        dataLat.setDouble(i, latArray.get(i));
+      }
+
+      ArrayDouble.D2 latBndsArray = (ArrayDouble.D2) vlat_bnds.read();
+      shape = latBndsArray.getShape();
+      Array dataLatBnds = Array.factory(DataType.DOUBLE, new int[]{shape[0], shape[1]});
+      Index2D idx = new Index2D(new int[]{shape[0], shape[1]});
+      for (int i = 0; i < shape[0]; i++) {
+        for (int j = 0; j < shape[1]; j++) {
+          idx.set(i, j);
+          dataLatBnds.setDouble(idx, latBndsArray.get(i,j));
+        }
+      }
+
+      ArrayFloat.D3 dataRsut = (ArrayFloat.D3)(Array.factory(DataType.FLOAT, new int[]{(int) (vlon.getSize()), (int) (vtime.getSize()), (int) (vlat.getSize())}));
+      ArrayFloat.D3 rsutArray = (ArrayFloat.D3) vrsut.read();
+      for( int i = 0; i < vlon.gertSize(); i++ ) {
+        for (int j = 0; j < vtime.getSize(); j++) {
+          for (int k = 0; k < vlat.getSize(); k++) {
+            try {
+              dataRsut.set(i, j, k, rsutArray.get(j,k,i));
+            } catch (Exception e) {
+              System.out.println("[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage());
+              throw e;
+            }
+          }
+        }
+        outputFile.create();
+        outputFile.write(vlatNew, dataLat);
+        outputFile.write(vlatbndsNew, dataLatBnds);
+        outputFile.write(vtimeNew, dataTime);
+        outputFile.write(vtimebndsNew, dataTimeBnds);
+        outputFile.write(vlonNew, dataLon);
+        outputFile.write(vlonbndsNew, dataLonBnds);
+        outputFile.write(vrsutNew, dataRsut);
+      }
+
+    }catch (Exception e){
+      e.printStackTrace();
+    } finally {
+      if( outputFile != null ){
+        try{
+          outputFile.close();
+        }catch (IOException e){
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
 }

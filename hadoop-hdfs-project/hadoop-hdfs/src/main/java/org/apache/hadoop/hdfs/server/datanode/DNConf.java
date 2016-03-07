@@ -44,6 +44,7 @@ public class DNConf {
   final boolean encryptDataTransfer;
   final boolean connectToDnViaHostname;
   final boolean verifyChecksum;
+  final boolean isnetcdf;
 
   final long readaheadLength;
   final long heartBeatInterval;
@@ -155,6 +156,8 @@ public class DNConf {
 
 
     this.verifyChecksum = conf.getBoolean( DFSConfigKeys.DFS_VERIFY_CHECKSUM, true );
+
+    this.isnetcdf = conf.getBoolean( DFSConfigKeys.DFS_IS_NETCDF, false );
   }
 
   // We get minimumNameNodeVersion via a method so it can be mocked out in tests.
