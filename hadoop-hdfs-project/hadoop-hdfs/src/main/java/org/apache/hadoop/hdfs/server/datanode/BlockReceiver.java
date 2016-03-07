@@ -790,14 +790,19 @@ class BlockReceiver implements Closeable {
       // then finalize block or convert temporary to RBW.
       // For client-writes, the block is finalized in the PacketResponder.
       if (isDatanode || isTransfer) {
+
+        System.out.println( "[SAMAN][BlockReceiver][receiveBlock] isDatanode || isTransfer" );
+
         // close the block/crc files
         close();
         block.setNumBytes(replicaInfo.getNumBytes());
 
         if (stage == BlockConstructionStage.TRANSFER_RBW) {
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] TRANSFER_RBW" );
           // for TRANSFER_RBW, convert temporary to RBW
           datanode.data.convertTemporaryToRbw(block);
         } else {
+          System.out.println( "[SAMAN][BlockReceiver][receiveBlock] TRANSFER_RBW else!" );
           // for isDatnode or TRANSFER_FINALIZED
           // Finalize the block.
           datanode.data.finalizeBlock(block);
