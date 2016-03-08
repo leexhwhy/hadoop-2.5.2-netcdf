@@ -956,6 +956,9 @@ class FsDatasetImpl implements FsDatasetSpi<FsVolumeImpl> {
 
       File dest = v.addBlock(bpid, replicaInfo, f);
       newReplicaInfo = new FinalizedReplica(replicaInfo, v, dest.getParentFile());
+      // Added by me to remember the new path
+      replicaInfo.setDir( newReplicaInfo.getDir() );
+      //replicaInfo.setNewPath( newReplicaInfo.getBlockFile().getAbsolutePath() );
       System.out.println( "[SAMAN][FSDatasetImpl][finalizeReplica] newReplicaInfo location is: " + newReplicaInfo.getBlockFile().getAbsolutePath() );
     }
     volumeMap.add(bpid, newReplicaInfo);

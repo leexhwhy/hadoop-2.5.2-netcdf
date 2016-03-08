@@ -58,7 +58,7 @@ abstract public class ReplicaInfo extends Block implements Replica {
    * containing this replica.
    */
   private int[] subDirs;
-  
+
   private static final Map<String, File> internedBaseDirs = new HashMap<String, File>();
 
   /**
@@ -159,7 +159,7 @@ abstract public class ReplicaInfo extends Block implements Replica {
    * Return the parent directory path where this replica is located
    * @return the parent directory path where this replica is located
    */
-  File getDir() {
+  public File getDir() {
     if (subDirs == null) {
       return null;
     }
