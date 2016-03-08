@@ -1682,9 +1682,9 @@ class BlockReceiver implements Closeable {
       lat_bnds_dim.add(bndDim);
       lon_bnds_dim.add(lonDim);
       lon_bnds_dim.add(bndDim);
-      rsut_dim.add(latDim);
-      rsut_dim.add(timeDim);
       rsut_dim.add(lonDim);
+      rsut_dim.add(timeDim);
+      rsut_dim.add(latDim);
 
       Variable vlonNew = outputFile.addVariable(null, vlon.getShortName(), vlon.getDataType(), vlon.getDimensionsString());
       Variable vlonbndsNew = outputFile.addVariable(null, vlon_bnds.getShortName(), vlon_bnds.getDataType(), lon_bnds_dim);
