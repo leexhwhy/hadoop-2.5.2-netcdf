@@ -510,12 +510,12 @@ public class DFSOutputStream extends FSOutputSummer
               now = Time.now();
             }
             if (streamerClosed || hasError || !dfsClient.clientRunning) {
-              System.out.println( "[SAMAN][DFSOutputStream][run] streamerClosed || hasError || !dfsClient.clientRunning" );
+              //System.out.println( "[SAMAN][DFSOutputStream][run] streamerClosed || hasError || !dfsClient.clientRunning" );
               continue;
             }
             // get packet to be sent.
             if (dataQueue.isEmpty()) {
-              System.out.println( "[SAMAN][DFSOutputStream][run] heartbeat packet!" );
+              //System.out.println( "[SAMAN][DFSOutputStream][run] heartbeat packet!" );
               one = new Packet();  // heartbeat packet
             } else {
               //System.out.println( "[SAMAN][DFSOutputStream][run] regular data packet!" );
@@ -526,14 +526,14 @@ public class DFSOutputStream extends FSOutputSummer
 
           // get new block from namenode.
           if (stage == BlockConstructionStage.PIPELINE_SETUP_CREATE) {
-            System.out.println( "[SAMAN][DFSOutputStream][run] Stage is PIPELINE_SETUP_CREATE" );
+            //System.out.println( "[SAMAN][DFSOutputStream][run] Stage is PIPELINE_SETUP_CREATE" );
             if(DFSClient.LOG.isDebugEnabled()) {
               DFSClient.LOG.debug("Allocating new block");
             }
             setPipeline(nextBlockOutputStream());
             initDataStreaming();
           } else if (stage == BlockConstructionStage.PIPELINE_SETUP_APPEND) {
-            System.out.println( "[SAMAN][DFSOutputStream][run] Stage is PIPELINE_SETUP_APPEND" );
+            //System.out.println( "[SAMAN][DFSOutputStream][run] Stage is PIPELINE_SETUP_APPEND" );
             if(DFSClient.LOG.isDebugEnabled()) {
               DFSClient.LOG.debug("Append to block " + block);
             }
@@ -551,7 +551,7 @@ public class DFSOutputStream extends FSOutputSummer
           }
 
           if (one.lastPacketInBlock) {
-            System.out.println( "[SAMAN][DFSOutputStream][run] one.lastPacketInBlock" );
+            //System.out.println( "[SAMAN][DFSOutputStream][run] one.lastPacketInBlock" );
             // wait for all data packets have been successfully acked
             synchronized (dataQueue) {
               while (!streamerClosed && !hasError && 
@@ -586,7 +586,7 @@ public class DFSOutputStream extends FSOutputSummer
 
           // write out data to remote datanode
           try {
-            System.out.println( "[SAMAN][DFSOutputStream][run] one.writeTo(blockStream)" );
+            //System.out.println( "[SAMAN][DFSOutputStream][run] one.writeTo(blockStream)" );
             one.writeTo(blockStream);
             blockStream.flush();   
           } catch (IOException e) {
@@ -608,13 +608,13 @@ public class DFSOutputStream extends FSOutputSummer
           }
 
           if (streamerClosed || hasError || !dfsClient.clientRunning) {
-            System.out.println( "[SAMAN][DFSOutputStream][run] streamerClosed || hasError || !dfsClient.clientRunning" );
+            //System.out.println( "[SAMAN][DFSOutputStream][run] streamerClosed || hasError || !dfsClient.clientRunning" );
             continue;
           }
 
           // Is this block full?
           if (one.lastPacketInBlock) {
-            System.out.println( "[SAMAN][DFSOutputStream][run] one.lastPacketInBlock" );
+            //System.out.println( "[SAMAN][DFSOutputStream][run] one.lastPacketInBlock" );
             // wait for the close packet has been acked
             synchronized (dataQueue) {
               while (!streamerClosed && !hasError && 
@@ -1286,9 +1286,6 @@ public class DFSOutputStream extends FSOutputSummer
         bytesSent = 0;
         accessToken = lb.getBlockToken();
         nodes = lb.getLocations();
-        for( int i = 0; i < nodes.length; i++ ){
-            System.out.println( "[SAMAN][DFSOutputStream][nextBlockOutputStream] location = " + nodes[i].getName() );
-        }
 
         //
         // Connect to first DataNode in the list.
@@ -1461,8 +1458,6 @@ public class DFSOutputStream extends FSOutputSummer
         long localstart = Time.now();
         while (true) {
           try {
-            //DFSClient.LOG.info("[SAMAN] DFSOutputStream.locateFollowingBlock => dfsClient.namenode.addBlock, with namenode being: " +
-            //        dfsClient.namenode.getClass().getName());
             if( this.isModifiedBlockEnabled ) {
               boolean isModifiedBlock = Math.random() < 0.5;
               return dfsClient.namenode.addBlock(src, dfsClient.clientName,
