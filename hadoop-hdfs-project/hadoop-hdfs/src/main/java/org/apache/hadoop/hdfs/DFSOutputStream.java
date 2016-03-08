@@ -1287,6 +1287,9 @@ public class DFSOutputStream extends FSOutputSummer
         accessToken = lb.getBlockToken();
         nodes = lb.getLocations();
 
+        for( int i = 0; i < nodes.length; i++ ){
+          System.out.println( "[SAMAN][DFSOutputStream][nextBlockOutputStream] location = " + nodes[i].getName() );
+        }
         //
         // Connect to first DataNode in the list.
         //
