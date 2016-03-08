@@ -761,8 +761,6 @@ class BlockReceiver implements Closeable {
         System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file not exist before receivePacket()"  );
       }
 
-      String temporaryReplicaLocation = ((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath();
-
       while (receivePacket() >= 0) { /* Receive until the last packet */ }
 
       if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
@@ -782,7 +780,7 @@ class BlockReceiver implements Closeable {
       // Here we need to do the transformation.
       // This part has beed added by me(SAMAN), for the netcdf project. By default, it's not working.
       // So you don't need to be worried about it.
-      if( datanode.getDnConf().isnetcdf == true && temporaryReplicaLocation.contains("rbw") ){
+      if( datanode.getDnConf().isnetcdf == true ){
         if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file size:" + ((ReplicaInPipeline) replicaInfo).getBlockFile().length() );
         }
@@ -792,13 +790,15 @@ class BlockReceiver implements Closeable {
         }else if( downstreams.length == 1 ){
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 1" );
           // In this case we would transform it into sorted by latitude.
-          transformNetCDFSortedByLatitude();
-          ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
+          boolean tmp = transformNetCDFSortedByLatitude();
+          if( tmp )
+            ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
         }else{
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] length == 0" );
           // In this case we would transform it into sorted by longitude
-          transformNetCDFSortedByLongitude();
-          ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
+          boolean tmp = transformNetCDFSortedByLongitude();
+          if( tmp )
+            ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().renameTo( ((ReplicaInPipeline)replicaInfo).getBlockFile() );
         }
       }else{
         System.out.println( "[SAMAN][BlockReceiver][receiveBlock] isnetcdf == false" );
@@ -1466,12 +1466,18 @@ class BlockReceiver implements Closeable {
     }
   }
 
-  public void transformNetCDFSortedByLatitude() {
+  public boolean transformNetCDFSortedByLatitude() {
     NetcdfFile inputFile = null;
     NetcdfFileWriter outputFile = null;
+
+    boolean returnValue = false;
+
     try{
       inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
       outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
+
+      if( outputFile == null )
+        System.out.println( "[SAMAN][BlockReceiver][transformNetCDFSortedByLatitude] outputFile is null!" );
 
       Variable vtime = inputFile.findVariable("time");
       Variable vtime_bnds = inputFile.findVariable("time_bnds");
@@ -1635,6 +1641,8 @@ class BlockReceiver implements Closeable {
         outputFile.write(vlonNew, dataLon);
         outputFile.write(vlonbndsNew, dataLonBnds);
         outputFile.write(vrsutNew, dataRsut);
+
+        returnValue = true;
       }
 
     }catch (Exception e){
@@ -1648,14 +1656,23 @@ class BlockReceiver implements Closeable {
         }
       }
     }
+
+    return returnValue;
   }
 
-  public void transformNetCDFSortedByLongitude() {
+  public boolean transformNetCDFSortedByLongitude() {
     NetcdfFile inputFile = null;
     NetcdfFileWriter outputFile = null;
+
+    boolean returnValue = false;
+
     try{
       inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
       outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
+
+      if( outputFile == null )
+        System.out.println( "[SAMAN][BlockReceiver][transformNetCDFSortedByLongitude] outputFile is null!" );
+
 
       Variable vtime = inputFile.findVariable("time");
       Variable vtime_bnds = inputFile.findVariable("time_bnds");
@@ -1819,6 +1836,7 @@ class BlockReceiver implements Closeable {
         outputFile.write(vlatNew, dataLat);
         outputFile.write(vlatbndsNew, dataLatBnds);
         outputFile.write(vrsutNew, dataRsut);
+        returnValue = true;
       }
 
     }catch (Exception e){
@@ -1832,6 +1850,7 @@ class BlockReceiver implements Closeable {
         }
       }
     }
+    return returnValue;
   }
 
 }
