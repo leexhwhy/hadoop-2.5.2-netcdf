@@ -761,6 +761,8 @@ class BlockReceiver implements Closeable {
         System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file not exist before receivePacket()"  );
       }
 
+      String temporaryReplicaLocation = ((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath();
+
       while (receivePacket() >= 0) { /* Receive until the last packet */ }
 
       if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
@@ -780,7 +782,7 @@ class BlockReceiver implements Closeable {
       // Here we need to do the transformation.
       // This part has beed added by me(SAMAN), for the netcdf project. By default, it's not working.
       // So you don't need to be worried about it.
-      if( datanode.getDnConf().isnetcdf == true && ((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath().contains("rbw") ){
+      if( datanode.getDnConf().isnetcdf == true && temporaryReplicaLocation.contains("rbw") ){
         if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file size:" + ((ReplicaInPipeline) replicaInfo).getBlockFile().length() );
         }
