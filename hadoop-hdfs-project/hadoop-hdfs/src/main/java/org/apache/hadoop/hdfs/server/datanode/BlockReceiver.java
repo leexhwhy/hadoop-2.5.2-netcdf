@@ -780,7 +780,7 @@ class BlockReceiver implements Closeable {
       // Here we need to do the transformation.
       // This part has beed added by me(SAMAN), for the netcdf project. By default, it's not working.
       // So you don't need to be worried about it.
-      if( datanode.getDnConf().isnetcdf == true ){
+      if( datanode.getDnConf().isnetcdf == true && ((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath().contains("rbw") ){
         if(((ReplicaInPipeline)replicaInfo).getBlockFile().exists()){
           System.out.println( "[SAMAN][BlockReceiver][receiveBlock] file size:" + ((ReplicaInPipeline) replicaInfo).getBlockFile().length() );
         }
