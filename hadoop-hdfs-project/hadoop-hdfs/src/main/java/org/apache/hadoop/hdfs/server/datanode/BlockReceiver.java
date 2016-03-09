@@ -1626,24 +1626,25 @@ class BlockReceiver implements Closeable {
         for (int j = 0; j < vtime.getSize(); j++) {
           for (int k = 0; k < vlon.getSize(); k++) {
             try {
-              dataRsut.set(i, j, k, rsutArray.get(j,i,k));
+              dataRsut.set(i, j, k, rsutArray.get(j, i, k));
             } catch (Exception e) {
               System.out.println("[SAMAN][NetCDFOutputFormat][Write] Exception in rsut = " + e.getMessage());
               throw e;
             }
           }
         }
-        outputFile.create();
-        outputFile.write(vlatNew, dataLat);
-        outputFile.write(vlatbndsNew, dataLatBnds);
-        outputFile.write(vtimeNew, dataTime);
-        outputFile.write(vtimebndsNew, dataTimeBnds);
-        outputFile.write(vlonNew, dataLon);
-        outputFile.write(vlonbndsNew, dataLonBnds);
-        outputFile.write(vrsutNew, dataRsut);
-
-        returnValue = true;
       }
+
+      outputFile.create();
+      outputFile.write(vlatNew, dataLat);
+      outputFile.write(vlatbndsNew, dataLatBnds);
+      outputFile.write(vtimeNew, dataTime);
+      outputFile.write(vtimebndsNew, dataTimeBnds);
+      outputFile.write(vlonNew, dataLon);
+      outputFile.write(vlonbndsNew, dataLonBnds);
+      outputFile.write(vrsutNew, dataRsut);
+
+      returnValue = true;
 
     }catch (Exception e){
       e.printStackTrace();
@@ -1828,16 +1829,16 @@ class BlockReceiver implements Closeable {
             }
           }
         }
-        outputFile.create();
-        outputFile.write(vlonNew, dataLon);
-        outputFile.write(vlonbndsNew, dataLonBnds);
-        outputFile.write(vtimeNew, dataTime);
-        outputFile.write(vtimebndsNew, dataTimeBnds);
-        outputFile.write(vlatNew, dataLat);
-        outputFile.write(vlatbndsNew, dataLatBnds);
-        outputFile.write(vrsutNew, dataRsut);
-        returnValue = true;
       }
+      outputFile.create();
+      outputFile.write(vlonNew, dataLon);
+      outputFile.write(vlonbndsNew, dataLonBnds);
+      outputFile.write(vtimeNew, dataTime);
+      outputFile.write(vtimebndsNew, dataTimeBnds);
+      outputFile.write(vlatNew, dataLat);
+      outputFile.write(vlatbndsNew, dataLatBnds);
+      outputFile.write(vrsutNew, dataRsut);
+      returnValue = true;
 
     }catch (Exception e){
       e.printStackTrace();
