@@ -137,7 +137,7 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
     @Override
     public void write(DataOutput out) throws IOException {
 
-        System.out.println( "[SAMAN][NetCDFFileSplit][write] calling write!" );
+        //System.out.println( "[SAMAN][NetCDFFileSplit][write] calling write!" );
 
         int numberOfPaths = file.size();
         out.writeInt( numberOfPaths );
@@ -178,7 +178,7 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
         //startChunk = in.readLong();
         //endChunk = in.readLong();
 
-        System.out.println( "[SAMAN][NetCDFFileSplit][readFields] calling readFields!" );
+        //System.out.println( "[SAMAN][NetCDFFileSplit][readFields] calling readFields!" );
 
         int numberOfPaths = in.readInt();
         file = new LinkedList<Path>();
