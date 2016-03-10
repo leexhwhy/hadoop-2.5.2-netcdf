@@ -489,7 +489,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                 }
 
                 validBlocks.add(oneblock);
-                blockToNodes.remove(oneblock);
                 if( queryType == QueryType.LAT ){
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
                 }else if( queryType == QueryType.LON ){
@@ -497,6 +496,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                 }else if( queryType == QueryType.TIME ){
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }
+                blockToNodes.remove(oneblock);
+                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] curSplitSize = " + curSplitSize );
+
                 //curSplitSize += singleSplitSize;
 
                 System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
