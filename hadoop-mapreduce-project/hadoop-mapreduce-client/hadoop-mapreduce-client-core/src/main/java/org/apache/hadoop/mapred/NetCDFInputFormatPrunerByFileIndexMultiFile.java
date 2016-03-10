@@ -435,125 +435,128 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
         System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] singleSplitSize = " + singleSplitSize );
 
-        if( filledSize > blockSize / 2 )
-            return splits.toArray(new FileSplit[splits.size()]);
-        else{
+
 
             // Now it's time to merge splits as much as possible
 
-            Set<String> completedNodes = new HashSet<String>();
-            ArrayList<NetCDFFileSplit> validBlocks = new ArrayList<NetCDFFileSplit>();
-            long curSplitSize = 0;
-            Multiset<String> splitsPerNode = HashMultiset.create();
+        Set<String> completedNodes = new HashSet<String>();
+        ArrayList<NetCDFFileSplit> validBlocks = new ArrayList<NetCDFFileSplit>();
+        long curSplitSize = 0;
+        Multiset<String> splitsPerNode = HashMultiset.create();
 
-            for (Iterator<Map.Entry<String, Set<NetCDFFileSplit>>> iter = nodeToBlocks
-                    .entrySet().iterator(); iter.hasNext();) {
-                Map.Entry<String, Set<NetCDFFileSplit>> one = iter.next();
-                String node = one.getKey();
+        for (Iterator<Map.Entry<String, Set<NetCDFFileSplit>>> iter = nodeToBlocks
+                .entrySet().iterator(); iter.hasNext();) {
+            Map.Entry<String, Set<NetCDFFileSplit>> one = iter.next();
+            String node = one.getKey();
 
-                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] node is = " + node );
+            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] node is = " + node );
 
-                // Skip the node if it has previously been marked as completed.
-                if (completedNodes.contains(node)) {
+            // Skip the node if it has previously been marked as completed.
+            if (completedNodes.contains(node)) {
+                continue;
+            }
+
+            Set<NetCDFFileSplit> blocksInCurrentNode = one.getValue();
+
+            // for each block, copy it into validBlocks. Delete it from
+            // blockToNodes so that the same block does not appear in
+            // two different splits.
+            Iterator<NetCDFFileSplit> oneBlockIter = blocksInCurrentNode.iterator();
+            while (oneBlockIter.hasNext()) {
+                NetCDFFileSplit oneblock = oneBlockIter.next();
+
+                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                            "split is: " + oneblock.getFileSplit().getPath());
+
+                // Remove all blocks which may already have been assigned to other
+                // splits.
+                if(!blockToNodes.containsKey(oneblock)) {
+                    oneBlockIter.remove();
                     continue;
                 }
 
-                Set<NetCDFFileSplit> blocksInCurrentNode = one.getValue();
-
-                // for each block, copy it into validBlocks. Delete it from
-                // blockToNodes so that the same block does not appear in
-                // two different splits.
-                Iterator<NetCDFFileSplit> oneBlockIter = blocksInCurrentNode.iterator();
-                while (oneBlockIter.hasNext()) {
-                    NetCDFFileSplit oneblock = oneBlockIter.next();
-
-                    System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
-                            "split is: " + oneblock.getFileSplit().getPath());
-
-                    // Remove all blocks which may already have been assigned to other
-                    // splits.
-                    if(!blockToNodes.containsKey(oneblock)) {
-                        oneBlockIter.remove();
-                        continue;
-                    }
-
-                    validBlocks.add(oneblock);
-                    blockToNodes.remove(oneblock);
-                    curSplitSize += singleSplitSize;
-
-                    System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
-                            "Added to valid blocks!" );
-
-                    // if the accumulated split size exceeds the maximum, then
-                    // create this split.
-                    if (blockSize != 0 && curSplitSize >= blockSize) {
-                        // create an input split and add it to the splits array
-                        addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
-                        //totalLength -= curSplitSize;
-
-                        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
-                                "addCreatedSplit called!" );
-
-                        curSplitSize = 0;
-                        splitsPerNode.add(node);
-
-                        // Remove entries from blocksInNode so that we don't walk these
-                        // again.
-                        blocksInCurrentNode.removeAll(validBlocks);
-                        validBlocks.clear();
-
-                        // Done creating a single split for this node. Move on to the next
-                        // node so that splits are distributed across nodes.
-                        break;
-                    }
+                validBlocks.add(oneblock);
+                blockToNodes.remove(oneblock);
+                if( queryType == QueryType.LAT ){
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
+                }else if( queryType == QueryType.LON ){
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
+                }else if( queryType == QueryType.TIME ){
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }
-            }
-
-            Set<NetCDFFileSplit> singleSplitsSet =  blockToNodes.keySet();
-            Iterator itrSingle = singleSplitsSet.iterator();
-            while( itrSingle.hasNext() ){
-                NetCDFFileSplit temp = (NetCDFFileSplit)itrSingle.next();
-                addCreatedSingleSplit( finalSplits, temp.getLocations() , temp );
-            }
-
-            Iterator itr = finalSplits.iterator();
-            while( itr.hasNext() ){
-
-                NetCDFFileSplit temp = (NetCDFFileSplit)itr.next();
-
-                String[] locations = temp.getFileSplit().getLocations();
-                String locationsString = "";
-                for( int i = 0; i < locations.length; i++ )
-                    locationsString += locations[i];
-
-                String pathsString = "";
-                List<Path> paths = temp.getFileSplit().getPaths();
-                for( Path path : paths )
-                    pathsString += path.getName()+",";
-
-                String startsString = "";
-                List<Long> starts = temp.getFileSplit().startChunk;
-                for( Long start : starts )
-                    startsString += (start+",");
-
-
-                String endsString = "";
-                List<Long> ends = temp.getFileSplit().endChunk;
-                for( Long end : ends )
-                    endsString += (end+",");
+                //curSplitSize += singleSplitSize;
 
                 System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
-                        "locations="+locationsString+","+
-                        "paths="+pathsString+","+
-                        "starts="+startsString+","+
-                        "ends="+endsString+",");
+                        "Added to valid blocks!" );
+
+                // if the accumulated split size exceeds the maximum, then
+                // create this split.
+                if (blockSize != 0 && curSplitSize >= blockSize) {
+                    // create an input split and add it to the splits array
+                    addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
+                    //totalLength -= curSplitSize;
+
+                    System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                        "addCreatedSplit called!" );
+
+                    curSplitSize = 0;
+                    splitsPerNode.add(node);
+
+                    // Remove entries from blocksInNode so that we don't walk these
+                    // again.
+                    blocksInCurrentNode.removeAll(validBlocks);
+                    validBlocks.clear();
+
+                    // Done creating a single split for this node. Move on to the next
+                    // node so that splits are distributed across nodes.
+                    break;
+                }
             }
-
-            return finalSplits.toArray(new NetCDFFileSplit[finalSplits.size()]);
-
         }
 
-        //return splits.toArray(new FileSplit[splits.size()]);
+        Set<NetCDFFileSplit> singleSplitsSet =  blockToNodes.keySet();
+        Iterator itrSingle = singleSplitsSet.iterator();
+        while( itrSingle.hasNext() ){
+            NetCDFFileSplit temp = (NetCDFFileSplit)itrSingle.next();
+            addCreatedSingleSplit( finalSplits, temp.getLocations() , temp );
+        }
+
+        Iterator itr = finalSplits.iterator();
+        while( itr.hasNext() ){
+
+            NetCDFFileSplit temp = (NetCDFFileSplit)itr.next();
+
+            String[] locations = temp.getFileSplit().getLocations();
+            String locationsString = "";
+            for( int i = 0; i < locations.length; i++ )
+                locationsString += locations[i];
+
+            String pathsString = "";
+            List<Path> paths = temp.getFileSplit().getPaths();
+            for( Path path : paths )
+                pathsString += path.getName()+",";
+
+            String startsString = "";
+            List<Long> starts = temp.getFileSplit().startChunk;
+            for( Long start : starts )
+                startsString += (start+",");
+
+
+            String endsString = "";
+            List<Long> ends = temp.getFileSplit().endChunk;
+            for( Long end : ends )
+                endsString += (end+",");
+
+            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                    "locations="+locationsString+","+
+                    "paths="+pathsString+","+
+                    "starts="+startsString+","+
+                    "ends="+endsString+",");
+        }
+
+        return finalSplits.toArray(new NetCDFFileSplit[finalSplits.size()]);
+
+
     }
 
     /**
