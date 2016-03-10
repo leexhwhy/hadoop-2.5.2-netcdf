@@ -395,6 +395,19 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                             thisChunk = endChunk;
                             continue;
                         }
+
+                        blockToNodes.put( split, splitHosts );
+
+                        // Put the nodes with the specified split into the node to block set
+                        for( int i = 0; i < splitHosts.length; i++ ){
+                            Set<NetCDFFileSplit> splitList = nodeToBlocks.get(splitHosts[i]);
+                            if( splitList == null ){
+                                splitList = new LinkedHashSet<NetCDFFileSplit>();
+                                nodeToBlocks.put( splitHosts[i], splitList );
+                            }
+                            splitList.add( split );
+                        }
+
                         split.getFileSplit().startChunk.add(thisChunk);
                         split.getFileSplit().endChunk.add(endChunk);
                     }
