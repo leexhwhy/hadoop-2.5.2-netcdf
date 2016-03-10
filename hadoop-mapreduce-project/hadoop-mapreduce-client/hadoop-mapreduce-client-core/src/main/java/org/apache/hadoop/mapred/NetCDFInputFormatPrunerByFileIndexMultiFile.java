@@ -240,7 +240,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             }
 
             //LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
-            //System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
+            System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] File name is : " + path.getName());
             FileSystem fs = path.getFileSystem(job);
             long length = file.getLen();
             BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
@@ -266,7 +266,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     numChunksPerKey = blockSize / chunkSize;
                 }
 
-                //System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] numChunksPerKey = " + numChunksPerKey );
+                System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] numChunksPerKey = " + numChunksPerKey );
 
                 //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => recStart = " + recStart + ", chunkStarts = " + chunkStarts +
                 //        ", smallSize = " + smallSize + ", recSize = " + recSize + ", bytesRemaining = " + bytesRemaining +
@@ -293,8 +293,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     blockNo++;
                     //LOG.info( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
                     //        ", endChunk="+endChunk+", blockNo="+blockNo);
-                    //System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
-                    //        ", endChunk="+endChunk+", blockNo="+blockNo);
+                    System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
+                            ", endChunk="+endChunk+", blockNo="+blockNo);
                     String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
                     NetCDFFileSplit split     = new NetCDFFileSplit(path, tempStart, splitSize, splitHosts);
 
@@ -309,6 +309,22 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                             thisChunk = endChunk;
                             continue;
                         }
+
+                        blockToNodes.put( split, splitHosts );
+
+                        // Put the nodes with the specified split into the node to block set
+                        System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] Put the nodes with the specified split into the node to block set" );
+                        for( int i = 0; i < splitHosts.length; i++ ){
+                            Set<NetCDFFileSplit> splitList = nodeToBlocks.get(splitHosts[i]);
+                            if( splitList == null ){
+                                splitList = new LinkedHashSet<NetCDFFileSplit>();
+                                nodeToBlocks.put( splitHosts[i], splitList );
+                            }
+                            splitList.add( split );
+                        }
+
+                        System.out.println("[SAMAN][NetCDFInputFormat][getSplits] set start and end!" );
+
                         split.getFileSplit().startChunk.add(thisChunk);
                         split.getFileSplit().endChunk.add(endChunk);
                     } else if( queryType == QueryType.LAT || queryType == QueryType.LON ){
@@ -412,6 +428,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
         }else if( queryType == QueryType.LON ) {
             filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
             singleSplitSize = filledSize;
+        }else if( queryType == QueryType.TIME ){
+            filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
         }
 
         System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] singleSplitSize = " + singleSplitSize );
