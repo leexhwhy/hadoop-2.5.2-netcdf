@@ -430,6 +430,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             singleSplitSize = filledSize;
         }else if( queryType == QueryType.TIME ){
             filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
+            singleSplitSize = filledSize;
         }
 
         System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] singleSplitSize = " + singleSplitSize );
