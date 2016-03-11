@@ -495,6 +495,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
                 }else if( queryType == QueryType.TIME ){
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
+                }else{
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }
                 blockToNodes.remove(oneblock);
                 System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] curSplitSize = " + curSplitSize );
