@@ -538,6 +538,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             addCreatedSingleSplit( finalSplits, temp.getLocations() , temp );
         }
 
+        /*
         Iterator itr = finalSplits.iterator();
         while( itr.hasNext() ){
 
@@ -571,6 +572,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     "ends="+endsString+",");
         }
 
+        */
         return finalSplits.toArray(new NetCDFFileSplit[finalSplits.size()]);
 
 

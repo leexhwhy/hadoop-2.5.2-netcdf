@@ -340,6 +340,18 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                             continue;
                         }
                         */
+
+                        if( bottomLimit > thisChunk && (bottomLimit != -1) ){
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] startChunk = "
+                                    + bottomLimit );
+                            split.getFileSplit().startChunk = (long)bottomLimit;
+                        }
+                        if( topLimit < endChunk && (topLimit != -1) ){
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] endChunk = "
+                                    + endChunk );
+                            split.getFileSplit().endChunk = (long)topLimit;
+                        }
+
                         //split.getFileSplit().endChunk = (long)topLimit;
                     } else {
                         if ((topLimit < thisChunk) && (topLimit != -1)) {
