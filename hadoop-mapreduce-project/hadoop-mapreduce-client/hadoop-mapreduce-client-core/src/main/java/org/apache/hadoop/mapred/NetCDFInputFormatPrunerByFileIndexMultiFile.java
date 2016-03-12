@@ -384,6 +384,16 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                         // For the test, we would assign everything statically.
                         split.getFileSplit().startChunk.add((long)60);
                         split.getFileSplit().endChunk.add((long)120);
+                        if( bottomLimit > thisChunk && (bottomLimit != -1) ){
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] startChunk = "
+                                    + bottomLimit );
+                            split.getFileSplit().startChunk.add((long)bottomLimit);
+                        }
+                        if( topLimit < endChunk && (topLimit != -1) ){
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] endChunk = "
+                                    + endChunk );
+                            split.getFileSplit().endChunk.add((long)topLimit);
+                        }
                     } else {
                         if ((topLimit < thisChunk) && (topLimit != -1)) {
                             bytesRemaining -= splitSize;
