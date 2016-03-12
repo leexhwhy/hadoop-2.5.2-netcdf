@@ -382,8 +382,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                         }
 
                         // For the test, we would assign everything statically.
-                        split.getFileSplit().startChunk.add((long)60);
-                        split.getFileSplit().endChunk.add((long)120);
                         if( bottomLimit > thisChunk && (bottomLimit != -1) ){
                             System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] startChunk = "
                                     + bottomLimit );
@@ -442,20 +440,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
         // Now it's time to merge non-complete splits.
         // Check if each split has enough space to include another split too
 
-        NetCDFFileSplit netCDFFileSplit = splits.get(0);
-        long filledSize = 0;
-        long singleSplitSize = 0;
-        if( queryType == QueryType.LAT ) {
-            filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
-            singleSplitSize = filledSize;
-        }else if( queryType == QueryType.LON ) {
-            filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
-            singleSplitSize = filledSize;
-        }else if( queryType == QueryType.TIME ){
-            filledSize = (netCDFFileSplit.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
-            singleSplitSize = filledSize;
-        }
-
         System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] singleSplitSize = " + singleSplitSize );
 
 
@@ -500,13 +484,13 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
                 validBlocks.add(oneblock);
                 if( queryType == QueryType.LAT ){
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
                 }else if( queryType == QueryType.LON ){
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
                 }else if( queryType == QueryType.TIME ){
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }else{
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - netCDFFileSplit.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }
                 blockToNodes.remove(oneblock);
                 System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] curSplitSize = " + curSplitSize );
@@ -536,8 +520,16 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
                     // Done creating a single split for this node. Move on to the next
                     // node so that splits are distributed across nodes.
-                    break;
+                    //break;
                 }
+
+            }
+            if( !validBlocks.isEmpty() ){
+                addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
+                curSplitSize = 0;
+                splitsPerNode.add(node);
+                blocksInCurrentNode.removeAll(validBlocks);
+                validBlocks.clear();
             }
         }
 
@@ -548,7 +540,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
             addCreatedSingleSplit( finalSplits, temp.getLocations() , temp );
         }
 
-        /*
+
         Iterator itr = finalSplits.iterator();
         while( itr.hasNext() ){
 
@@ -582,7 +574,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                     "ends="+endsString+",");
         }
 
-        */
+
         return finalSplits.toArray(new NetCDFFileSplit[finalSplits.size()]);
 
 
