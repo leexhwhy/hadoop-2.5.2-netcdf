@@ -340,7 +340,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                             continue;
                         }
                         */
-                        split.getFileSplit().endChunk = (long)topLimit;
+                        //split.getFileSplit().endChunk = (long)topLimit;
                     } else {
                         if ((topLimit < thisChunk) && (topLimit != -1)) {
                             bytesRemaining -= splitSize;
