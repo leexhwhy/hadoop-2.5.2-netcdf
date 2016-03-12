@@ -440,12 +440,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
         // Now it's time to merge non-complete splits.
         // Check if each split has enough space to include another split too
 
-        System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] singleSplitSize = " + singleSplitSize );
-
-
-
-            // Now it's time to merge splits as much as possible
-
         Set<String> completedNodes = new HashSet<String>();
         ArrayList<NetCDFFileSplit> validBlocks = new ArrayList<NetCDFFileSplit>();
         long curSplitSize = 0;
