@@ -513,7 +513,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
                     // Remove entries from blocksInNode so that we don't walk these
                     // again.
-                    blocksInCurrentNode.removeAll(validBlocks);
+                    //blocksInCurrentNode.removeAll(validBlocks);
                     validBlocks.clear();
 
                     // Done creating a single split for this node. Move on to the next
