@@ -523,6 +523,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
 
             }
             if( !validBlocks.isEmpty() ){
+                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] validBlocks not empty!" );
                 addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
                 curSplitSize = 0;
                 splitsPerNode.add(node);
