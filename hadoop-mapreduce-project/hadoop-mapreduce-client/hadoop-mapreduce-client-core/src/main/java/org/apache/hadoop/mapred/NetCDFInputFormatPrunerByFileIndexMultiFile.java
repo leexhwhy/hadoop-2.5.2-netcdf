@@ -386,11 +386,15 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFile extends FileInputFormat
                             System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] startChunk = "
                                     + bottomLimit );
                             split.getFileSplit().startChunk.add((long)bottomLimit);
+                        }else{
+                            split.getFileSplit().startChunk.add(thisChunk);
                         }
                         if( topLimit < endChunk && (topLimit != -1) ){
                             System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] endChunk = "
                                     + endChunk );
                             split.getFileSplit().endChunk.add((long)topLimit);
+                        }else{
+                            split.getFileSplit().endChunk.add(endChunk);
                         }
                     } else {
                         if ((topLimit < thisChunk) && (topLimit != -1)) {
