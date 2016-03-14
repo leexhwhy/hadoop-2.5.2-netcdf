@@ -91,11 +91,12 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
 
     NetCDFInfo netInfo = null;
 
+    NetCDFInfo result = null;
 
     private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job)
     {
         //traverse header and return chunk start and size arrays
-        NetCDFInfo result = new NetCDFInfo();//library call
+        result = new NetCDFInfo();//library call
 
         NetcdfFile ncFile;
         Variable v;
@@ -211,9 +212,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
         // First decide which which files should be considered as the base to be read
         int latTopTemp = -1;
         if( latTopLimit == -1 ){
-            latTopTemp = netInfo.latLength;
+            latTopTemp = result.latLength;
         }else{
-            latTopTemp = Math.min( netInfo.latLength, (int)latTopLimit );
+            latTopTemp = Math.min( result.latLength, (int)latTopLimit );
         }
 
         int latBottomTemp = -1;
@@ -226,9 +227,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
 
         int lonTopTemp = -1;
         if( lonTopLimit == -1 ){
-            lonTopTemp = netInfo.lonLength;
+            lonTopTemp = result.lonLength;
         }else{
-            lonTopTemp = Math.min( netInfo.lonLength, (int)lonTopLimit );
+            lonTopTemp = Math.min( result.lonLength, (int)lonTopLimit );
         }
 
         int lonBottomTemp = -1;
@@ -239,8 +240,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
         }
 
         boolean chooseLat = false;
-        if( ( latTopTemp - latBottomTemp )*4*netInfo.lonLength*netInfo.timeLength
-                < ( lonTopTemp - lonBottomTemp )*4*netInfo.latLength*netInfo.timeLength ){
+        if( ( latTopTemp - latBottomTemp )*4*result.lonLength*result.timeLength
+                < ( lonTopTemp - lonBottomTemp )*4*result.latLength*result.timeLength ){
             chooseLat = true;
         }
         else{
