@@ -402,7 +402,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                         }
 
                         split.getFileSplit().secondDimStartChunk.add( (long)latBottomTemp );
-                        split.getFileSplit().secondDimEndChunk.add( (long)latTopTemp )
+                        split.getFileSplit().secondDimEndChunk.add( (long)latTopTemp );
                     }
 
                     splits.add(split);
