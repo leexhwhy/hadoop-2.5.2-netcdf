@@ -583,7 +583,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
 
         // add this split to the list that is returned
         NetCDFFileSplit thissplit = new NetCDFFileSplit(fl, offset,
-                length, locations.toArray(new String[0]), startChunk, endChunk);
+                length, locations.toArray(new String[0]), startChunk, endChunk, secondDimStartChunk, secondDimEndChunk);
         splitList.add(thissplit);
     }
 
@@ -607,7 +607,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
         secondDimEndChunk.add( validBlock.getFileSplit().endChunk.get(0) );
 
         NetCDFFileSplit thissplit = new NetCDFFileSplit( fl, offset,
-                length, locations, startChunk, endChunk );
+                length, locations, startChunk, endChunk, secondDimStartChunk, secondDimStartChunk );
         splitList.add( thissplit );
     }
 
