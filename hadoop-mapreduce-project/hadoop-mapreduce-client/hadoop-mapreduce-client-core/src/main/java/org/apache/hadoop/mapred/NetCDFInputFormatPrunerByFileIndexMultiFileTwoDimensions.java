@@ -93,6 +93,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
 
     NetCDFInfo result = null;
 
+    boolean chooseLat = false;
+
     private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job)
     {
         //traverse header and return chunk start and size arrays
@@ -261,7 +263,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                     lonBottomTemp = Math.min(0, (int)lonBottomLimit);
                 }
 
-                boolean chooseLat = false;
+
                 if( ( latTopTemp - latBottomTemp )*4*result.lonLength*result.timeLength
                         < ( lonTopTemp - lonBottomTemp )*4*result.latLength*result.timeLength ){
                     chooseLat = true;
