@@ -49,6 +49,9 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
     private SplitLocationInfo[] hostInfos;
     public List<Long> startChunk = new LinkedList<Long>();
     public List<Long> endChunk = new LinkedList<Long>();
+
+    public List<Long> secondDimStartChunk = new LinkedList<Long>();
+    public List<Long> secondDimEndChunk = new LinkedList<Long>();
     public NetCDFFileSplit() {}
 
     /** Constructs a split with host information
@@ -80,6 +83,19 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
         this.hosts = hosts;
         this.startChunk = startChunks;
         this.endChunk = endChunks;
+    }
+
+    public NetCDFFileSplit( List<Path> paths, List<Long> starts, List<Long> lengths, String[] hosts,
+                            List<Long> startChunks, List<Long> endChunks,
+                            List<Long> secondDimStartChunks, List<Long> secondDimEndChunks){
+        this.file = paths;
+        this.start = starts;
+        this.length = lengths;
+        this.hosts = hosts;
+        this.startChunk = startChunks;
+        this.endChunk = endChunks;
+        this.secondDimEndChunk = secondDimEndChunks;
+        this.secondDimStartChunk = secondDimStartChunks;
     }
 
     /** Constructs a split with host and cached-blocks information
@@ -163,6 +179,19 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
         out.writeInt( numberOfEndChunks );
         for( int i = 0; i < numberOfEndChunks; i++ )
             out.writeLong( endChunk.get(i) );
+
+        int numberOfSecondDimStartChunks = secondDimStartChunk.size();
+        out.writeInt( numberOfSecondDimStartChunks );
+        for( int i = 0; i < numberOfSecondDimStartChunks; i++ ){
+            out.writeLong( secondDimStartChunk.get(i) );
+        }
+
+        int numberOfSecondDimEndChunks = secondDimEndChunk.size();
+        out.writeInt( numberOfSecondDimEndChunks );
+        for( int i = 0; i < numberOfSecondDimEndChunks; i++ ){
+            out.writeLong( secondDimEndChunk.get(i) );
+        }
+
         //Text.writeString(out, file.toString());
         //out.writeLong(start.get(0));
         //out.writeLong(length.get(0));
@@ -204,6 +233,16 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
         endChunk = new LinkedList<Long>();
         for( int i = 0; i < numberOfEndChunks; i++ )
             endChunk.add( in.readLong() );
+
+        int numberOfSecondDimStartChunks = in.readInt();
+        secondDimStartChunk = new LinkedList<Long>();
+        for( int i = 0; i < numberOfSecondDimStartChunks; i++ )
+            secondDimStartChunk.add( in.readLong() );
+
+        int numberOfSecondDimEndChunks = in.readInt();
+        for( int i = 0; i < numberOfSecondDimEndChunks; i++ )
+            secondDimEndChunk.add( in.readLong() );
+
 
         hosts = null;
     }

@@ -357,6 +357,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                         }else{
                             split.getFileSplit().endChunk.add(endChunk);
                         }
+
+                        split.getFileSplit().secondDimStartChunk.add( (long) lonBottomTemp );
+                        split.getFileSplit().secondDimEndChunk.add( (long)lonTopTemp );
                     }
                     if( !chooseLat ){
                         if( lonTopTemp < thisChunk ){
@@ -397,6 +400,9 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                         }else{
                             split.getFileSplit().endChunk.add(endChunk);
                         }
+
+                        split.getFileSplit().secondDimStartChunk.add( (long)latBottomTemp );
+                        split.getFileSplit().secondDimEndChunk.add( (long)latTopTemp )
                     }
 
                     splits.add(split);
@@ -563,6 +569,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
         List<Long> length = new LinkedList<Long>();
         List<Long> startChunk = new LinkedList<Long>();
         List<Long> endChunk = new LinkedList<Long>();
+        List<Long> secondDimStartChunk = new LinkedList<Long>();
+        List<Long> secondDimEndChunk = new LinkedList<Long>();
 
         for (int i = 0; i < validBlocks.size(); i++) {
             fl.add(validBlocks.get(i).getFileSplit().getPaths().get(0));
@@ -570,6 +578,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
             length.add(validBlocks.get(i).getFileSplit().getLength());
             startChunk.add(validBlocks.get(i).getFileSplit().startChunk.get(0));
             endChunk.add(validBlocks.get(i).getFileSplit().endChunk.get(0));
+            secondDimStartChunk.add(validBlocks.get(i).getFileSplit().secondDimStartChunk.get(0));
+            secondDimEndChunk.add(validBlocks.get(i).getFileSplit().secondDimEndChunk.get(0));
         }
 
         // add this split to the list that is returned
@@ -586,12 +596,16 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
         List<Long> length = new LinkedList<Long>();
         List<Long> startChunk = new LinkedList<Long>();
         List<Long> endChunk = new LinkedList<Long>();
+        List<Long> secondDimStartChunk = new LinkedList<Long>();
+        List<Long> secondDimEndChunk = new LinkedList<Long>();
 
         fl.add( validBlock.getFileSplit().getPaths().get(0) );
         offset.add( validBlock.getFileSplit().getStart() );
         length.add( validBlock.getFileSplit().getLength() );
         startChunk.add( validBlock.getFileSplit().startChunk.get(0) );
         endChunk.add( validBlock.getFileSplit().endChunk.get(0) );
+        secondDimStartChunk.add( validBlock.getFileSplit().startChunk.get(0) );
+        secondDimEndChunk.add( validBlock.getFileSplit().endChunk.get(0) );
 
         NetCDFFileSplit thissplit = new NetCDFFileSplit( fl, offset,
                 length, locations, startChunk, endChunk );
