@@ -385,7 +385,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                             splitList.add( split );
                         }
 
-                        // For the test, we would assign everything statically.
                         if( lonBottomLimit > thisChunk ){
                             System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] startChunk = "
                                     + latBottomLimit );

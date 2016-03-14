@@ -77,7 +77,7 @@ public class NetCDFReaderWithMetaMultiFileTwoDimensions implements RecordReader<
             end.add(split.getFileSplit().endChunk.get(i)); //start + split.getLength();
 
             secondDimStart.add( split.getFileSplit().secondDimStartChunk.get(i) );
-            secondDimEnd.add( split.getFileSplit().secondDimEndChunk.get(i) )
+            secondDimEnd.add( split.getFileSplit().secondDimEndChunk.get(i) );
 
             final Path file = split.getFileSplit().getPaths().get(i);
 
