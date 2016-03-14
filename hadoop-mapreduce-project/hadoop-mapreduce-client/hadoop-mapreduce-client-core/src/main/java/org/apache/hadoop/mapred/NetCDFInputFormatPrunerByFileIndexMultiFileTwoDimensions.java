@@ -209,46 +209,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
             totalSize += file.getLen();
         }
 
-        // First decide which which files should be considered as the base to be read
-        int latTopTemp = -1;
-        if( latTopLimit == -1 ){
-            latTopTemp = result.latLength;
-        }else{
-            latTopTemp = Math.min( result.latLength, (int)latTopLimit );
-        }
-
-        int latBottomTemp = -1;
-        if( latBottomLimit == -1 ){
-            latBottomTemp = 0;
-        }
-        else{
-            latBottomTemp = Math.max( 0, (int)latBottomLimit);
-        }
-
-        int lonTopTemp = -1;
-        if( lonTopLimit == -1 ){
-            lonTopTemp = result.lonLength;
-        }else{
-            lonTopTemp = Math.min( result.lonLength, (int)lonTopLimit );
-        }
-
-        int lonBottomTemp = -1;
-        if( lonBottomLimit == -1 ){
-            lonBottomTemp = 0;
-        }else{
-            lonBottomTemp = Math.min(0, (int)lonBottomLimit);
-        }
-
-        boolean chooseLat = false;
-        if( ( latTopTemp - latBottomTemp )*4*result.lonLength*result.timeLength
-                < ( lonTopTemp - lonBottomTemp )*4*result.latLength*result.timeLength ){
-            chooseLat = true;
-        }
-        else{
-            chooseLat = false;
-        }
-
-        System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] chooseLat = " + chooseLat );
 
 
         // generate splits
@@ -259,14 +219,6 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
             Path path = file.getPath();
             int fileIndex = 0;
             int dimIndex = 0;
-            if( chooseLat ){
-                if( !path.getName().contains("lat") )
-                    continue;
-            }else{
-                if( !path.getName().contains("lon") )
-                    continue;
-            }
-
             String[] parts = path.getName().split("-");
             dimIndex = Integer.valueOf(parts[1]);
 
@@ -278,6 +230,58 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
             if ((length != 0) && isSplitable(fs, path)) {
                 long blockSize = file.getBlockSize();
                 netInfo     = getNetCDFInfo(path, fs, job);
+
+                // First decide which which files should be considered as the base to be read
+                int latTopTemp = -1;
+                if( latTopLimit == -1 ){
+                    latTopTemp = result.latLength;
+                }else{
+                    latTopTemp = Math.min( result.latLength, (int)latTopLimit );
+                }
+
+                int latBottomTemp = -1;
+                if( latBottomLimit == -1 ){
+                    latBottomTemp = 0;
+                }
+                else{
+                    latBottomTemp = Math.max( 0, (int)latBottomLimit);
+                }
+
+                int lonTopTemp = -1;
+                if( lonTopLimit == -1 ){
+                    lonTopTemp = result.lonLength;
+                }else{
+                    lonTopTemp = Math.min( result.lonLength, (int)lonTopLimit );
+                }
+
+                int lonBottomTemp = -1;
+                if( lonBottomLimit == -1 ){
+                    lonBottomTemp = 0;
+                }else{
+                    lonBottomTemp = Math.min(0, (int)lonBottomLimit);
+                }
+
+                boolean chooseLat = false;
+                if( ( latTopTemp - latBottomTemp )*4*result.lonLength*result.timeLength
+                        < ( lonTopTemp - lonBottomTemp )*4*result.latLength*result.timeLength ){
+                    chooseLat = true;
+                }
+                else{
+                    chooseLat = false;
+                }
+
+                System.out.println( "[SAMAN][NetCDFInputFormat][getSplits] chooseLat = " + chooseLat );
+
+                if( chooseLat ){
+                    if( !path.getName().contains("lat") )
+                        continue;
+                }else{
+                    if( !path.getName().contains("lon") )
+                        continue;
+                }
+
+
+
                 long   recStart        = netInfo.recStart;
                 long[] chunkStarts     = netInfo.chunkStarts;
                 long   smallSize       = netInfo.smallRecSize;
