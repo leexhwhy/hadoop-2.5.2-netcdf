@@ -358,6 +358,46 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                             split.getFileSplit().endChunk.add(endChunk);
                         }
                     }
+                    if( !chooseLat ){
+                        if( lonTopTemp < thisChunk ){
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+                        if( lonBottomTemp > endChunk ){
+                            bytesRemaining -= splitSize;
+                            thisChunk = endChunk;
+                            continue;
+                        }
+
+                        blockToNodes.put( split, splitHosts );
+
+                        // Put the nodes with the specified split into the node to block set
+                        for( int i = 0; i < splitHosts.length; i++ ){
+                            Set<NetCDFFileSplit> splitList = nodeToBlocks.get(splitHosts[i]);
+                            if( splitList == null ){
+                                splitList = new LinkedHashSet<NetCDFFileSplit>();
+                                nodeToBlocks.put( splitHosts[i], splitList );
+                            }
+                            splitList.add( split );
+                        }
+
+                        // For the test, we would assign everything statically.
+                        if( lonBottomLimit > thisChunk ){
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] startChunk = "
+                                    + latBottomLimit );
+                            split.getFileSplit().startChunk.add((long)lonBottomLimit);
+                        }else{
+                            split.getFileSplit().startChunk.add(thisChunk);
+                        }
+                        if( lonTopLimit < endChunk ){
+                            System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] endChunk = "
+                                    + latTopLimit );
+                            split.getFileSplit().endChunk.add((long)lonTopLimit);
+                        }else{
+                            split.getFileSplit().endChunk.add(endChunk);
+                        }
+                    }
 
                     splits.add(split);
 
@@ -418,6 +458,8 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
                 validBlocks.add(oneblock);
                 if( chooseLat ){
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
+                }else{
+                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
                 }
                 blockToNodes.remove(oneblock);
                 System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] curSplitSize = " + curSplitSize );
