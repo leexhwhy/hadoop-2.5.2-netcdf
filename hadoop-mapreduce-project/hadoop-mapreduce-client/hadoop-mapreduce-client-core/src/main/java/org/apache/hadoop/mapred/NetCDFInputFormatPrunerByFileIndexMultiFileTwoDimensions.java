@@ -622,7 +622,7 @@ public class NetCDFInputFormatPrunerByFileIndexMultiFileTwoDimensions extends Fi
         reporter.setStatus(genericSplit.toString());
         //LOG.info( "[SAMAN] return getRecordReader" );
         //System.out.println( "[SAMAN] return getRecordReader" );
-        return new NetCDFReaderWithMetaMultiFile(job, (NetCDFFileSplit) genericSplit);
+        return new NetCDFReaderWithMetaMultiFileTwoDimensions(job, (NetCDFFileSplit) genericSplit);
     }
 
 
