@@ -58,7 +58,7 @@ public class NetCDFTransposeCompactForLon {
         public void map(Text key, NetCDFArrayWritable value, Context context )
                 throws IOException, InterruptedException {
 
-            int blockSize = 128*1024*1024;
+            int blockSize = 256*1024*1024;
 
             FloatWritable[] records = (FloatWritable[]) value.toArray();
 
@@ -92,7 +92,7 @@ public class NetCDFTransposeCompactForLon {
                            Context context)
                 throws IOException, InterruptedException {
 
-            int blockSize = 128*1024*1024;
+            int blockSize = 256*1024*1024;
 
             System.out.println( "[SAMAN][NetCDFTransposeForLon][Reducer] Reducer Beginning!" );
             //for( Text value : values ){

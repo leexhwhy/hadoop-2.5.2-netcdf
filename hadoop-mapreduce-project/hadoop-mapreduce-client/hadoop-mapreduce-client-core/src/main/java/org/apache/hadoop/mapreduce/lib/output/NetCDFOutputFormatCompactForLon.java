@@ -72,7 +72,7 @@ public class NetCDFOutputFormatCompactForLon<Text, List> extends FileOutputForma
             System.out.println( "Lon is: "+keySplitted[0]+",timeDim: "+keySplitted[1]
                     +",latDim: "+keySplitted[2]+",lonDim: "+keySplitted[3] );
 
-            int blockSize = 128*1024*1024;
+            int blockSize = 256*1024*1024;
             int chunkSize = Integer.valueOf(timeDimSize)*Integer.valueOf(latDimSize)*4;
             int numChunksPerKey = (blockSize/chunkSize);
             //boolean isBreak = false;
