@@ -103,13 +103,13 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
         if (pos < end) {
             key.set(String.valueOf(pos));
-            ArrayFloat.D2 chunk = null;
+            ArrayFloat.D3 chunk = null;
             try{
 
                 //long first = System.currentTimeMillis();
 
                 while(true) {
-                    chunk = (ArrayFloat.D2)(ncFile.readSection("rsut(" + pos + ":" + pos + ",:,:)"));
+                    chunk = (ArrayFloat.D3)(ncFile.readSection("rsut(" + pos + ":" + pos + ",:,:)"));
                     if( startTime != -1 ){
                         if( pos < startTime ){
                             System.out.println( "[SAMAN] section skipped!" );
@@ -159,7 +159,7 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
                 if( i < startLat || i >= endLat ) continue;
                 for( int j = 0; j < shape[1]; j++ ){
                     if( j < startLon || j >= endLon ) continue;
-                    fw[3+position] = new FloatWritable( chunk.get( i, j ) );
+                    fw[3+position] = new FloatWritable( chunk.get( 0, i, j ) );
                     position++;
                 }
             }
