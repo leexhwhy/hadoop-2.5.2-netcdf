@@ -167,7 +167,7 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
             //long fourth = System.currentTimeMillis();
 
-            System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] chunk array time = " + (fourth-third) );
+            //System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] chunk array time = " + (fourth-third) );
 
             //FloatWritable[] fw = new FloatWritable[my.length + dimensionsSize + 1];
             //fw[0] = new FloatWritable( dimensionsSize );
