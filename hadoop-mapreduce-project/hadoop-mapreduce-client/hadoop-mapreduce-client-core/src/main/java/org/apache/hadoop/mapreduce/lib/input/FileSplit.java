@@ -121,6 +121,12 @@ public class FileSplit extends InputSplit implements Writable {
     out.writeLong(length);
     out.writeLong(startChunk);
     out.writeLong(endChunk);
+    out.writeLong(timeStartLimit);
+    out.writeLong(timeEndLimit);
+    out.writeLong(latStartLimit);
+    out.writeLong(latEndLimit);
+    out.writeLong(lonStartLimit);
+    out.writeLong(lonEndLimit);
   }
 
   @Override
@@ -130,6 +136,12 @@ public class FileSplit extends InputSplit implements Writable {
     length = in.readLong();
     startChunk = in.readLong();
     endChunk = in.readLong();
+    timeStartLimit = in.readLong();
+    timeEndLimit = in.readLong();
+    latStartLimit = in.readLong();
+    latEndLimit = in.readLong();
+    lonStartLimit = in.readLong();
+    lonEndLimit = in.readLong();
     hosts = null;
   }
 

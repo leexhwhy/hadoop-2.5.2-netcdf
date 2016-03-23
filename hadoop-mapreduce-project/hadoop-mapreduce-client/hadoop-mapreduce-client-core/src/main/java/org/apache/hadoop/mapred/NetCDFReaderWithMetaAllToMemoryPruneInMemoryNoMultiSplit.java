@@ -108,7 +108,7 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
                 //long first = System.currentTimeMillis();
 
-                while(true) {
+                while(pos < end) {
                     chunk = (ArrayFloat.D3)(ncFile.readSection("rsut(" + pos + ":" + pos + ",:,:)"));
                     if( startTime != -1 ){
                         if( pos < startTime ){
