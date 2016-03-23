@@ -106,7 +106,7 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
             ArrayFloat.D2 chunk = null;
             try{
 
-                long first = System.currentTimeMillis();
+                //long first = System.currentTimeMillis();
 
                 while(true) {
                     chunk = (ArrayFloat.D2)(ncFile.readSection("rsut(" + pos + ":" + pos + ",:,:)"));
@@ -124,9 +124,10 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
                             continue;
                         }
                     }
+                    break;
                 }
 
-                long second = System.currentTimeMillis();
+                //long second = System.currentTimeMillis();
                 //LOG.info( "[SAMAN][NetCDFReaderWithMeta][Next] read time = " + (second - first) );
 
             } catch (ucar.ma2.InvalidRangeException e)
