@@ -112,7 +112,6 @@ public class NetCDFReaderWithMetaMultiFileTwoDimensions implements RecordReader<
             try{
 
                 long first = System.currentTimeMillis();
-
                 chunk = ncFile.get(currChunk).readSection("rsut(" + pos + ":" + pos + ",:,"+
                         secondDimStart.get(currChunk)+":"+secondDimEnd.get(currChunk)+")");
 

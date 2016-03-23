@@ -46,6 +46,16 @@ public class FileSplit extends InputSplit implements Writable {
   private SplitLocationInfo[] hostInfos;
   public long startChunk;
   public long endChunk;
+  public long timeStartLimit;
+  public long timeEndLimit;
+  public long latStartLimit;
+  public long latEndLimit;
+  public long lonStartLimit;
+  public long lonEndLimit;
+  //public long secondStartChunk;
+  //public long secondEndChunk;
+  //public long thirdStartChunk;
+  //public long thirdEndChunk;
   public FileSplit() {}
 
   /** Constructs a split with host information
