@@ -103,13 +103,13 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
         if (pos < end) {
             key.set(String.valueOf(pos));
-            Array chunk = null;
+            ArrayFloat.D2 chunk = null;
             try{
 
                 long first = System.currentTimeMillis();
 
                 while(true) {
-                    chunk = ncFile.readSection("rsut(" + pos + ":" + pos + ",:,:)");
+                    chunk = (ArrayFloat.D2)(ncFile.readSection("rsut(" + pos + ":" + pos + ",:,:)"));
                     if( startTime != -1 ){
                         if( pos < startTime ){
                             System.out.println( "[SAMAN] section skipped!" );
