@@ -150,6 +150,8 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
             if( startLon == -1 ) startLon = 0;
             if( endLon == -1 ) endLon = v.getDimensions().get(2).getLength();
 
+            System.out.println( "[SAMAN] startLat = " + startLat + ", endLat = " + endLat + ", startLon = " + startLon + ", endLon = " + endLon );
+
             FloatWritable[] fw = new FloatWritable[(int)(endLat - startLat)*(int)(endLon - startLon) + dimensionsSize + 1];
             fw[0] = new FloatWritable( dimensionsSize );
             fw[1] = new FloatWritable( pos );
@@ -163,7 +165,7 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
                 if( i < startLat || i >= endLat ) continue;
                 for( int j = 0; j < shape[1]; j++ ){
                     if( j < startLon || j >= endLon ) continue;
-                    fw[3+position] = new FloatWritable( chunk.get( 0, i, j ) );
+                    fw[4+position] = new FloatWritable( chunk.get( 0, i, j ) );
                     position++;
                 }
             }
