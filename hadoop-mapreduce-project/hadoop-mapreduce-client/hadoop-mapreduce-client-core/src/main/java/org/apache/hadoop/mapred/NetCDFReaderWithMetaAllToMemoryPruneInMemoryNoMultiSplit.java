@@ -80,6 +80,10 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
         LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
 
+        System.out.println( "[SAMAN] startTime = " + startTime + ", endTime = " + endTime +
+                ", startLat = " + startLat + ", endLat = " + endLat +
+                ", startLon = " + startLon + ", endLon = " + endLon );
+
         ncFile = NetcdfDataset.openFile(file.toString(), null);
         List<Variable> vs = ncFile.getVariables();
         v = vs.get(vs.size()-1);
