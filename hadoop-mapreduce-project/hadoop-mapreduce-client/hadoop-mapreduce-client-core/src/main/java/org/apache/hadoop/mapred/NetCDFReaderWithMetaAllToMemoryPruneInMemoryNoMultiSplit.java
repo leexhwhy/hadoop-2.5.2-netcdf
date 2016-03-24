@@ -161,13 +161,13 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
             int position = 0;
 
             int[] shape = chunk.getShape();
-            System.out.println( "[SAMAN] shape[0]=" + shape[0] +", shape[1]="+shape[1] );
-            for( int i = 0; i < shape[0]; i++ ){
+            System.out.println( "[SAMAN] shape[0]=" + shape[1] +", shape[1]="+shape[2] );
+            for( int i = 0; i < shape[1]; i++ ){
                if( i < startLat || i >= endLat ){
                    System.out.println( "[SAMAN] Gone out of lat!" );
                    continue;
                }
-                for( int j = 0; j < shape[1]; j++ ){
+                for( int j = 0; j < shape[2]; j++ ){
                     if( j < startLon || j >= endLon ){
                         System.out.println( "[SAMAN] Gone out of lon!" );
                         continue;
