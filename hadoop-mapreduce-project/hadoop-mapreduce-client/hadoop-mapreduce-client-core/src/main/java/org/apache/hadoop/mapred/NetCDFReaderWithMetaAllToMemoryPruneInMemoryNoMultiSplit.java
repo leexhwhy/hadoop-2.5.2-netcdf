@@ -161,10 +161,17 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
             int position = 0;
 
             int[] shape = chunk.getShape();
+            System.out.println( "[SAMAN] shape[0]=" + shape[0] +", shape[1]="+shape[1] );
             for( int i = 0; i < shape[0]; i++ ){
-               if( i < startLat || i >= endLat ) continue;
+               if( i < startLat || i >= endLat ){
+                   System.out.println( "[SAMAN] Gone out of lat!" );
+                   continue;
+               }
                 for( int j = 0; j < shape[1]; j++ ){
-                    if( j < startLon || j >= endLon ) continue;
+                    if( j < startLon || j >= endLon ){
+                        System.out.println( "[SAMAN] Gone out of lon!" );
+                        continue;
+                    }
                     fw[4+position] = new FloatWritable( chunk.get( 0, i, j ) );
                     System.out.println( "[SAMNA] FW is " + fw[4+position].get() );
                     position++;
