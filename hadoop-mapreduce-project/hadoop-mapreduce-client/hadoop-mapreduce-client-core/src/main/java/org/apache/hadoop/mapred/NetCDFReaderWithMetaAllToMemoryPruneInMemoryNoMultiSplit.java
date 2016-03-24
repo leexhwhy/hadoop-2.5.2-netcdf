@@ -190,7 +190,9 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
             for( int i = (int)startLat; i < endLat; i++ ){
                 int baseIndex = i*(int)lonSize;
                 for( int j = (int)startLon; j < endLon; j++ ){
+                    //System.out.println( "[SAMAN] baseIndex+j = " + my[ baseIndex + j ] );
                     fw[4+position] = new FloatWritable( my[ baseIndex + j ] );
+                    position++;
                 }
             }
 
