@@ -160,6 +160,7 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
             int position = 0;
 
+            /*
             int[] shape = chunk.getShape();
             //System.out.println( "[SAMAN] shape[0]=" + shape[1] +", shape[1]="+shape[2] );
             for( int i = 0; i < shape[1]; i++ ){
@@ -178,11 +179,20 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
                 }
             }
 
+            */
+
             //System.out.println( "[SAMAN] position is: " + position );
 
-            //float[] my = (float[])chunk.get1DJavaArray(Float.class);
+            float[] my = (float[])chunk.get1DJavaArray(Float.class);
 
             //long fourth = System.currentTimeMillis();
+            long lonSize = v.getDimensions().get(2).getLength();
+            for( int i = (int)startLat; i < endLat; i++ ){
+                int baseIndex = i*(int)lonSize;
+                for( int j = (int)startLon; j < endLon; j++ ){
+                    fw[4+position] = new FloatWritable( my[ baseIndex + j ] );
+                }
+            }
 
             //System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] chunk array time = " + (fourth-third) );
 
