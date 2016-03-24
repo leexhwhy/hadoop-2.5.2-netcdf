@@ -162,13 +162,16 @@ public class NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit implements
 
             int[] shape = chunk.getShape();
             for( int i = 0; i < shape[0]; i++ ){
-                if( i < startLat || i >= endLat ) continue;
+               if( i < startLat || i >= endLat ) continue;
                 for( int j = 0; j < shape[1]; j++ ){
                     if( j < startLon || j >= endLon ) continue;
                     fw[4+position] = new FloatWritable( chunk.get( 0, i, j ) );
+                    System.out.println( "[SAMNA] FW is " + fw[4+position].get() );
                     position++;
                 }
             }
+
+            System.out.println( "[SAMAN] position is: " + position );
 
             //float[] my = (float[])chunk.get1DJavaArray(Float.class);
 
