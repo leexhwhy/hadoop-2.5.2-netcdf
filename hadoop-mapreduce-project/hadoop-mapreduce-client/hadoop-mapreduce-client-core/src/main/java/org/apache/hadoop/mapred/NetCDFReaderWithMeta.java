@@ -96,7 +96,7 @@
             chunk = ncFile.readSection("rsut("+pos+":"+pos+",:,:)");
 
             long second = System.currentTimeMillis();
-            LOG.info( "[SAMAN][NetCDFReaderWithMeta][Next] read time = " + (second - first) );
+            //LOG.info( "[SAMAN][NetCDFReaderWithMeta][Next] read time = " + (second - first) );
 
           } catch (ucar.ma2.InvalidRangeException e)
           {

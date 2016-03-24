@@ -74,7 +74,7 @@ public class NetCDFReaderWithMetaMultiFile implements RecordReader<Text, NetCDFA
             end.add(split.getFileSplit().endChunk.get(i)); //start + split.getLength();
             final Path file = split.getFileSplit().getPaths().get(i);
 
-            LOG.info("Map is reading from input: " + file + " start chunk " + start + " end chunk " + end);
+            //LOG.info("Map is reading from input: " + file + " start chunk " + start + " end chunk " + end);
 
             ncFile.add(NetcdfDataset.openFile(file.toString(), null));
             List<Variable> vs = ncFile.get(i).getVariables();
@@ -104,20 +104,20 @@ public class NetCDFReaderWithMetaMultiFile implements RecordReader<Text, NetCDFA
             Array chunk = null;
             try{
 
-                long first = System.currentTimeMillis();
+                //long first = System.currentTimeMillis();
 
                 chunk = ncFile.get(currChunk).readSection("rsut(" + pos + ":" + pos + ",:,:)");
 
-                long second = System.currentTimeMillis();
-                LOG.info( "[SAMAN][NetCDFReaderWithMeta][Next] read time = " + (second - first) );
+                //long second = System.currentTimeMillis();
+                //LOG.info( "[SAMAN][NetCDFReaderWithMeta][Next] read time = " + (second - first) );
 
             } catch (ucar.ma2.InvalidRangeException e)
             {
                 LOG.info("section error " + e);
             }
             if (chunk == null) {LOG.info("chunk is null");return false;}
-            LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
-            System.out.println(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
+            //LOG.info(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
+            //System.out.println(chunk.getSize()+" elements and "+chunk.getSizeBytes()+" bytes, shape is "+Arrays.toString(chunk.getShape()));
             int dimensionsSize = v.get(currChunk).getDimensions().size();
 
             long third = System.currentTimeMillis();
@@ -126,7 +126,7 @@ public class NetCDFReaderWithMetaMultiFile implements RecordReader<Text, NetCDFA
 
             long fourth = System.currentTimeMillis();
 
-            System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] chunk array time = " + (fourth-third) );
+            //System.out.println( "[SAMAN][NetCDFReaderWithMeta][Next] chunk array time = " + (fourth-third) );
 
             FloatWritable[] fw = new FloatWritable[my.length + dimensionsSize + 1];
             fw[0] = new FloatWritable( dimensionsSize );
