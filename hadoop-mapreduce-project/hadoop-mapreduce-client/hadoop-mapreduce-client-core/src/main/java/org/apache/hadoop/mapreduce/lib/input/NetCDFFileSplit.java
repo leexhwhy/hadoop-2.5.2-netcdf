@@ -52,6 +52,14 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
 
     public List<Long> secondDimStartChunk = new LinkedList<Long>();
     public List<Long> secondDimEndChunk = new LinkedList<Long>();
+
+    public List<Long> timeStartLimit = new LinkedList<Long>();
+    public List<Long> timeEndLimit = new LinkedList<Long>();
+    public List<Long> latStartLimit = new LinkedList<Long>();
+    public List<Long> latEndLimit = new LinkedList<Long>();
+    public List<Long> lonStartLimit = new LinkedList<Long>();
+    public List<Long> lonEndLimit = new LinkedList<Long>();
+
     public NetCDFFileSplit() {}
 
     /** Constructs a split with host information
@@ -192,6 +200,42 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
             out.writeLong( secondDimEndChunk.get(i) );
         }
 
+        int numberOfTimeStartLimit = timeStartLimit.size();
+        out.writeInt( numberOfTimeStartLimit );
+        for( int i = 0; i < numberOfTimeStartLimit; i++ ){
+            out.writeLong( timeStartLimit.get(i) );
+        }
+
+        int numberOfTimeEndLimit = timeEndLimit.size();
+        out.writeInt(numberOfTimeEndLimit);
+        for( int i = 0; i < numberOfTimeEndLimit; i++ ){
+            out.writeLong(timeEndLimit.get(i));
+        }
+
+        int numberOfLatStartLimit = latStartLimit.size();
+        out.writeInt(numberOfLatStartLimit);
+        for( int i = 0; i < numberOfLatStartLimit; i++ ){
+            out.writeLong(latStartLimit.get(i));
+        }
+
+        int numberOfLatEndLimit = latEndLimit.size();
+        out.writeInt(numberOfLatEndLimit);
+        for( int i = 0; i < numberOfLatEndLimit; i++ ){
+            out.writeLong(latEndLimit.get(i));
+        }
+
+        int numberOfLonStartLimit = lonStartLimit.size();
+        out.writeInt(numberOfLonStartLimit);
+        for( int i = 0; i < numberOfLonStartLimit; i++ ){
+            out.writeLong(lonStartLimit.get(i));
+        }
+
+        int numberOfLonEndLimit = lonEndLimit.size();
+        out.writeInt( numberOfLonEndLimit );
+        for( int i = 0; i < numberOfLonEndLimit; i++ ){
+            out.writeLong(lonEndLimit.get(i));
+        }
+
         //Text.writeString(out, file.toString());
         //out.writeLong(start.get(0));
         //out.writeLong(length.get(0));
@@ -243,6 +287,35 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
         for( int i = 0; i < numberOfSecondDimEndChunks; i++ )
             secondDimEndChunk.add( in.readLong() );
 
+        int numberOfTimeStartLimit = in.readInt();
+        for( int i = 0; i < numberOfTimeStartLimit; i++ ){
+            timeStartLimit.add( in.readLong() );
+        }
+
+        int numberOfTimeEndLimit = in.readInt();
+        for( int i = 0; i < numberOfTimeEndLimit; i++ ){
+            timeEndLimit.add( in.readLong() );
+        }
+
+        int numberOfLatStartLimit = in.readInt();
+        for( int i = 0; i < numberOfLatStartLimit; i++ ){
+            latStartLimit.add( in.readLong() );
+        }
+
+        int numberOfLatEndLimit = in.readInt();
+        for( int i = 0; i < numberOfLatEndLimit; i++ ){
+            latEndLimit.add( in.readLong() );
+        }
+
+        int numberOfLonStartLimit = in.readInt();
+        for( int i = 0; i < numberOfLonStartLimit; i++ ){
+            lonStartLimit.add( in.readLong() );
+        }
+
+        int numberOfLonEndLimit = in.readInt();
+        for( int i = 0; i < numberOfLonEndLimit; i++ ){
+            lonEndLimit.add(in.readLong());
+        }
 
         hosts = null;
     }
