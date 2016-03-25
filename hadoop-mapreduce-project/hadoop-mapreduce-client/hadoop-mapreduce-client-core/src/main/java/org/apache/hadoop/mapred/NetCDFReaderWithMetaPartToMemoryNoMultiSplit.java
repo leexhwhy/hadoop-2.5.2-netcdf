@@ -161,7 +161,7 @@ public class NetCDFReaderWithMetaPartToMemoryNoMultiSplit implements RecordReade
             fw[1] = new FloatWritable( pos );
             fw[2] = new FloatWritable(endLat - startLat);
             fw[3] = new FloatWritable(endLon - startLon);
-            
+
 
             /*
             int[] shape = chunk.getShape();

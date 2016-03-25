@@ -328,7 +328,7 @@ public class NetCDFInputFormatPartToMemoryNoMultiSplit extends FileInputFormat<T
         reporter.setStatus(genericSplit.toString());
         //LOG.info( "[SAMAN] return getRecordReader" );
         //System.out.println( "[SAMAN] return getRecordReader" );
-        return new NetCDFReaderWithMetaAllToMemoryPruneInMemoryNoMultiSplit(job, (FileSplit) genericSplit);
+        return new NetCDFReaderWithMetaPartToMemoryNoMultiSplit(job, (FileSplit) genericSplit);
     }
 
 
