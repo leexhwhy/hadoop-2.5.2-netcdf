@@ -635,7 +635,9 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
 
         // add this split to the list that is returned
         NetCDFFileSplit thissplit = new NetCDFFileSplit(fl, offset,
-                length, locations.toArray(new String[0]), startChunk, endChunk);
+                length, locations.toArray(new String[0]), startChunk, endChunk,
+                timeStartLimit, timeEndLimit, latStartLimit, latEndLimit, lonStartLimit,
+                lonEndLimit);
         splitList.add(thissplit);
     }
 
@@ -667,7 +669,8 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
         lonEndLimit.add(validBlock.getFileSplit().endChunk.get(0));
 
         NetCDFFileSplit thissplit = new NetCDFFileSplit( fl, offset,
-                length, locations, startChunk, endChunk );
+                length, locations, startChunk, endChunk, timeStartLimit, timeEndLimit,
+                latStartLimit, latEndLimit, lonStartLimit, lonEndLimit);
         splitList.add( thissplit );
     }
 

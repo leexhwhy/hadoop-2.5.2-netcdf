@@ -94,6 +94,26 @@ public class NetCDFFileSplit extends FileSplit implements Writable {
     }
 
     public NetCDFFileSplit( List<Path> paths, List<Long> starts, List<Long> lengths, String[] hosts,
+                            List<Long> startChunks, List<Long> endChunks, List<Long> timeStartLimit,
+                            List<Long> timeEndLimit, List<Long> latStartLimit, List<Long> latEndLimit,
+                            List<Long> lonStartLimit, List<Long> lonEndLimit){
+
+        this.file = paths;
+        this.start = starts;
+        this.length = lengths;
+        this.hosts = hosts;
+        this.startChunk = startChunks;
+        this.endChunk = endChunks;
+        this.timeStartLimit = timeStartLimit;
+        this.timeEndLimit = timeEndLimit;
+        this.latStartLimit = latStartLimit;
+        this.latEndLimit = latEndLimit;
+        this.lonStartLimit = lonStartLimit;
+        this.lonEndLimit = lonEndLimit;
+
+    }
+
+    public NetCDFFileSplit( List<Path> paths, List<Long> starts, List<Long> lengths, String[] hosts,
                             List<Long> startChunks, List<Long> endChunks,
                             List<Long> secondDimStartChunks, List<Long> secondDimEndChunks){
         this.file = paths;

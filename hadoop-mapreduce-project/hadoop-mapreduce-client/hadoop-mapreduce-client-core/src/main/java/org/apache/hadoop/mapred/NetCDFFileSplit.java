@@ -81,6 +81,16 @@ public class NetCDFFileSplit extends org.apache.hadoop.mapred.FileSplit
     }
 
     public NetCDFFileSplit( List<Path> files, List<Long> starts, List<Long> lengths, String[] hosts,
+                            List<Long> startChunks, List<Long> endChunks, List<Long>  timeStartLimit,
+                            List<Long> timeEndLimit, List<Long> latStartLimit, List<Long> latEndLimit,
+                            List<Long> lonStartLimit, List<Long> lonEndLimit){
+
+        fs = new org.apache.hadoop.mapreduce.lib.input.NetCDFFileSplit( files, starts, lengths, hosts, startChunks, endChunks,
+                timeStartLimit, timeEndLimit, latStartLimit, latEndLimit, lonStartLimit, lonEndLimit);
+
+    }
+
+    public NetCDFFileSplit( List<Path> files, List<Long> starts, List<Long> lengths, String[] hosts,
                             List<Long> startChunks, List<Long> endChunks, List<Long> secondDimStartChunks,
                             List<Long> secondDimEndChunks){
         fs = new org.apache.hadoop.mapreduce.lib.input.NetCDFFileSplit( files, starts, lengths, hosts, startChunks, endChunks, secondDimStartChunks, secondDimEndChunks );
