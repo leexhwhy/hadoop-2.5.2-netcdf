@@ -162,9 +162,9 @@ public class NetCDFReaderWithMetaPartToMemoryMultiSplit implements RecordReader<
                     //long third = System.currentTimeMillis();
 
                     if( startLat.get(currChunk) == -1 ) startLat.set(currChunk, (long)0);
-                    if( endLat.get(currChunk) == -1 ) endLat.set(currChunk,  v.getDimensions().get(1).getLength());
+                    if( endLat.get(currChunk) == -1 ) endLat.set(currChunk,  v.get(currChunk).getDimensions().get(1).getLength());
                     if( startLon.get(currChunk) == -1 ) startLon.set(currChunk, (long)0);
-                    if( endLon.get(currChunk) == -1 ) endLon.set(currChunk, v.getDimensions().get(2).getLength());
+                    if( endLon.get(currChunk) == -1 ) endLon.set(currChunk, v.get(currChunk).getDimensions().get(2).getLength());
                     if( startTime.get(currChunk) != -1 ){
                         if( pos < startTime.get(currChunk) ){
                             System.out.println( "[SAMAN] section skipped!" );
