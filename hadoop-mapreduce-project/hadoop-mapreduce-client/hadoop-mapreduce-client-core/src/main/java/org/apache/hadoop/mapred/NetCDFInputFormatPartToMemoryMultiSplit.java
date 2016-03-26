@@ -502,11 +502,11 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
 
                 validBlocks.add(oneblock);
                 if( queryType == QueryType.LAT ){
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
+                    curSplitSize += (oneblock.getFileSplit().timeStartLimit.get(0) - oneblock.getFileSplit().timeEndLimit.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
                 }else if( queryType == QueryType.LON ){
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
+                    curSplitSize += (oneblock.getFileSplit().lonStartLimit.get(0) - oneblock.getFileSplit().lonEndLimit.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
                 }else if( queryType == QueryType.TIME ){
-                    curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
+                    curSplitSize += (oneblock.getFileSplit().latStartLimit.get(0) - oneblock.getFileSplit().latEndLimit.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }else{
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }
@@ -515,8 +515,8 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
 
                 //curSplitSize += singleSplitSize;
 
-                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
-                        "Added to valid blocks!" );
+                //System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                //        "Added to valid blocks!" );
 
                 // if the accumulated split size exceeds the maximum, then
                 // create this split.
@@ -525,8 +525,8 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
                     addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
                     //totalLength -= curSplitSize;
 
-                    System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
-                            "addCreatedSplit called!" );
+                    //System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] " +
+                    //        "addCreatedSplit called!" );
 
                     curSplitSize = 0;
                     splitsPerNode.add(node);
@@ -543,7 +543,7 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
 
             }
             if( !validBlocks.isEmpty() ){
-                System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] validBlocks not empty!" );
+                //System.out.println( "[SAMAN][NetCDFInputFormatPrunerByFileIndexMultiFile][getSplits] validBlocks not empty!" );
                 addCreatedSplit(finalSplits, Collections.singleton(node), validBlocks);
                 curSplitSize = 0;
                 splitsPerNode.add(node);
@@ -612,6 +612,12 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
         List<Long> length = new LinkedList<Long>();
         List<Long> startChunk = new LinkedList<Long>();
         List<Long> endChunk = new LinkedList<Long>();
+        List<Long> timeStartLimit = new LinkedList<Long>();
+        List<Long> timeEndLimit = new LinkedList<Long>();
+        List<Long> latStartLimit = new LinkedList<Long>();
+        List<Long> latEndLimit = new LinkedList<Long>();
+        List<Long> lonStartLimit = new LinkedList<Long>();
+        List<Long> lonEndLimit = new LinkedList<Long>();
 
         for (int i = 0; i < validBlocks.size(); i++) {
             fl.add(validBlocks.get(i).getFileSplit().getPaths().get(0));
@@ -619,6 +625,12 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
             length.add(validBlocks.get(i).getFileSplit().getLength());
             startChunk.add(validBlocks.get(i).getFileSplit().startChunk.get(0));
             endChunk.add(validBlocks.get(i).getFileSplit().endChunk.get(0));
+            timeStartLimit.add(validBlocks.get(i).getFileSplit().timeStartLimit.get(0));
+            timeEndLimit.add(validBlocks.get(i).getFileSplit().timeEndLimit.get(0));
+            latStartLimit.add(validBlocks.get(i).getFileSplit().latStartLimit.get(0));
+            latEndLimit.add(validBlocks.get(i).getFileSplit().latEndLimit.get(0));
+            lonStartLimit.add(validBlocks.get(i).getFileSplit().lonStartLimit.get(0));
+            lonEndLimit.add(validBlocks.get(i).getFileSplit().lonEndLimit.get(0));
         }
 
         // add this split to the list that is returned
@@ -635,12 +647,24 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
         List<Long> length = new LinkedList<Long>();
         List<Long> startChunk = new LinkedList<Long>();
         List<Long> endChunk = new LinkedList<Long>();
+        List<Long> timeStartLimit = new LinkedList<Long>();
+        List<Long> timeEndLimit = new LinkedList<Long>();
+        List<Long> latStartLimit = new LinkedList<Long>();
+        List<Long> latEndLimit = new LinkedList<Long>();
+        List<Long> lonStartLimit = new LinkedList<Long>();
+        List<Long> lonEndLimit = new LinkedList<Long>();
 
         fl.add( validBlock.getFileSplit().getPaths().get(0) );
         offset.add( validBlock.getFileSplit().getStart() );
         length.add( validBlock.getFileSplit().getLength() );
         startChunk.add( validBlock.getFileSplit().startChunk.get(0) );
         endChunk.add( validBlock.getFileSplit().endChunk.get(0) );
+        timeStartLimit.add(validBlock.getFileSplit().startChunk.get(0));
+        timeEndLimit.add(validBlock.getFileSplit().endChunk.get(0));
+        latStartLimit.add(validBlock.getFileSplit().startChunk.get(0));
+        latEndLimit.add(validBlock.getFileSplit().endChunk.get(0));
+        lonStartLimit.add(validBlock.getFileSplit().startChunk.get(0));
+        lonEndLimit.add(validBlock.getFileSplit().endChunk.get(0));
 
         NetCDFFileSplit thissplit = new NetCDFFileSplit( fl, offset,
                 length, locations, startChunk, endChunk );
@@ -658,7 +682,7 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
         reporter.setStatus(genericSplit.toString());
         //LOG.info( "[SAMAN] return getRecordReader" );
         //System.out.println( "[SAMAN] return getRecordReader" );
-        return new NetCDFReaderWithMetaMultiFile(job, (NetCDFFileSplit) genericSplit);
+        return new NetCDFReaderWithMetaPartToMemoryMultiSplit(job, (NetCDFFileSplit) genericSplit);
     }
 
 
