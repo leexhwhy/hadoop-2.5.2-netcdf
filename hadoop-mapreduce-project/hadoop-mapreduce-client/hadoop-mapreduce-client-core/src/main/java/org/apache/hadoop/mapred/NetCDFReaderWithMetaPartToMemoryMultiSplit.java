@@ -86,30 +86,6 @@ public class NetCDFReaderWithMetaPartToMemoryMultiSplit implements RecordReader<
 
     public NetCDFReaderWithMetaPartToMemoryMultiSplit(Configuration job,
                                                         NetCDFFileSplit split) throws IOException {
-        //start = split.getFileSplit().startChunk; //split.getStart();
-        //end = split.getFileSplit().endChunk; //start + split.getLength();
-
-        //this.startTime = split.getFileSplit().timeStartLimit;
-        //this.endTime = split.getFileSplit().timeEndLimit;
-        //this.startLat = split.getFileSplit().latStartLimit;
-        //this.endLat = split.getFileSplit().latEndLimit;
-        //this.startLon = split.getFileSplit().lonStartLimit;
-        //this.endLon = split.getFileSplit().lonEndLimit;
-
-        ///final Path file = split.getPath();
-
-        //LOG.info("Map is reading from input: " + file +" start chunk "+ start+" end chunk "+end);
-
-        //System.out.println( "[SAMAN] startTime = " + startTime + ", endTime = " + endTime +
-        //        ", startLat = " + startLat + ", endLat = " + endLat +
-        //        ", startLon = " + startLon + ", endLon = " + endLon );
-
-        //ncFile = NetcdfDataset.openFile(file.toString(), null);
-        //List<Variable> vs = ncFile.getVariables();
-        //v = vs.get(vs.size()-1);
-        //LOG.info("Variable is "+ v.getFullName());
-
-        //this.pos = start;
 
         numberOfElements = split.getFileSplit().getPaths().size();
         for( int i = 0; i < numberOfElements; i++ ) {
@@ -157,7 +133,7 @@ public class NetCDFReaderWithMetaPartToMemoryMultiSplit implements RecordReader<
                 //long first = System.currentTimeMillis();
                 while(pos < end.get(currChunk)) {
 
-                    dimensionsSize = v.getDimensions().size();
+                    dimensionsSize = v.get(currChunk).getDimensions().size();
 
                     //long third = System.currentTimeMillis();
 
