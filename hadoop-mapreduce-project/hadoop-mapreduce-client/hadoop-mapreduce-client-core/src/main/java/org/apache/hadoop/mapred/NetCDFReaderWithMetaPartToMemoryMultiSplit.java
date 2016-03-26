@@ -168,7 +168,7 @@ public class NetCDFReaderWithMetaPartToMemoryMultiSplit implements RecordReader<
                         }
                     }
 
-                    chunk = (ArrayFloat.D3)(ncFile.readSection("rsut(" + pos + ":" + pos + ","+startLat.get(currChunk)+":"+(endLat.get(currChunk)-1)+","+startLon.get(currChunk)+":"+(endLon.get(currChunk)-1)+")"));
+                    chunk = (ArrayFloat.D3)(ncFile.get(currChunk).readSection("rsut(" + pos + ":" + pos + ","+startLat.get(currChunk)+":"+(endLat.get(currChunk)-1)+","+startLon.get(currChunk)+":"+(endLon.get(currChunk)-1)+")"));
 
                     break;
                 }
