@@ -502,11 +502,11 @@ public class NetCDFInputFormatPartToMemoryMultiSplit extends FileInputFormat<Tex
 
                 validBlocks.add(oneblock);
                 if( queryType == QueryType.LAT ){
-                    curSplitSize += (oneblock.getFileSplit().latStartLimit.get(0) - oneblock.getFileSplit().latEndLimit.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
+                    curSplitSize += (oneblock.getFileSplit().latEndLimit.get(0) - oneblock.getFileSplit().latStartLimit.get(0)) * 4 * netInfo.lonLength * netInfo.timeLength;
                 }else if( queryType == QueryType.LON ){
-                    curSplitSize += (oneblock.getFileSplit().lonStartLimit.get(0) - oneblock.getFileSplit().lonEndLimit.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
+                    curSplitSize += (oneblock.getFileSplit().lonEndLimit.get(0) - oneblock.getFileSplit().lonStartLimit.get(0)) * 4 * netInfo.latLength * netInfo.timeLength;
                 }else if( queryType == QueryType.TIME ){
-                    curSplitSize += (oneblock.getFileSplit().timeStartLimit.get(0) - oneblock.getFileSplit().timeEndLimit.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
+                    curSplitSize += (oneblock.getFileSplit().timeEndLimit.get(0) - oneblock.getFileSplit().timeStartLimit.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }else{
                     curSplitSize += (oneblock.getFileSplit().endChunk.get(0) - oneblock.getFileSplit().startChunk.get(0)) * 4 * netInfo.latLength * netInfo.lonLength;
                 }
