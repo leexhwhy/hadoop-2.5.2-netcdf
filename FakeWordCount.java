@@ -57,12 +57,14 @@ public class FakeWordCount {
         public void reduce(Text key, Iterable<IntWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
+            /*
             int sum = 0;
             for (IntWritable val : values) {
                 sum += val.get();
             }
             result.set(sum);
             context.write(key, result);
+            */
         }
     }
 
@@ -81,7 +83,7 @@ public class FakeWordCount {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         job.setInputFormatClass(TextInputFormat.class);
-        for( int j = 0; j < 100; j++ ) {
+        for( int j = 0; j < 200; j++ ) {
             for (int i = 0; i < otherArgs.length - 1; ++i) {
                 FileInputFormat.addInputPath(job, new Path(otherArgs[i]));
             }
