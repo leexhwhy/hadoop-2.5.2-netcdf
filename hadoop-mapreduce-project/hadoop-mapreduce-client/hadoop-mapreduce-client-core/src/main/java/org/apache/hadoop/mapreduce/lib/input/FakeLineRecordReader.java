@@ -58,6 +58,7 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
     private boolean isCompressedInput;
     private Decompressor decompressor;
     private byte[] recordDelimiterBytes;
+    int counter = 0;
 
     public FakeLineRecordReader() {
     }
@@ -181,10 +182,9 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
         // We always read one extra line, which lies outside the upper
         // split limit i.e. (end - 1)
 
-        int counter = 0;
         String text  = "Hello my name is saman welcome to my fake program and enjoy them";
 
-        while( counter < 2097152 ){
+        if( counter < 2097152 ){
             value = new Text(text);
             pos += 64;
             counter += 1;
@@ -222,6 +222,11 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
             value = null;
             return false;
         } else {
+            try {
+                Thread.sleep(1);
+            }catch (Exception e){
+                return true;
+            }
             return true;
         }
     }
