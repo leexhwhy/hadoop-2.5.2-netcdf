@@ -182,15 +182,23 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
         // We always read one extra line, which lies outside the upper
         // split limit i.e. (end - 1)
 
-        String text  = "Hello my name is saman welcome to my fake program and enjoy them";
-
-        if( counter < 2097152 ){
+        String text  = "Hello my name is saman welcome to my fake program and enjoy them ";
+        text += text;
+        text += text;
+        text += text;
+        text += text;
+        text += text;
+        text += text;
+        text += text;
+        text += text;
+        text += text;
+        if( counter < 128*1024*1024 ){
             value = new Text(text);
-            pos += 64;
-            counter += 1;
-            newSize = 64;
+            pos += 64*512;
+            counter += 64*512;
+            newSize = 64*512;
         }
-        if( counter == 2097152 ){
+        if( counter >= 128*1024*1024 ){
             newSize = 0;
         }
         /*
