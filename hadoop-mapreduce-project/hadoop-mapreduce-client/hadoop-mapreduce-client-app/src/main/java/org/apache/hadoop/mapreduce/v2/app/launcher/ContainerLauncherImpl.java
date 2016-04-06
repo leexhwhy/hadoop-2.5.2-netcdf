@@ -391,6 +391,7 @@ public class ContainerLauncherImpl extends AbstractService implements
   @Override
   public void handle(ContainerLauncherEvent event) {
     try {
+      System.out.println( "[SAMAN][ContainerLauncherImpl][handle] container id = " + event.getContainerID().getId() );
       eventQueue.put(event);
     } catch (InterruptedException e) {
       throw new YarnRuntimeException(e);

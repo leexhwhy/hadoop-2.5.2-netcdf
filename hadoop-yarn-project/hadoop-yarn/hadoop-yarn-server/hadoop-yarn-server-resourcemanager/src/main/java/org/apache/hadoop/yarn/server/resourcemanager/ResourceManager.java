@@ -144,30 +144,30 @@ public class ResourceManager extends CompositeService implements Recoverable {
   protected RMSecretManagerService rmSecretManagerService;
 
   protected ResourceScheduler scheduler;
-  private ClientRMService clientRM;
+  private   ClientRMService clientRM;
   protected ApplicationMasterService masterService;
   protected NMLivelinessMonitor nmLivelinessMonitor;
   protected NodesListManager nodesListManager;
   protected RMAppManager rmAppManager;
   protected ApplicationACLsManager applicationACLsManager;
   protected QueueACLsManager queueACLsManager;
-  private WebApp webApp;
-  private AppReportFetcher fetcher = null;
+  private   WebApp webApp;
+  private   AppReportFetcher fetcher = null;
   protected ResourceTrackerService resourceTracker;
 
-  private String webAppAddress;
-  private ConfigurationProvider configurationProvider = null;
+  private   String webAppAddress;
+  private   ConfigurationProvider configurationProvider = null;
   /** End of Active services */
 
-  private Configuration conf;
+  private   Configuration conf;
 
-  private UserGroupInformation rmLoginUGI;
+  private   UserGroupInformation rmLoginUGI;
   
-  public ResourceManager() {
+  public    ResourceManager() {
     super("ResourceManager");
   }
 
-  public RMContext getRMContext() {
+  public    RMContext getRMContext() {
     return this.rmContext;
   }
 

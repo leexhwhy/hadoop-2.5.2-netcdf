@@ -177,6 +177,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         while (!stopped.get() && !Thread.currentThread().isInterrupted()) {
           try {
             event = RMContainerAllocator.this.eventQueue.take();
+            System.out.println( "[SAMAN][RMContainerAllocator][Run] handle event. Event id = " + event.getAttemptID().getId() );
           } catch (InterruptedException e) {
             if (!stopped.get()) {
               LOG.error("Returning, interrupted : " + e);
