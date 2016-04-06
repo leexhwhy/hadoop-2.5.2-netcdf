@@ -833,8 +833,24 @@ public class FairScheduler extends
   public Allocation allocate(ApplicationAttemptId appAttemptId,
       List<ResourceRequest> ask, List<ContainerId> release, List<String> blacklistAdditions, List<String> blacklistRemovals) {
 
+    System.out.println( "[SAMAN][FairScheduler][allocate]" );
+    for( ResourceRequest request : ask ){
+      System.out.println( "[SAMAN][FairScheduler][allocate] request = " + request.getResourceName() +","+request.getNumContainers()+","+request.getCapability()  );
+    }
+    for( ContainerId containerId : release ){
+      System.out.println( "[SAMAN][FairScheduler][allocate] release = " + containerId.getId() );
+    }
+    for( String black : blacklistAdditions ){
+      System.out.println( "[SAMAN][FairScheduler][allocate] black addition = " + black );
+    }
+    for( String black : blacklistRemovals ){
+      System.out.println( "[SAMAN][FairScheduler][allocate] black removal = " + black );
+    }
+
     // Make sure this application exists
     FSSchedulerApp application = getSchedulerApp(appAttemptId);
+    System.out.println( "[SAMAN][FairScheduler][allocate] application=="+application.getApplicationId().getId() );
+
     if (application == null) {
       LOG.info("Calling allocate on removed " +
           "or non existant application " + appAttemptId);
@@ -853,6 +869,9 @@ public class FairScheduler extends
 
     // Release containers
     for (ContainerId releasedContainerId : release) {
+
+      System.out.println( "[SAMAN][FairScheduler][allocate] release = " + releasedContainerId.getId() );
+
       RMContainer rmContainer = getRMContainer(releasedContainerId);
       if (rmContainer == null) {
         RMAuditLogger.logFailure(application.getUser(),
