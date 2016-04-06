@@ -840,13 +840,14 @@ public class FairScheduler extends
     for( ContainerId containerId : release ){
       System.out.println( "[SAMAN][FairScheduler][allocate] release = " + containerId.getId() );
     }
+    /*
     for( String black : blacklistAdditions ){
       System.out.println( "[SAMAN][FairScheduler][allocate] black addition = " + black );
     }
     for( String black : blacklistRemovals ){
       System.out.println( "[SAMAN][FairScheduler][allocate] black removal = " + black );
     }
-
+    */
     // Make sure this application exists
     FSSchedulerApp application = getSchedulerApp(appAttemptId);
     System.out.println( "[SAMAN][FairScheduler][allocate] application=="+application.getApplicationId().getId() );
