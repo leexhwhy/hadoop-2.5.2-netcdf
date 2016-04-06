@@ -302,7 +302,9 @@ public class RMContainerAllocator extends RMContainerRequestor
           getMaxContainerCapability().getMemory();
       if (reqEvent.getAttemptID().getTaskId().getTaskType().equals(TaskType.MAP)) {
         if (mapResourceRequest == 0) {
+          System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] mapResourceRequest == 0" );
           mapResourceRequest = reqEvent.getCapability().getMemory();
+          System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] eventHandler class = " + eventHandler.getClass().getName() );
           eventHandler.handle(new JobHistoryEvent(jobId, 
               new NormalizedResourceEvent(org.apache.hadoop.mapreduce.TaskType.MAP,
                   mapResourceRequest)));
