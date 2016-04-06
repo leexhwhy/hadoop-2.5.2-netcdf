@@ -627,12 +627,12 @@ public class MRAppMaster extends CompositeService {
             taskAttemptListener, jobTokenSecretManager, jobCredentials, clock,
             completedTasksFromPreviousRun, metrics,
             committer, newApiCommitter,
-            currentUser.getUserName(), appSubmitTime, amInfos, context, 
+            currentUser.getUserName(), appSubmitTime, amInfos, context,
             forcedState, diagnostic);
     ((RunningAppContext) context).jobs.put(newJob.getID(), newJob);
 
     dispatcher.register(JobFinishEvent.Type.class,
-        createJobFinishEventHandler());     
+        createJobFinishEventHandler());
     return newJob;
   } // end createJob()
 
@@ -803,6 +803,9 @@ public class MRAppMaster extends CompositeService {
 
     @Override
     protected void serviceStart() throws Exception {
+
+      System.out.println("[SAMAN][MRAppMaster][ContainerAllocatorRouter][serviceStart]" );
+
       if (job.isUber()) {
         this.containerAllocator = new LocalContainerAllocator(
             this.clientService, this.context, nmHost, nmPort, nmHttpPort
@@ -818,20 +821,24 @@ public class MRAppMaster extends CompositeService {
 
     @Override
     protected void serviceStop() throws Exception {
+      System.out.println("[SAMAN][MRAppMaster][ContainerAllocatorRouter][serviceStop]" );
       ServiceOperations.stop((Service) this.containerAllocator);
       super.serviceStop();
     }
 
     @Override
     public void handle(ContainerAllocatorEvent event) {
+      System.out.println("[SAMAN][MRAppMaster][ContainerAllocatorRouter][handle]" );
       this.containerAllocator.handle(event);
     }
 
     public void setSignalled(boolean isSignalled) {
+      System.out.println("[SAMAN][MRAppMaster][ContainerAllocatorRouter][setSignalled]" );
       ((RMCommunicator) containerAllocator).setSignalled(isSignalled);
     }
     
     public void setShouldUnregister(boolean shouldUnregister) {
+      System.out.println("[SAMAN][MRAppMaster][ContainerAllocatorRouter][setShouldUnregister]" );
       ((RMCommunicator) containerAllocator).setShouldUnregister(shouldUnregister);
     }
 
@@ -862,6 +869,7 @@ public class MRAppMaster extends CompositeService {
 
     @Override
     protected void serviceStart() throws Exception {
+      System.out.println("[SAMAN][MRAppMaster][ContainerLauncherRouter][serviceStart]" );
       if (job.isUber()) {
         this.containerLauncher = new LocalContainerLauncher(context,
             (TaskUmbilicalProtocol) taskAttemptListener);
@@ -875,11 +883,13 @@ public class MRAppMaster extends CompositeService {
 
     @Override
     public void handle(ContainerLauncherEvent event) {
+      System.out.println("[SAMAN][MRAppMaster][ContainerLauncherRouter][handle]" );
         this.containerLauncher.handle(event);
     }
 
     @Override
     protected void serviceStop() throws Exception {
+      System.out.println("[SAMAN][MRAppMaster][ContainerLauncherRouter][serviceStop]" );
       ServiceOperations.stop((Service) this.containerLauncher);
       super.serviceStop();
     }
@@ -1272,6 +1282,7 @@ public class MRAppMaster extends CompositeService {
     @SuppressWarnings("unchecked")
     @Override
     public void handle(JobEvent event) {
+      System.out.println("[SAMAN][MRAppMaster][JobEventDispatcher][handle]" );
       ((EventHandler<JobEvent>)context.getJob(event.getJobId())).handle(event);
     }
   }
@@ -1280,6 +1291,7 @@ public class MRAppMaster extends CompositeService {
     @SuppressWarnings("unchecked")
     @Override
     public void handle(TaskEvent event) {
+      System.out.println("[SAMAN][MRAppMaster][TaskEventDispatcher][handle]" );
       Task task = context.getJob(event.getTaskID().getJobId()).getTask(
           event.getTaskID());
       ((EventHandler<TaskEvent>)task).handle(event);
@@ -1291,6 +1303,7 @@ public class MRAppMaster extends CompositeService {
     @SuppressWarnings("unchecked")
     @Override
     public void handle(TaskAttemptEvent event) {
+      System.out.println("[SAMAN][MRAppMaster][TaskAttemptEventDispatcher][handle]" );
       Job job = context.getJob(event.getTaskAttemptID().getTaskId().getJobId());
       Task task = job.getTask(event.getTaskAttemptID().getTaskId());
       TaskAttempt attempt = task.getAttempt(event.getTaskAttemptID());
