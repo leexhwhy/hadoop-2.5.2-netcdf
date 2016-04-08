@@ -19,13 +19,7 @@
 package org.apache.hadoop.mapreduce.v2.app.rm;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,11 +34,7 @@ import org.apache.hadoop.mapreduce.v2.app.AppContext;
 import org.apache.hadoop.mapreduce.v2.app.client.ClientService;
 import org.apache.hadoop.yarn.api.protocolrecords.AllocateRequest;
 import org.apache.hadoop.yarn.api.protocolrecords.AllocateResponse;
-import org.apache.hadoop.yarn.api.records.ContainerId;
-import org.apache.hadoop.yarn.api.records.Priority;
-import org.apache.hadoop.yarn.api.records.Resource;
-import org.apache.hadoop.yarn.api.records.ResourceBlacklistRequest;
-import org.apache.hadoop.yarn.api.records.ResourceRequest;
+import org.apache.hadoop.yarn.api.records.*;
 import org.apache.hadoop.yarn.exceptions.YarnException;
 import org.apache.hadoop.yarn.exceptions.YarnRuntimeException;
 import org.apache.hadoop.yarn.factories.RecordFactory;
@@ -182,7 +172,21 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           new ArrayList<ContainerId>(release), blacklistRequest);
     AllocateResponse allocateResponse;
     try {
+      // Logging Daste Khar
+      System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside allocateRequest!" );
+      Iterator itr = allocateRequest.getAskList().iterator();
+      while( itr.hasNext() ) {
+        ResourceRequest temp = (ResourceRequest) itr.next();
+        System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] numContainers=" + temp.getNumContainers() + ",memory=" + temp.getCapability().getMemory() + ",vcores=" + temp.getCapability().getVirtualCores());
+      }
       allocateResponse = scheduler.allocate(allocateRequest);
+      System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside response!" );
+      itr = allocateResponse.getAllocatedContainers().iterator();
+      while( itr.hasNext() ){
+        Container container = (Container)itr.next();
+        System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] container=" + container.getNodeHttpAddress()+","+container.getResource().getMemory()+","+container.getResource().getVirtualCores());
+      }
+      System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] command="+allocateResponse.getAMCommand().name() );
     } catch (YarnException e) {
       throw new IOException(e);
     }
