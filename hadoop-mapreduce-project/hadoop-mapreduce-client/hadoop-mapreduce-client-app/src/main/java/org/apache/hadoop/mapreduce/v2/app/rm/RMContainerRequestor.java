@@ -186,7 +186,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
         Container container = (Container)itr.next();
         System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] container=" + container.getNodeHttpAddress()+","+container.getResource().getMemory()+","+container.getResource().getVirtualCores());
       }
-      System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] command="+allocateResponse.getAMCommand().name() );
+      //System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] command="+allocateResponse.getAMCommand);
     } catch (YarnException e) {
       System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] An exception happened!" );
       throw new IOException(e);
