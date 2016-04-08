@@ -188,6 +188,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
       }
       System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] command="+allocateResponse.getAMCommand().name() );
     } catch (YarnException e) {
+      System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] An exception happened!" );
       throw new IOException(e);
     }
     lastResponseID = allocateResponse.getResponseId();
