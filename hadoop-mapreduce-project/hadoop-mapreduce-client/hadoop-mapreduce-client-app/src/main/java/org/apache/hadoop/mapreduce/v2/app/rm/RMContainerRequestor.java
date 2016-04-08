@@ -177,7 +177,11 @@ public abstract class RMContainerRequestor extends RMCommunicator {
       Iterator itr = allocateRequest.getAskList().iterator();
       while( itr.hasNext() ) {
         ResourceRequest temp = (ResourceRequest) itr.next();
-        System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] numContainers=" + temp.getNumContainers() + ",memory=" + temp.getCapability().getMemory() + ",vcores=" + temp.getCapability().getVirtualCores());
+        System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] numContainers=" + temp.getNumContainers()
+                + ",memory=" + temp.getCapability().getMemory()
+                + ",vcores=" + temp.getCapability().getVirtualCores()
+                + ",name=" + temp.getResourceName()
+                + ",relax=" + temp.getRelaxLocality());
       }
       allocateResponse = scheduler.allocate(allocateRequest);
       System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside response!" );
