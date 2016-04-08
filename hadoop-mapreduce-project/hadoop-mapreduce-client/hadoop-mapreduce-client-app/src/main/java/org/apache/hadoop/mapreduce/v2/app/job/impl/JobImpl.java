@@ -1421,6 +1421,9 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
         //TODO JH Verify jobACLs, UserName via UGI?
 
         TaskSplitMetaInfo[] taskSplitMetaInfo = createSplits(job, job.jobId);
+        for( int i = 0; i < taskSplitMetaInfo.length; i++ ){
+            System.out.println( "[SAMAN][JobImpl] task = " + taskSplitMetaInfo[i].getSplitLocation()+","+taskSplitMetaInfo[i].getLocations()[0] );
+        }
         job.numMapTasks = taskSplitMetaInfo.length;
         job.numReduceTasks = job.conf.getInt(MRJobConfig.NUM_REDUCES, 0);
 
