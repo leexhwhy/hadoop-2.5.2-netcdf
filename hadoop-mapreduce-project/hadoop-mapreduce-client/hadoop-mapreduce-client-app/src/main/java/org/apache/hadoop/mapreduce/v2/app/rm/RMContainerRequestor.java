@@ -170,7 +170,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
         AllocateRequest.newInstance(lastResponseID,
           super.getApplicationProgress(), new ArrayList<ResourceRequest>(ask),
           new ArrayList<ContainerId>(release), blacklistRequest);
-    if( false ) {
+    if( true ) {
         Iterator itr = allocateRequest.getAskList().iterator();
         while (itr.hasNext()) {
             ((ResourceRequest) (itr.next())).setRelaxLocality(false);
