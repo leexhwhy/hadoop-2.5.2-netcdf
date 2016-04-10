@@ -170,13 +170,18 @@ public abstract class RMContainerRequestor extends RMCommunicator {
         AllocateRequest.newInstance(lastResponseID,
           super.getApplicationProgress(), new ArrayList<ResourceRequest>(ask),
           new ArrayList<ContainerId>(release), blacklistRequest);
+
+    // Totall added by saman
     if( true ) {
         Iterator itr = allocateRequest.getAskList().iterator();
         while (itr.hasNext()) {
-            ((ResourceRequest) (itr.next())).setRelaxLocality(false);
+            ResourceRequest temp = (ResourceRequest) (itr.next());
+            if( temp.getPriority().getPriority() == 20 )
+                temp.setRelaxLocality(false);
 
         }
     }
+    // END: Totally added by saman
     AllocateResponse allocateResponse;
     try {
       // Logging Daste Khar
