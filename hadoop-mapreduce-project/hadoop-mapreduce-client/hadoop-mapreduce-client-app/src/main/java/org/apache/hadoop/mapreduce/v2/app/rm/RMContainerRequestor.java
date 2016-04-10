@@ -172,7 +172,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           new ArrayList<ContainerId>(release), blacklistRequest);
 
     // Totall added by saman
-    if( true ) {
+    if( false ) {
         Iterator itr = allocateRequest.getAskList().iterator();
         while (itr.hasNext()) {
             ResourceRequest temp = (ResourceRequest) (itr.next());
