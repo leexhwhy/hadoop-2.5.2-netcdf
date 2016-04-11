@@ -997,8 +997,8 @@ public class RMContainerAllocator extends RMContainerRequestor
       while (it.hasNext()) {
         Container allocated = it.next();
         //System.out.println( "[SAMAN][RMContainerAllocator][assignContainers] allocated:httpAddress="+allocated.getNodeHttpAddress()+
-                ",id="+allocated.getId().getId()+
-                ",host"+allocated.getNodeId().getHost() );
+        //        ",id="+allocated.getId().getId()+
+        //        ",host"+allocated.getNodeId().getHost() );
         ContainerRequest assigned = assignWithoutLocality(allocated);
         if (assigned != null) {
           containerAssigned(allocated, assigned);
