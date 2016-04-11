@@ -986,8 +986,8 @@ public class RMContainerAllocator extends RMContainerRequestor
         }
         assigned = assignToReduce(allocated);
       }
-      if( assigned == null )
-        System.out.println( "[SAMAN][RMContainerAllocator][assignWithoutLocality] assigned = null" );
+      //if( assigned == null )
+        //System.out.println( "[SAMAN][RMContainerAllocator][assignWithoutLocality] assigned = null" );
         
       return assigned;
     }
@@ -996,7 +996,7 @@ public class RMContainerAllocator extends RMContainerRequestor
       Iterator<Container> it = allocatedContainers.iterator();
       while (it.hasNext()) {
         Container allocated = it.next();
-        System.out.println( "[SAMAN][RMContainerAllocator][assignContainers] allocated:httpAddress="+allocated.getNodeHttpAddress()+
+        //System.out.println( "[SAMAN][RMContainerAllocator][assignContainers] allocated:httpAddress="+allocated.getNodeHttpAddress()+
                 ",id="+allocated.getId().getId()+
                 ",host"+allocated.getNodeId().getHost() );
         ContainerRequest assigned = assignWithoutLocality(allocated);
