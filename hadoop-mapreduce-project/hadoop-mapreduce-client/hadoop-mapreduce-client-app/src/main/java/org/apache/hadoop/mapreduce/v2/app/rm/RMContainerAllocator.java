@@ -130,6 +130,13 @@ public class RMContainerAllocator extends RMContainerRequestor
   private long retrystartTime;
   private Clock clock;
 
+  /**
+   * Some configuration parameters that are added by SAMAN
+   * For educational purpose
+   */
+
+  private boolean rackRelaxAssignment = true;
+
   @VisibleForTesting
   protected BlockingQueue<ContainerAllocatorEvent> eventQueue
     = new LinkedBlockingQueue<ContainerAllocatorEvent>();
@@ -157,6 +164,11 @@ public class RMContainerAllocator extends RMContainerRequestor
     allocationDelayThresholdMs = conf.getInt(
         MRJobConfig.MR_JOB_REDUCER_PREEMPT_DELAY_SEC,
         MRJobConfig.DEFAULT_MR_JOB_REDUCER_PREEMPT_DELAY_SEC) * 1000;//sec -> ms
+    rackRelaxAssignment = conf.getBoolean(
+            MRJobConfig.MR_NETCDF_RACK_ASSIGNMENT,
+            MRJobConfig.MR_NETCDF_RACK_ASSIGNMENT_VALUE);
+    scheduledRequests.setRackRelaxAssignment( rackRelaxAssignment );
+
     RackResolver.init(conf);
     retryInterval = getConfig().getLong(MRJobConfig.MR_AM_TO_RM_WAIT_INTERVAL_MS,
                                 MRJobConfig.DEFAULT_MR_AM_TO_RM_WAIT_INTERVAL_MS);
@@ -755,6 +767,8 @@ public class RMContainerAllocator extends RMContainerRequestor
   @Private
   @VisibleForTesting
   class ScheduledRequests {
+
+    private boolean rackRelaxAssignment = true;
     
     private final LinkedList<TaskAttemptId> earlierFailedMaps = 
       new LinkedList<TaskAttemptId>();
@@ -770,7 +784,11 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     private final LinkedHashMap<TaskAttemptId, ContainerRequest> reduces = 
       new LinkedHashMap<TaskAttemptId, ContainerRequest>();
-    
+
+    public void setRackRelaxAssignment( boolean rackRelaxAssignment ){
+      this.rackRelaxAssignment = rackRelaxAssignment;
+    }
+
     boolean remove(TaskAttemptId tId) {
       ContainerRequest req = null;
       if (tId.getTaskId().getTaskType().equals(TaskType.MAP)) {
@@ -1113,55 +1131,63 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
         }
       }
-      
-      // try to match all rack local
-      it = allocatedContainers.iterator();
-      while(it.hasNext() && maps.size() > 0){
-        Container allocated = it.next();
-        Priority priority = allocated.getPriority();
-        assert PRIORITY_MAP.equals(priority);
-        // "if (maps.containsKey(tId))" below should be almost always true.
-        // hence this while loop would almost always have O(1) complexity
-        String host = allocated.getNodeId().getHost();
-        String rack = RackResolver.resolve(host).getNetworkLocation();
-        LinkedList<TaskAttemptId> list = mapsRackMapping.get(rack);
-        while (list != null && list.size() > 0) {
-          TaskAttemptId tId = list.removeFirst();
-          if (maps.containsKey(tId)) {
-            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] rack local assigned!" );
-            ContainerRequest assigned = maps.remove(tId);
-            containerAssigned(allocated, assigned);
-            it.remove();
-            JobCounterUpdateEvent jce =
-              new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
-            jce.addCounterUpdate(JobCounter.RACK_LOCAL_MAPS, 1);
-            eventHandler.handle(jce);
-            rackLocalAssigned++;
-            if (LOG.isDebugEnabled()) {
-              LOG.debug("Assigned based on rack match " + rack);
+
+      // Here we will comment to see if we can achieve relax property or not!
+
+
+      if( rackRelaxAssignment ) {
+
+        System.out.println( "[SAMAN][RMContainerAllocator][assignMapWithLocality] rackRelaxAssignment = " + rackRelaxAssignment );
+
+        // try to match all rack local
+        it = allocatedContainers.iterator();
+        while (it.hasNext() && maps.size() > 0) {
+          Container allocated = it.next();
+          Priority priority = allocated.getPriority();
+          assert PRIORITY_MAP.equals(priority);
+          // "if (maps.containsKey(tId))" below should be almost always true.
+          // hence this while loop would almost always have O(1) complexity
+          String host = allocated.getNodeId().getHost();
+          String rack = RackResolver.resolve(host).getNetworkLocation();
+          LinkedList<TaskAttemptId> list = mapsRackMapping.get(rack);
+          while (list != null && list.size() > 0) {
+            TaskAttemptId tId = list.removeFirst();
+            if (maps.containsKey(tId)) {
+              System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] rack local assigned!");
+              ContainerRequest assigned = maps.remove(tId);
+              containerAssigned(allocated, assigned);
+              it.remove();
+              JobCounterUpdateEvent jce =
+                      new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+              jce.addCounterUpdate(JobCounter.RACK_LOCAL_MAPS, 1);
+              eventHandler.handle(jce);
+              rackLocalAssigned++;
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Assigned based on rack match " + rack);
+              }
+              break;
             }
-            break;
           }
         }
-      }
-      
-      // assign remaining
-      it = allocatedContainers.iterator();
-      while(it.hasNext() && maps.size() > 0){
-        Container allocated = it.next();
-        Priority priority = allocated.getPriority();
-        assert PRIORITY_MAP.equals(priority);
-        TaskAttemptId tId = maps.keySet().iterator().next();
-        ContainerRequest assigned = maps.remove(tId);
-        containerAssigned(allocated, assigned);
-        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] remaining assigned!" );
-        it.remove();
-        JobCounterUpdateEvent jce =
-          new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
-        jce.addCounterUpdate(JobCounter.OTHER_LOCAL_MAPS, 1);
-        eventHandler.handle(jce);
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("Assigned based on * match");
+
+        // assign remaining
+        it = allocatedContainers.iterator();
+        while (it.hasNext() && maps.size() > 0) {
+          Container allocated = it.next();
+          Priority priority = allocated.getPriority();
+          assert PRIORITY_MAP.equals(priority);
+          TaskAttemptId tId = maps.keySet().iterator().next();
+          ContainerRequest assigned = maps.remove(tId);
+          containerAssigned(allocated, assigned);
+          System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] remaining assigned!");
+          it.remove();
+          JobCounterUpdateEvent jce =
+                  new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+          jce.addCounterUpdate(JobCounter.OTHER_LOCAL_MAPS, 1);
+          eventHandler.handle(jce);
+          if (LOG.isDebugEnabled()) {
+            LOG.debug("Assigned based on * match");
+          }
         }
       }
     }

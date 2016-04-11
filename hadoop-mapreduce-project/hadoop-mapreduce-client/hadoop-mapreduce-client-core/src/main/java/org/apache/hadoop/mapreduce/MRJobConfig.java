@@ -748,5 +748,14 @@ public interface MRJobConfig {
   public static final int DEFAULT_MR_AM_MAX_ATTEMPTS = 2;
   
   public static final String MR_APPLICATION_TYPE = "MAPREDUCE";
+
+
+  /**
+   * Configuration Keys Added by saman
+   * For educational Purpose
+   */
+
+  public static final String MR_NETCDF_RACK_ASSIGNMENT = "mapreduce.netcdf.rack.assignment";
+  public static final boolean MR_NETCDF_RACK_ASSIGNMENT_VALUE = true;
   
 }
