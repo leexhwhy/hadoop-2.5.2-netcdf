@@ -290,13 +290,14 @@ public class RMContainerAllocator extends RMContainerRequestor
     if (event.getType() == ContainerAllocator.EventType.CONTAINER_REQ) {
       ContainerRequestEvent reqEvent = (ContainerRequestEvent) event;
       JobId jobId = getJob().getID();
+      // Added by saman
       String hosts = new String();
       for( String temp : reqEvent.getHosts() ){
           hosts += (temp +",");
       }
-
       System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] jobid=" + jobId.getId()
               + ",hosts=" + hosts );
+      // END Added by saman
 
       int supportedMaxContainerCapability =
           getMaxContainerCapability().getMemory();
@@ -322,6 +323,18 @@ public class RMContainerAllocator extends RMContainerRequestor
         //set the rounded off memory
         reqEvent.getCapability().setMemory(mapResourceRequest);
         scheduledRequests.addMap(reqEvent);//maps are immediately scheduled
+
+        Map<TaskAttemptId, ContainerRequest> maps = scheduledRequests.maps;
+        Iterator itr = maps.keySet().iterator();
+        while( itr.hasNext() ){
+          TaskAttemptId taskAttemptId = (TaskAttemptId)itr.next();
+          ContainerRequest containerRequest = maps.get(taskAttemptId);
+          hosts = new String();
+          for( int i = 0; i < containerRequest.hosts.length; i++ ){
+            hosts += containerRequest.hosts[i]+",";
+          }
+          System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] we have in maps: taskAttemptId=" + taskAttemptId.getId()+",containerRequest=" + hosts  );
+        }
       } else {
         if (reduceResourceRequest == 0) {
           reduceResourceRequest = reqEvent.getCapability().getMemory();
@@ -354,8 +367,6 @@ public class RMContainerAllocator extends RMContainerRequestor
       
     } else if (
         event.getType() == ContainerAllocator.EventType.CONTAINER_DEALLOCATE) {
-
-
 
       LOG.info("Processing the event " + event.toString());
 
