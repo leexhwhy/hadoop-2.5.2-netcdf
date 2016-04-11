@@ -324,17 +324,17 @@ public class RMContainerAllocator extends RMContainerRequestor
         reqEvent.getCapability().setMemory(mapResourceRequest);
         scheduledRequests.addMap(reqEvent);//maps are immediately scheduled
 
-        Map<TaskAttemptId, ContainerRequest> maps = scheduledRequests.maps;
-        Iterator itr = maps.keySet().iterator();
-        while( itr.hasNext() ){
-          TaskAttemptId taskAttemptId = (TaskAttemptId)itr.next();
-          ContainerRequest containerRequest = maps.get(taskAttemptId);
-          hosts = new String();
-          for( int i = 0; i < containerRequest.hosts.length; i++ ){
-            hosts += containerRequest.hosts[i]+",";
-          }
-          System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] we have in maps: taskAttemptId=" + taskAttemptId.getId()+",containerRequest=" + hosts  );
-        }
+        //Map<TaskAttemptId, ContainerRequest> maps = scheduledRequests.maps;
+        //Iterator itr = maps.keySet().iterator();
+       // while( itr.hasNext() ){
+          //TaskAttemptId taskAttemptId = (TaskAttemptId)itr.next();
+         // ContainerRequest containerRequest = maps.get(taskAttemptId);
+          //hosts = new String();
+          //for( int i = 0; i < containerRequest.hosts.length; i++ ){
+          //  hosts += containerRequest.hosts[i]+",";
+          //}
+          //System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] we have in maps: taskAttemptId=" + taskAttemptId.getId()+",containerRequest=" + hosts  );
+        //}
       } else {
         if (reduceResourceRequest == 0) {
           reduceResourceRequest = reqEvent.getCapability().getMemory();
