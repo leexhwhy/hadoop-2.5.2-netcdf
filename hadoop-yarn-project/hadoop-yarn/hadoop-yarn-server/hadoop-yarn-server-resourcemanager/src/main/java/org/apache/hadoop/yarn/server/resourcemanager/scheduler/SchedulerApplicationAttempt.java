@@ -413,12 +413,14 @@ public class SchedulerApplicationAttempt {
   // in the newlyAllocatedContainers waiting to be refetched.
   public synchronized ContainersAndNMTokensAllocation
       pullNewlyAllocatedContainersAndNMTokens() {
+    System.out.println( "[SAMAN][SchedulerApplicationAttempt][pullNewlyAllocatedContainersAndNMTokens] newly allocated size: " + newlyAllocatedContainers.size() );
     List<Container> returnContainerList =
         new ArrayList<Container>(newlyAllocatedContainers.size());
     List<NMToken> nmTokens = new ArrayList<NMToken>();
     for (Iterator<RMContainer> i = newlyAllocatedContainers.iterator(); i
       .hasNext();) {
       RMContainer rmContainer = i.next();
+      System.out.println( "[SAMAN][SchedulerApplicationAttempt][pullNewlyAllocatedContainersAndNMTokens] container="+rmContainer.getAllocatedNode().getHost()+","+rmContainer.getApplicationAttemptId().getAttemptId() );
       Container container = rmContainer.getContainer();
       try {
         // create container token and NMToken altogether.

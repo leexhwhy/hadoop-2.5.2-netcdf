@@ -869,6 +869,7 @@ public class FairScheduler extends
         application.showRequests();
 
         // Update application requests
+        System.out.println( "[SAMAN][FairScheduler][allocate] application.updateResourceRequests!" );
         application.updateResourceRequests(ask);
 
         LOG.debug("allocate: post-update");

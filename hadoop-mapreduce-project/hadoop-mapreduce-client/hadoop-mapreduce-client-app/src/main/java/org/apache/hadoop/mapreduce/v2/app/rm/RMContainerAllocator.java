@@ -130,13 +130,6 @@ public class RMContainerAllocator extends RMContainerRequestor
   private long retrystartTime;
   private Clock clock;
 
-  /**
-   * Some configuration parameters that are added by SAMAN
-   * For educational purpose
-   */
-
-  private boolean rackRelaxAssignment = true;
-
   @VisibleForTesting
   protected BlockingQueue<ContainerAllocatorEvent> eventQueue
     = new LinkedBlockingQueue<ContainerAllocatorEvent>();
@@ -387,7 +380,7 @@ public class RMContainerAllocator extends RMContainerRequestor
       boolean removed = scheduledRequests.remove(aId);
       if (!removed) {
         ContainerId containerId = assignedRequests.get(aId);
-        System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] deallocate container = " + containerId.getId() );
+        //System.out.println( "[SAMAN][RMContainerAllocator][handleEvent] deallocate container = " + containerId.getId() );
         if (containerId != null) {
           removed = true;
           assignedRequests.remove(aId);
@@ -1142,7 +1135,6 @@ public class RMContainerAllocator extends RMContainerRequestor
         it = allocatedContainers.iterator();
         while (it.hasNext() && maps.size() > 0) {
           Container allocated = it.next();
-          if( allocated.getPriority().equals(PRIORITY_MAP) && !rackRelaxAssignment ) break;
           Priority priority = allocated.getPriority();
           assert PRIORITY_MAP.equals(priority);
           // "if (maps.containsKey(tId))" below should be almost always true.
@@ -1174,7 +1166,6 @@ public class RMContainerAllocator extends RMContainerRequestor
         it = allocatedContainers.iterator();
         while (it.hasNext() && maps.size() > 0) {
           Container allocated = it.next();
-          if( allocated.getPriority().equals(PRIORITY_MAP) && !rackRelaxAssignment ) break;
           Priority priority = allocated.getPriority();
           assert PRIORITY_MAP.equals(priority);
           TaskAttemptId tId = maps.keySet().iterator().next();
