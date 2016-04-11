@@ -1135,7 +1135,6 @@ public class RMContainerAllocator extends RMContainerRequestor
       // Here we will comment to see if we can achieve relax property or not!
 
 
-      if( rackRelaxAssignment ) {
 
         System.out.println( "[SAMAN][RMContainerAllocator][assignMapWithLocality] rackRelaxAssignment = " + rackRelaxAssignment );
 
@@ -1143,6 +1142,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         it = allocatedContainers.iterator();
         while (it.hasNext() && maps.size() > 0) {
           Container allocated = it.next();
+          if( allocated.getPriority().equals(PRIORITY_MAP) && !rackRelaxAssignment ) break;
           Priority priority = allocated.getPriority();
           assert PRIORITY_MAP.equals(priority);
           // "if (maps.containsKey(tId))" below should be almost always true.
@@ -1174,6 +1174,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         it = allocatedContainers.iterator();
         while (it.hasNext() && maps.size() > 0) {
           Container allocated = it.next();
+          if( allocated.getPriority().equals(PRIORITY_MAP) && !rackRelaxAssignment ) break;
           Priority priority = allocated.getPriority();
           assert PRIORITY_MAP.equals(priority);
           TaskAttemptId tId = maps.keySet().iterator().next();
@@ -1189,7 +1190,6 @@ public class RMContainerAllocator extends RMContainerRequestor
             LOG.debug("Assigned based on * match");
           }
         }
-      }
     }
   }
 
