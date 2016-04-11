@@ -888,6 +888,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         }
         
         if(!isAssignable) {
+          System.out.println( "[SAMAN][RMContainerAllocator][assign] isAssignable == false" );
           // release container if we could not assign it 
           containerNotAssigned(allocated);
           it.remove();
@@ -898,6 +899,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         // blacklisted host
         String allocatedHost = allocated.getNodeId().getHost();
         if (isNodeBlacklisted(allocatedHost)) {
+          System.out.println( "[SAMAN][RMContainerAllocator][assign] node is black listed!" );
           // we need to request for a new container 
           // and release the current one
           LOG.info("Got allocated container on a blacklisted "
@@ -984,6 +986,8 @@ public class RMContainerAllocator extends RMContainerRequestor
         }
         assigned = assignToReduce(allocated);
       }
+      if( assigned == null )
+        System.out.println( "[SAMAN][RMContainerAllocator][assignWithoutLocality] assigned = null" );
         
       return assigned;
     }
@@ -992,6 +996,9 @@ public class RMContainerAllocator extends RMContainerRequestor
       Iterator<Container> it = allocatedContainers.iterator();
       while (it.hasNext()) {
         Container allocated = it.next();
+        System.out.println( "[SAMAN][RMContainerAllocator][assignContainers] allocated:httpAddress="+allocated.getNodeHttpAddress()+
+                ",id="+allocated.getId().getId()+
+                ",host"+allocated.getNodeId().getHost() );
         ContainerRequest assigned = assignWithoutLocality(allocated);
         if (assigned != null) {
           containerAssigned(allocated, assigned);
@@ -1075,19 +1082,22 @@ public class RMContainerAllocator extends RMContainerRequestor
       // try to assign to all nodes first to match node local
       Iterator<Container> it = allocatedContainers.iterator();
       while(it.hasNext() && maps.size() > 0){
-        Container allocated = it.next();        
+        Container allocated = it.next();
+        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] allocated:id="+allocated.getId().getId()+",http="+allocated.getNodeHttpAddress() );
         Priority priority = allocated.getPriority();
         assert PRIORITY_MAP.equals(priority);
         // "if (maps.containsKey(tId))" below should be almost always true.
         // hence this while loop would almost always have O(1) complexity
         String host = allocated.getNodeId().getHost();
         LinkedList<TaskAttemptId> list = mapsHostMapping.get(host);
+        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
         while (list != null && list.size() > 0) {
           if (LOG.isDebugEnabled()) {
             LOG.debug("Host matched to the request list " + host);
           }
           TaskAttemptId tId = list.removeFirst();
           if (maps.containsKey(tId)) {
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
             ContainerRequest assigned = maps.remove(tId);
             containerAssigned(allocated, assigned);
             it.remove();
@@ -1118,6 +1128,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         while (list != null && list.size() > 0) {
           TaskAttemptId tId = list.removeFirst();
           if (maps.containsKey(tId)) {
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] rack local assigned!" );
             ContainerRequest assigned = maps.remove(tId);
             containerAssigned(allocated, assigned);
             it.remove();
@@ -1143,6 +1154,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         TaskAttemptId tId = maps.keySet().iterator().next();
         ContainerRequest assigned = maps.remove(tId);
         containerAssigned(allocated, assigned);
+        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] remaining assigned!" );
         it.remove();
         JobCounterUpdateEvent jce =
           new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
