@@ -171,6 +171,7 @@ public class FSSchedulerApp extends SchedulerApplicationAttempt {
 
     // If delay scheduling is not being used, can schedule anywhere
     if (nodeLocalityThreshold < 0.0 || rackLocalityThreshold < 0.0) {
+      System.out.println( "[SAMAN][FSSchedulerApp][getAllowedLocalityLevel] NodeType == OFF_SWITCH" );
       return NodeType.OFF_SWITCH;
     }
 
