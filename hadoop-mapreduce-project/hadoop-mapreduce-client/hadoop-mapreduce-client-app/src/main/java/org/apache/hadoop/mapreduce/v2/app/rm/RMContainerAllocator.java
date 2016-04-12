@@ -1125,12 +1125,6 @@ public class RMContainerAllocator extends RMContainerRequestor
         }
       }
 
-      // Here we will comment to see if we can achieve relax property or not!
-
-
-
-        System.out.println( "[SAMAN][RMContainerAllocator][assignMapWithLocality] rackRelaxAssignment = " + rackRelaxAssignment );
-
         // try to match all rack local
         it = allocatedContainers.iterator();
         while (it.hasNext() && maps.size() > 0) {

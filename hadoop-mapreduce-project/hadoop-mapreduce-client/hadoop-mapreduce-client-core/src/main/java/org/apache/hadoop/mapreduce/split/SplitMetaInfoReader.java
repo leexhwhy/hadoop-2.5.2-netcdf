@@ -44,7 +44,6 @@ public class SplitMetaInfoReader {
   public static JobSplit.TaskSplitMetaInfo[] readSplitMetaInfo(
       JobID jobId, FileSystem fs, Configuration conf, Path jobSubmitDir) 
   throws IOException {
-    System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] readSplitMetaInfo!" );
     long maxMetaInfoSize = conf.getLong(MRJobConfig.SPLIT_METAINFO_MAXSIZE,
         MRJobConfig.DEFAULT_SPLIT_METAINFO_MAXSIZE);
     Path metaSplitFile = JobSubmissionFiles.getJobSplitMetaFile(jobSubmitDir);
@@ -69,15 +68,12 @@ public class SplitMetaInfoReader {
     JobSplit.TaskSplitMetaInfo[] allSplitMetaInfo = 
       new JobSplit.TaskSplitMetaInfo[numSplits];
 
-    System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] numSplits = " + numSplits );
-
     for (int i = 0; i < numSplits; i++) {
       JobSplit.SplitMetaInfo splitMetaInfo = new JobSplit.SplitMetaInfo();
       splitMetaInfo.readFields(in);
       JobSplit.TaskSplitIndex splitIndex = new JobSplit.TaskSplitIndex(
           jobSplitFile, 
           splitMetaInfo.getStartOffset());
-      System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] locations=" + splitMetaInfo.getLocations().toString() );
 
       allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex, 
           splitMetaInfo.getLocations(), 
