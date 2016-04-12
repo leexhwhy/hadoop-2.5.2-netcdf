@@ -299,6 +299,8 @@ public class AppSchedulable extends Schedulable {
     // (not scheduled) in order to promote better locality.
     synchronized (app) {
       for (Priority priority : prioritiesToTry) {
+        System.out.println( "[SAMAN][AppSchedulable][assignContainer] priority: " + priority.getPriority() );
+
         if (app.getTotalRequiredResources(priority) <= 0 ||
             !hasContainerForNode(priority, node)) {
           continue;
@@ -316,8 +318,10 @@ public class AppSchedulable extends Schedulable {
 
         ResourceRequest rackLocalRequest = app.getResourceRequest(priority,
             node.getRackName());
+        System.out.println( "[SAMAN][AppSchedulable][assignContainer] rackLocalRequest="+rackLocalRequest.getResourceName()+","+rackLocalRequest.getNumContainers()+","+rackLocalRequest.getRelaxLocality() );
         ResourceRequest localRequest = app.getResourceRequest(priority,
             node.getNodeName());
+        System.out.println( "[SAMAN][AppSchedulable][assignContainer] localRequest="+localRequest.getResourceName()+","+localRequest.getNumContainers()+","+localRequest.getRelaxLocality() );
         
         if (localRequest != null && !localRequest.getRelaxLocality()) {
           LOG.warn("Relax locality off is not supported on local request: "
