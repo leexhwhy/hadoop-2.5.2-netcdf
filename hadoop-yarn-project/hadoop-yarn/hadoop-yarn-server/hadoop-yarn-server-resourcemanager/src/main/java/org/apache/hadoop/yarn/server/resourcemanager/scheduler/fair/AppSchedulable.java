@@ -283,6 +283,9 @@ public class AppSchedulable extends Schedulable {
   }
 
   private Resource assignContainer(FSSchedulerNode node, boolean reserved) {
+
+    System.out.println( "[SAMAN][AppSchedulable][assignContainer]" );
+
     if (LOG.isDebugEnabled()) {
       LOG.debug("Node offered to app: " + getName() + " reserved: " + reserved);
     }

@@ -1010,6 +1010,7 @@ public class FairScheduler extends
 
     AppSchedulable reservedAppSchedulable = node.getReservedAppSchedulable();
     if (reservedAppSchedulable != null) {
+      System.out.println( "[SAMAN][FairScheduler][attemptScheduling] reservedAppSchedulable!=null" );
       Priority reservedPriority = node.getReservedContainer().getReservedPriority();
       if (!reservedAppSchedulable.hasContainerForNode(reservedPriority, node)) {
         // Don't hold the reservation if app can no longer use it
@@ -1030,6 +1031,7 @@ public class FairScheduler extends
       }
     }
     if (reservedAppSchedulable == null) {
+      System.out.println( "[SAMAN][FairScheduler][attemptScheduling] reservedAppSchedulable == null" );
       // No reservation, schedule at queue which is farthest below fair share
       int assignedContainers = 0;
       while (node.getReservedContainer() == null) {

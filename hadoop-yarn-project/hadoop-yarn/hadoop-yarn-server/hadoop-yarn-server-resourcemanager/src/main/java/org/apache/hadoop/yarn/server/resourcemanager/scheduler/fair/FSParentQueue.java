@@ -143,6 +143,9 @@ public class FSParentQueue extends FSQueue {
 
   @Override
   public Resource assignContainer(FSSchedulerNode node) {
+
+    System.out.println( "[SAMAN][FSParentQueue][assignContainer] !" );
+
     Resource assigned = Resources.none();
 
     // If this queue is over its limit, reject

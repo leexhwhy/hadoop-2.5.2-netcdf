@@ -255,6 +255,8 @@ public class FSSchedulerApp extends SchedulerApplicationAttempt {
   synchronized public RMContainer allocate(NodeType type, FSSchedulerNode node,
       Priority priority, ResourceRequest request,
       Container container) {
+    System.out.println( "[SAMAN][FSSchedulerApp][allocate]!" );
+
     // Update allowed locality level
     NodeType allowed = allowedLocalityLevel.get(priority);
     if (allowed != null) {
