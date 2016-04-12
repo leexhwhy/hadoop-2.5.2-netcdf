@@ -284,8 +284,6 @@ public class AppSchedulable extends Schedulable {
 
   private Resource assignContainer(FSSchedulerNode node, boolean reserved) {
 
-    System.out.println( "[SAMAN][AppSchedulable][assignContainer]" );
-
     if (LOG.isDebugEnabled()) {
       LOG.debug("Node offered to app: " + getName() + " reserved: " + reserved);
     }
@@ -293,13 +291,13 @@ public class AppSchedulable extends Schedulable {
     Collection<Priority> prioritiesToTry = (reserved) ? 
         Arrays.asList(node.getReservedContainer().getReservedPriority()) : 
         app.getPriorities();
+    System.out.println( "[SAMAN][AppSchedulable][assignContainer] number of priorities: " + prioritiesToTry.size() );
     
     // For each priority, see if we can schedule a node local, rack local
     // or off-switch request. Rack of off-switch requests may be delayed
     // (not scheduled) in order to promote better locality.
     synchronized (app) {
       for (Priority priority : prioritiesToTry) {
-        System.out.println( "[SAMAN][AppSchedulable][assignContainer] priority: " + priority.getPriority() );
 
         if (app.getTotalRequiredResources(priority) <= 0 ||
             !hasContainerForNode(priority, node)) {
@@ -332,11 +330,13 @@ public class AppSchedulable extends Schedulable {
         
         NodeType allowedLocality;
         if (scheduler.isContinuousSchedulingEnabled()) {
+          System.out.println( "[SAMAN][AppSchedulable][assignContainer] continuous scheduling is enabled!" );
           allowedLocality = app.getAllowedLocalityLevelByTime(priority,
                   scheduler.getNodeLocalityDelayMs(),
                   scheduler.getRackLocalityDelayMs(),
                   scheduler.getClock().getTime());
         } else {
+          System.out.println( "[SAMAN][AppSchedulable][assignContainer] continuous scheduling is not scheduled!" );
           allowedLocality = app.getAllowedLocalityLevel(priority,
                   scheduler.getNumClusterNodes(),
                   scheduler.getNodeLocalityThreshold(),

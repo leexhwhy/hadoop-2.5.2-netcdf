@@ -178,7 +178,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           super.getApplicationProgress(), new ArrayList<ResourceRequest>(ask),
           new ArrayList<ContainerId>(release), blacklistRequest);
 
-    // Totall added by saman
+    // Totally added by saman
     if( rackRelaxAssignment == false ) {
         Iterator itr = allocateRequest.getAskList().iterator();
         while (itr.hasNext()) {
