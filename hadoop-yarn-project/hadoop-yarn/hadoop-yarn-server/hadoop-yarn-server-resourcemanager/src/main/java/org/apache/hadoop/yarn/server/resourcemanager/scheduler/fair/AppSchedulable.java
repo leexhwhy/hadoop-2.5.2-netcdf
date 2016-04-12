@@ -318,10 +318,12 @@ public class AppSchedulable extends Schedulable {
 
         ResourceRequest rackLocalRequest = app.getResourceRequest(priority,
             node.getRackName());
-        System.out.println( "[SAMAN][AppSchedulable][assignContainer] rackLocalRequest="+rackLocalRequest.getResourceName()+","+rackLocalRequest.getNumContainers()+","+rackLocalRequest.getRelaxLocality() );
+        if( rackLocalRequest != null )
+          System.out.println( "[SAMAN][AppSchedulable][assignContainer] rackLocalRequest="+rackLocalRequest.getResourceName()+","+rackLocalRequest.getNumContainers()+","+rackLocalRequest.getRelaxLocality() );
         ResourceRequest localRequest = app.getResourceRequest(priority,
             node.getNodeName());
-        System.out.println( "[SAMAN][AppSchedulable][assignContainer] localRequest="+localRequest.getResourceName()+","+localRequest.getNumContainers()+","+localRequest.getRelaxLocality() );
+        if( localRequest != null )
+          System.out.println( "[SAMAN][AppSchedulable][assignContainer] localRequest="+localRequest.getResourceName()+","+localRequest.getNumContainers()+","+localRequest.getRelaxLocality() );
         
         if (localRequest != null && !localRequest.getRelaxLocality()) {
           LOG.warn("Relax locality off is not supported on local request: "
