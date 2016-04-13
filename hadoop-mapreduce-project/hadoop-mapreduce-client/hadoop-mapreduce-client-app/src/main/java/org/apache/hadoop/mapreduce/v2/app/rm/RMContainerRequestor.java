@@ -94,7 +94,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
    */
 
   protected boolean bestLayoutEnabled = false;
-  protected boolean isnetcdf = false;
+  protected boolean isNetcdf = false;
 
   @Private
   @VisibleForTesting
@@ -180,7 +180,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           new ArrayList<ContainerId>(release), blacklistRequest);
 
     // Totally added by saman
-    if( bestLayoutEnabled == true ) {
+    if( bestLayoutEnabled == true && isNetcdf ) {
         Iterator itr = allocateRequest.getAskList().iterator();
         while (itr.hasNext()) {
             ResourceRequest temp = (ResourceRequest) (itr.next());

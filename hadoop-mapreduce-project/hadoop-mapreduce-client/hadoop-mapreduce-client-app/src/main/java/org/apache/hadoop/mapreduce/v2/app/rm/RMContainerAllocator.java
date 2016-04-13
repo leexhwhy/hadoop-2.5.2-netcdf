@@ -160,11 +160,11 @@ public class RMContainerAllocator extends RMContainerRequestor
     bestLayoutEnabled = conf.getBoolean(
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
-    isnetcdf = conf.getBoolean(
+    isNetcdf = conf.getBoolean(
             MRJobConfig.MR_NETCDF_ISNETCDF,
             MRJobConfig.MR_NETCDF_ISNETCDF_VALUE);
     scheduledRequests.setBestLayoutEnabled( bestLayoutEnabled );
-
+    scheduledRequests.setIsNetcdf( isNetcdf );
     RackResolver.init(conf);
     retryInterval = getConfig().getLong(MRJobConfig.MR_AM_TO_RM_WAIT_INTERVAL_MS,
                                 MRJobConfig.DEFAULT_MR_AM_TO_RM_WAIT_INTERVAL_MS);
@@ -764,7 +764,8 @@ public class RMContainerAllocator extends RMContainerRequestor
   @VisibleForTesting
   class ScheduledRequests {
 
-    private boolean bestLayoutEnabled = true;
+    private boolean bestLayoutEnabled = false;
+    private boolean isNetcdf = false;
     
     private final LinkedList<TaskAttemptId> earlierFailedMaps = 
       new LinkedList<TaskAttemptId>();
@@ -783,6 +784,10 @@ public class RMContainerAllocator extends RMContainerRequestor
 
     public void setBestLayoutEnabled( boolean bestLayoutEnabled ){
       this.bestLayoutEnabled = bestLayoutEnabled;
+    }
+
+    public void setIsNetcdf( boolean isNetcdf ){
+      this.isNetcdf = isNetcdf;
     }
 
     boolean remove(TaskAttemptId tId) {
