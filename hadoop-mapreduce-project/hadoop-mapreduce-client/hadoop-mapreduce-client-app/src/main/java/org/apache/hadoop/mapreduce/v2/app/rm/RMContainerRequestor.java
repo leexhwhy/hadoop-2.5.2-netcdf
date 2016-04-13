@@ -94,6 +94,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
    */
 
   protected boolean bestLayoutEnabled = false;
+  protected boolean isnetcdf = false;
 
   @Private
   @VisibleForTesting

@@ -755,6 +755,9 @@ public interface MRJobConfig {
    * For educational Purpose
    */
 
+  public static final String MR_NETCDF_ISNETCDF = "mapreduce.netcdf.isnetcdf";
+  public static final boolean MR_NETCDF_ISNETCDF_VALUE = false;
+
   public static final String MR_NETCDF_RACK_ASSIGNMENT = "mapreduce.netcdf.rack.assignment";
   public static final boolean MR_NETCDF_RACK_ASSIGNMENT_VALUE = true;
 

@@ -44,6 +44,8 @@ public class SplitMetaInfoReader {
   public static JobSplit.TaskSplitMetaInfo[] readSplitMetaInfo(
       JobID jobId, FileSystem fs, Configuration conf, Path jobSubmitDir) 
   throws IOException {
+    boolean isNetCDF = conf.getBoolean(MRJobConfig.MR_NETCDF_ISNETCDF,
+            MRJobConfig.MR_NETCDF_ISNETCDF_VALUE);
     boolean bestLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
     boolean bestFetchLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_BESTFETCH_LAYOUT_ENABLED,
@@ -80,12 +82,12 @@ public class SplitMetaInfoReader {
           jobSplitFile, 
           splitMetaInfo.getStartOffset());
 
-      if( bestLayoutEnabled ){
+      if( bestLayoutEnabled && isNetCDF ){
         String[] locations = new String[1];
         locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
-      }else if( bestFetchLayoutEnabled ){
+      }else if( bestFetchLayoutEnabled && isNetCDF ){
         String[] locations = new String[1];
         locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,

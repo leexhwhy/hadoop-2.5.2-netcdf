@@ -160,6 +160,9 @@ public class RMContainerAllocator extends RMContainerRequestor
     bestLayoutEnabled = conf.getBoolean(
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
+    isnetcdf = conf.getBoolean(
+            MRJobConfig.MR_NETCDF_ISNETCDF,
+            MRJobConfig.MR_NETCDF_ISNETCDF_VALUE);
     scheduledRequests.setBestLayoutEnabled( bestLayoutEnabled );
 
     RackResolver.init(conf);
