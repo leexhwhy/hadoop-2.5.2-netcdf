@@ -234,6 +234,7 @@ public class AppSchedulable extends Schedulable {
 
     // How much does this request need?
     Resource capability = request.getCapability();
+    System.out.println( "[SAMAN][AppSchedulable][assignContainer] capability="+capability.getVirtualCores()+":"+capability.getMemory() );
 
     // How much does the node have?
     Resource available = node.getAvailableResource();

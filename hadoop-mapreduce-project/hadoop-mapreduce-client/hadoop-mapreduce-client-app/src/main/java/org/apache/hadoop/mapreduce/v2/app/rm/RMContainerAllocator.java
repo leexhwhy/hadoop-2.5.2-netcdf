@@ -157,10 +157,10 @@ public class RMContainerAllocator extends RMContainerRequestor
     allocationDelayThresholdMs = conf.getInt(
         MRJobConfig.MR_JOB_REDUCER_PREEMPT_DELAY_SEC,
         MRJobConfig.DEFAULT_MR_JOB_REDUCER_PREEMPT_DELAY_SEC) * 1000;//sec -> ms
-    rackRelaxAssignment = conf.getBoolean(
-            MRJobConfig.MR_NETCDF_RACK_ASSIGNMENT,
-            MRJobConfig.MR_NETCDF_RACK_ASSIGNMENT_VALUE);
-    scheduledRequests.setRackRelaxAssignment( rackRelaxAssignment );
+    bestLayoutEnabled = conf.getBoolean(
+            MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED,
+            MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
+    scheduledRequests.setBestLayoutEnabled( bestLayoutEnabled );
 
     RackResolver.init(conf);
     retryInterval = getConfig().getLong(MRJobConfig.MR_AM_TO_RM_WAIT_INTERVAL_MS,
@@ -761,7 +761,7 @@ public class RMContainerAllocator extends RMContainerRequestor
   @VisibleForTesting
   class ScheduledRequests {
 
-    private boolean rackRelaxAssignment = true;
+    private boolean bestLayoutEnabled = true;
     
     private final LinkedList<TaskAttemptId> earlierFailedMaps = 
       new LinkedList<TaskAttemptId>();
@@ -778,8 +778,8 @@ public class RMContainerAllocator extends RMContainerRequestor
     private final LinkedHashMap<TaskAttemptId, ContainerRequest> reduces = 
       new LinkedHashMap<TaskAttemptId, ContainerRequest>();
 
-    public void setRackRelaxAssignment( boolean rackRelaxAssignment ){
-      this.rackRelaxAssignment = rackRelaxAssignment;
+    public void setBestLayoutEnabled( boolean bestLayoutEnabled ){
+      this.bestLayoutEnabled = bestLayoutEnabled;
     }
 
     boolean remove(TaskAttemptId tId) {

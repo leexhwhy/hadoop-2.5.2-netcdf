@@ -757,5 +757,14 @@ public interface MRJobConfig {
 
   public static final String MR_NETCDF_RACK_ASSIGNMENT = "mapreduce.netcdf.rack.assignment";
   public static final boolean MR_NETCDF_RACK_ASSIGNMENT_VALUE = true;
-  
+
+  public static final String MR_NETCDF_BEST_LAYOUT_ENABLED = "mapreduce.netcdf.bestlayout.enabled";
+  public static final boolean MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE = false;
+
+  public static final String MR_NETCDF_BESTFETCH_LAYOUT_ENABLED = "mapreduce.netcdf.bestfetchlayout.enabled";
+  public static final boolean MR_NETCDF_BESTFETCH_LAYOUT_ENABLED_VALUE = false;
+
+  public static final String MR_NETCDF_SECONDBEST_LAYOUT_ENABLED = "mapreduce.netcdf.secondbestlayout.enabled";
+  public static final boolean MR_NETCDF_SECONDBEST_LAYOUT_ENABLED_VALUE = false;
+
 }

@@ -93,7 +93,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
    * For educational purpose
    */
 
-  protected boolean rackRelaxAssignment = true;
+  protected boolean bestLayoutEnabled = false;
 
   @Private
   @VisibleForTesting
@@ -179,7 +179,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           new ArrayList<ContainerId>(release), blacklistRequest);
 
     // Totally added by saman
-    if( rackRelaxAssignment == false ) {
+    if( bestLayoutEnabled == true ) {
         Iterator itr = allocateRequest.getAskList().iterator();
         while (itr.hasNext()) {
             ResourceRequest temp = (ResourceRequest) (itr.next());

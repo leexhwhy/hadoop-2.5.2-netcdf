@@ -44,6 +44,9 @@ public class SplitMetaInfoReader {
   public static JobSplit.TaskSplitMetaInfo[] readSplitMetaInfo(
       JobID jobId, FileSystem fs, Configuration conf, Path jobSubmitDir) 
   throws IOException {
+    boolean bestLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED,
+            MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
+
     long maxMetaInfoSize = conf.getLong(MRJobConfig.SPLIT_METAINFO_MAXSIZE,
         MRJobConfig.DEFAULT_SPLIT_METAINFO_MAXSIZE);
     Path metaSplitFile = JobSubmissionFiles.getJobSplitMetaFile(jobSubmitDir);
@@ -75,9 +78,16 @@ public class SplitMetaInfoReader {
           jobSplitFile, 
           splitMetaInfo.getStartOffset());
 
-      allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex, 
-          splitMetaInfo.getLocations(), 
-          splitMetaInfo.getInputDataLength());
+      if( bestLayoutEnabled ){
+        String[] locations = new String[1];
+        locations[0] = splitMetaInfo.getLocations()[0];
+        allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
+                locations, splitMetaInfo.getInputDataLength());
+      }else {
+        allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
+                splitMetaInfo.getLocations(),
+                splitMetaInfo.getInputDataLength());
+      }
     }
     in.close();
     return allSplitMetaInfo;
