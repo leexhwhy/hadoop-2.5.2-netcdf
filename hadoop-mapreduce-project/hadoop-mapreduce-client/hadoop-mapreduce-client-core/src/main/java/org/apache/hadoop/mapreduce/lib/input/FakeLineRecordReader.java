@@ -231,7 +231,7 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
             return false;
         } else {
             try {
-                Thread.sleep(1);
+                Thread.sleep(500,0);
             }catch (Exception e){
                 return true;
             }
