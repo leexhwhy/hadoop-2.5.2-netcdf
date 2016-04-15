@@ -232,7 +232,7 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
             return false;
         } else {
             try {
-                TimeUnit.MILLISECONDS.sleep(100);
+                //TimeUnit.MILLISECONDS.sleep(100);
                 //Thread.sleep(500,0);
             }catch (Exception e){
                 return true;
