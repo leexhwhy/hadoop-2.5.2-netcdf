@@ -35,7 +35,6 @@ import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Treats keys as offset in file and value as line. 
@@ -193,7 +192,7 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
         text += text;
         text += text;
         text += text;
-        if( counter < 128*1024*1024 ){
+        if( counter < 32*1024*1024 ){
             value = new Text(text);
             pos += 64*512;
             counter += 64*512;
