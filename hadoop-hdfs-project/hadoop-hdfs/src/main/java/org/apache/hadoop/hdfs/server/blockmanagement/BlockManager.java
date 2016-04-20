@@ -1511,7 +1511,7 @@ public class BlockManager {
         numOfReplicas, client, excludedNodes, blocksize, 
         // TODO: get storage type from file
         favoredDatanodeDescriptors, StorageType.DEFAULT);
-    String targetsString = new String ;
+    String targetsString = new String() ;
     for( int i = 0; i < targets.length; i++ ){
       targetsString += (targets[i].getDatanodeDescriptor().getHostName()+",");
     }
