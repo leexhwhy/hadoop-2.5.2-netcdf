@@ -20,6 +20,7 @@ package org.apache.hadoop.mapreduce.split;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
@@ -82,14 +83,23 @@ public class SplitMetaInfoReader {
           jobSplitFile, 
           splitMetaInfo.getStartOffset());
 
+      // Here we would modify the target nodes
+      // We would force the task to be deployed on
+      // a remote read and would see the result
+      // We would consider how many tasks to be
+      // read forcefully from a remote node
+      // We would consider values 1/4, 1/2, and full
+
       if( bestLayoutEnabled && isNetCDF ){
         String[] locations = new String[1];
-        locations[0] = splitMetaInfo.getLocations()[0];
+        locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
+        //locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else if( bestFetchLayoutEnabled && isNetCDF ){
         String[] locations = new String[1];
-        locations[0] = splitMetaInfo.getLocations()[0];
+        locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
+        //locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else {
@@ -100,6 +110,46 @@ public class SplitMetaInfoReader {
     }
     in.close();
     return allSplitMetaInfo;
+  }
+
+  private static String getFakeNode( String[] trueLocations, int splitNumber ){
+
+    String trueLocationsString = new String();
+    for( int i = 0; i < trueLocations.length; i++ ){
+      trueLocationsString += trueLocations[i];
+    }
+    System.out.println( "[SAMAN][SplitMetaInfoReader][getFakeNodes] trueLocationsString = " + trueLocationsString );
+    int divider = 4;
+    if( splitNumber%4 != 0 )
+      return trueLocations[0];
+
+    // We consider trueLocations to have 3 nodes
+    String[] allNodes = new String[8];
+    allNodes[0] = "c3n3"; allNodes[1] = "c3n4"; allNodes[2] = "c3n5"; allNodes[3] = "c3n6";
+    allNodes[4] = "c3n7"; allNodes[5] = "c3n8"; allNodes[6] = "c3n9"; allNodes[7] = "c3n10";
+
+    String[] remoteNodes = new String[8-trueLocations.length];
+    for( int i = 0; i < allNodes.length; i++ ) {
+      for (int j = 0; j < trueLocations.length; j++) {
+        if (allNodes[i].equals(trueLocations[j])) {
+          allNodes[i] = "";
+          break;
+        }
+      }
+    }
+
+    int counter = 0;
+    for( int i = 0; i < allNodes.length; i++ ){
+      if( !allNodes[i].equals("") ){
+        remoteNodes[counter] = allNodes[i];
+        counter++;
+      }
+    }
+
+    int random = ThreadLocalRandom.current().nextInt(0, 8-trueLocations.length);
+    System.out.println( "[SAMAN][SplitMetaInfoReader][getFakeNode] random remote node = " + remoteNodes[random] );
+    return remoteNodes[random];
+
   }
 
 }
