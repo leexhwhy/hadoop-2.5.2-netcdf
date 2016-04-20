@@ -627,6 +627,8 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                boolean avoidStaleNodes,
                                StorageType storageType) {
     System.out.println( "[SAMAN][BlockPlacementPolicyDefault][isGoodTarget]" );
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][isGoodTarget] storage host name: " + storage.getDatanodeDescriptor().getHostName() );
+
     if (storage.getStorageType() != storageType) {
       logNodeIsNotChosen(storage,
           "storage types do not match, where the expected storage type is "
