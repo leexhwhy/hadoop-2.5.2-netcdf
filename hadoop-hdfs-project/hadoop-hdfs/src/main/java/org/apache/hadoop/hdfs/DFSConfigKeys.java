@@ -672,4 +672,6 @@ public class DFSConfigKeys extends CommonConfigurationKeys {
 
    public static final String DFS_IS_NETCDF = "dfs.isnetcdf";
 
+   public static final String DFS_NETCDF_ABONDENED_HOSTS = "dfs.netcdf.abondened.hosts";
+
 }
