@@ -93,6 +93,8 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
   public void initialize(Configuration conf,  FSClusterStats stats,
                          NetworkTopology clusterMap, 
                          Host2NodesMap host2datanodeMap) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][initialize] initialize!" );
+
     this.considerLoad = conf.getBoolean(
         DFSConfigKeys.DFS_NAMENODE_REPLICATION_CONSIDERLOAD_KEY, true);
     this.stats = stats;
@@ -118,6 +120,8 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                     Set<Node> excludedNodes,
                                     long blocksize,
                                     StorageType storageType) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseTarget] chooseTarget empty!" );
+
     return chooseTarget(numOfReplicas, writer, chosenNodes, returnChosenNodes,
         excludedNodes, blocksize, storageType);
   }
@@ -130,8 +134,10 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
       long blocksize,
       List<DatanodeDescriptor> favoredNodes,
       StorageType storageType) {
+      System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseTarget] chooseTarget don't know!" );
     try {
       if (favoredNodes == null || favoredNodes.size() == 0) {
+        System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseTarget] favoredNodes == null || favoredNodes.size() == 0" );
         // Favored nodes not specified, fall back to regular block placement.
         return chooseTarget(src, numOfReplicas, writer,
             new ArrayList<DatanodeStorageInfo>(numOfReplicas), false, 
@@ -162,6 +168,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
       }
 
       if (results.size() < numOfReplicas) {
+        System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseTarget] results.size() < numOfReplicas" );
         // Not enough favored nodes, choose other nodes.
         numOfReplicas -= results.size();
         DatanodeStorageInfo[] remainingTargets = 
@@ -171,8 +178,8 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
           results.add(remainingTargets[i]);
         }
       }
-      return getPipeline(writer,
-          results.toArray(new DatanodeStorageInfo[results.size()]));
+        return getPipeline(writer,
+                results.toArray(new DatanodeStorageInfo[results.size()]));
     } catch (NotEnoughReplicasException nr) {
       // Fall back to regular block placement disregarding favored nodes hint
       return chooseTarget(src, numOfReplicas, writer, 
@@ -189,6 +196,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                     Set<Node> excludedNodes,
                                     long blocksize,
                                     StorageType storageType) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseTarget] chooseTarget impl!" );
     if (numOfReplicas == 0 || clusterMap.getNumOfLeaves()==0) {
       return DatanodeStorageInfo.EMPTY_ARRAY;
     }
@@ -225,6 +233,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
   }
 
   private int[] getMaxNodesPerRack(int numOfChosen, int numOfReplicas) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][getMaxNodesPerRack]" );
     int clusterSize = clusterMap.getNumOfLeaves();
     int totalNumOfReplicas = numOfChosen + numOfReplicas;
     if (totalNumOfReplicas > clusterSize) {
@@ -254,6 +263,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                           List<DatanodeStorageInfo> results,
                                           final boolean avoidStaleNodes,
                                           StorageType storageType) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseTarget] madar!" );
     if (numOfReplicas == 0 || clusterMap.getNumOfLeaves()==0) {
       return writer;
     }
@@ -348,6 +358,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                              StorageType storageType,
                                              boolean fallbackToLocalRack)
       throws NotEnoughReplicasException {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseLocalStorage]" );
     // if no local machine, randomly choose one node
     if (localMachine == null) {
       return chooseRandom(NodeBase.ROOT, excludedNodes, blocksize,
@@ -383,6 +394,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
    */
   protected int addToExcludedNodes(DatanodeDescriptor localMachine,
       Set<Node> excludedNodes) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][addToExcludeNodes]" );
     return excludedNodes.add(localMachine) ? 1 : 0;
   }
 
@@ -402,6 +414,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                              boolean avoidStaleNodes,
                                              StorageType storageType)
       throws NotEnoughReplicasException {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseLocalRack]" );
     // no local machine, so choose a random machine
     if (localMachine == null) {
       return chooseRandom(NodeBase.ROOT, excludedNodes, blocksize,
@@ -455,6 +468,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                 boolean avoidStaleNodes,
                                 StorageType storageType)
                                     throws NotEnoughReplicasException {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseRemoteRack]" );
     int oldNumOfReplicas = results.size();
     // randomly choose one node from remote racks
     try {
@@ -480,6 +494,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
       boolean avoidStaleNodes,
       StorageType storageType)
           throws NotEnoughReplicasException {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseRandom]" );
     return chooseRandom(1, scope, excludedNodes, blocksize, maxNodesPerRack,
         results, avoidStaleNodes, storageType);
   }
@@ -497,7 +512,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                             boolean avoidStaleNodes,
                             StorageType storageType)
                                 throws NotEnoughReplicasException {
-      
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseRandom] madar!" );
     int numOfAvailableNodes = clusterMap.countNumOfAvailableNodes(
         scope, excludedNodes);
     StringBuilder builder = null;
@@ -564,6 +579,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
       List<DatanodeStorageInfo> results,                           
       boolean avoidStaleNodes,
       StorageType storageType) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][addIfIsGoodTarget]" );
     if (isGoodTarget(storage, blockSize, maxNodesPerRack, considerLoad,
         results, avoidStaleNodes, storageType)) {
       results.add(storage);
@@ -575,6 +591,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
   }
 
   private static void logNodeIsNotChosen(DatanodeStorageInfo storage, String reason) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][logNodeIsNotchosen]" );
     if (LOG.isDebugEnabled()) {
       final DatanodeDescriptor node = storage.getDatanodeDescriptor();
       // build the error message for later use.
@@ -609,6 +626,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
                                List<DatanodeStorageInfo> results,
                                boolean avoidStaleNodes,
                                StorageType storageType) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][isGoodTarget]" );
     if (storage.getStorageType() != storageType) {
       logNodeIsNotChosen(storage,
           "storage types do not match, where the expected storage type is "
@@ -675,6 +693,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
    */
   private DatanodeStorageInfo[] getPipeline(Node writer,
       DatanodeStorageInfo[] storages) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][getPipeline]" );
     if (storages.length == 0) {
       return storages;
     }
@@ -712,6 +731,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
   @Override
   public BlockPlacementStatus verifyBlockPlacement(String srcPath,
       LocatedBlock lBlk, int numberOfReplicas) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][verifyBlockPlacement]" );
     DatanodeInfo[] locs = lBlk.getLocations();
     if (locs == null)
       locs = DatanodeDescriptor.EMPTY_ARRAY;
@@ -733,6 +753,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
       Block block, short replicationFactor,
       Collection<DatanodeDescriptor> first,
       Collection<DatanodeDescriptor> second) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][chooseReplicaToDelete]" );
     long oldestHeartbeat =
       now() - heartbeatInterval * tolerateHeartbeatMultiplier;
     DatanodeDescriptor oldestHeartbeatNode = null;
@@ -765,6 +786,7 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
   protected Collection<DatanodeDescriptor> pickupReplicaSet(
       Collection<DatanodeDescriptor> first,
       Collection<DatanodeDescriptor> second) {
+    System.out.println( "[SAMAN][BlockPlacementPolicyDefault][pickupReplicaSet]" );
     return first.isEmpty() ? second : first;
   }
   
