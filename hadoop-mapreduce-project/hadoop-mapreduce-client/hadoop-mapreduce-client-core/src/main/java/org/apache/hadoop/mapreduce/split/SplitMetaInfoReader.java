@@ -91,18 +91,21 @@ public class SplitMetaInfoReader {
       // We would consider values 1/4, 1/2, and full
 
       if( bestLayoutEnabled && isNetCDF ){
+        System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
         locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
         //locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else if( bestFetchLayoutEnabled && isNetCDF ){
+        System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestFetchLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
         locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
         //locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else {
+        System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] else!" );
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 splitMetaInfo.getLocations(),
                 splitMetaInfo.getInputDataLength());
