@@ -120,7 +120,7 @@ public class SplitMetaInfoReader {
     }
     System.out.println( "[SAMAN][SplitMetaInfoReader][getFakeNodes] trueLocationsString = " + trueLocationsString );
     int divider = 2;
-    if( splitNumber%4 != 0 )
+    if( splitNumber%divider != 0 )
       return trueLocations[0];
 
     // We consider trueLocations to have 3 nodes
