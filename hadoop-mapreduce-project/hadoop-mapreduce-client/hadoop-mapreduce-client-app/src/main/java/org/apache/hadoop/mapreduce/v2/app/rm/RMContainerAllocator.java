@@ -1109,7 +1109,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         // hence this while loop would almost always have O(1) complexity
         String host = allocated.getNodeId().getHost();
         LinkedList<TaskAttemptId> list = mapsHostMapping.get(host);
-        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
+        //System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
         while (list != null && list.size() > 0) {
           if (LOG.isDebugEnabled()) {
             LOG.debug("Host matched to the request list " + host);
