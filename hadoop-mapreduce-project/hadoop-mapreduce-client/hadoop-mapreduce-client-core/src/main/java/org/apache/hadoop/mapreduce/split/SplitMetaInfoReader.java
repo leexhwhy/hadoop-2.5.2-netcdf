@@ -18,10 +18,6 @@
 
 package org.apache.hadoop.mapreduce.split;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
@@ -33,6 +29,10 @@ import org.apache.hadoop.io.WritableUtils;
 import org.apache.hadoop.mapreduce.JobID;
 import org.apache.hadoop.mapreduce.JobSubmissionFiles;
 import org.apache.hadoop.mapreduce.MRJobConfig;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A utility that reads the split meta info and creates
@@ -93,15 +93,15 @@ public class SplitMetaInfoReader {
       if( bestLayoutEnabled && isNetCDF ){
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
-        //locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
-        locations[0] = splitMetaInfo.getLocations()[0];
+        locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
+        //locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else if( bestFetchLayoutEnabled && isNetCDF ){
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestFetchLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
-        //locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
-        locations[0] = splitMetaInfo.getLocations()[0];
+        locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
+        //locations[0] = splitMetaInfo.getLocations()[0];
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else {
@@ -122,7 +122,7 @@ public class SplitMetaInfoReader {
       trueLocationsString += trueLocations[i];
     }
     System.out.println( "[SAMAN][SplitMetaInfoReader][getFakeNodes] trueLocationsString = " + trueLocationsString );
-    int divider = 1;
+    int divider = 4;
     if( splitNumber%divider != 0 )
       return trueLocations[0];
 
