@@ -122,7 +122,7 @@ public class SplitMetaInfoReader {
       trueLocationsString += trueLocations[i];
     }
     System.out.println( "[SAMAN][SplitMetaInfoReader][getFakeNodes] trueLocationsString = " + trueLocationsString );
-    int divider = 4;
+    int divider = 2;
     if( splitNumber%divider != 0 )
       return trueLocations[0];
 
