@@ -32,6 +32,7 @@ import org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId;
 import org.apache.hadoop.mapreduce.v2.api.records.TaskType;
 import org.apache.hadoop.mapreduce.v2.app.AppContext;
 import org.apache.hadoop.mapreduce.v2.app.client.ClientService;
+import org.apache.hadoop.mapreduce.v2.app.job.TaskAttempt;
 import org.apache.hadoop.mapreduce.v2.app.job.event.*;
 import org.apache.hadoop.util.StringInterner;
 import org.apache.hadoop.yarn.api.protocolrecords.AllocateResponse;
@@ -160,6 +161,9 @@ public class RMContainerAllocator extends RMContainerRequestor
     bestLayoutEnabled = conf.getBoolean(
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
+    secondBestLayoutEnabled = conf.getBoolean(
+            MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED,
+            MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED_VALUE);
     isNetcdf = conf.getBoolean(
             MRJobConfig.MR_NETCDF_ISNETCDF,
             MRJobConfig.MR_NETCDF_ISNETCDF_VALUE);
@@ -765,6 +769,7 @@ public class RMContainerAllocator extends RMContainerRequestor
   class ScheduledRequests {
 
     private boolean bestLayoutEnabled = false;
+    private boolean secondBestLayoutEnabled = false;
     private boolean isNetcdf = false;
     
     private final LinkedList<TaskAttemptId> earlierFailedMaps = 
@@ -775,6 +780,10 @@ public class RMContainerAllocator extends RMContainerRequestor
       new HashMap<String, LinkedList<TaskAttemptId>>();
     private final Map<String, LinkedList<TaskAttemptId>> mapsRackMapping = 
       new HashMap<String, LinkedList<TaskAttemptId>>();
+    // Added by saman to support second best layout
+    private final Map<String, LinkedList<TaskAttemptId>> bestLayoutHostMapping = new HashMap<String, LinkedList<TaskAttemptId>>();
+    private final Map<String, LinkedList<TaskAttemptId>> secondBestLayoutHostMapping = new HashMap<String, LinkedList<TaskAttemptId>>();
+
     @VisibleForTesting
     final Map<TaskAttemptId, ContainerRequest> maps =
       new LinkedHashMap<TaskAttemptId, ContainerRequest>();
@@ -788,6 +797,10 @@ public class RMContainerAllocator extends RMContainerRequestor
 
     public void setIsNetcdf( boolean isNetcdf ){
       this.isNetcdf = isNetcdf;
+    }
+
+    public void setSecondBestLayoutEnabled( boolean secondBestLayoutEnabled ){
+      this.secondBestLayoutEnabled = secondBestLayoutEnabled;
     }
 
     boolean remove(TaskAttemptId tId) {
@@ -825,6 +838,41 @@ public class RMContainerAllocator extends RMContainerRequestor
         request = new ContainerRequest(event, PRIORITY_FAST_FAIL_MAP);
         LOG.info("Added "+event.getAttemptID()+" to list of failed maps");
       } else {
+
+        if( secondBestLayoutEnabled ) {
+          System.out.println( "[SAMAN][RMContainerAllocator][addMap] secondBestLayout is enabled!" );
+          // Added by Saman to fill out bestLayout and secondBestLayout
+          String hostBestLayout = event.getHosts()[0];
+          LinkedList<TaskAttemptId> listBestLayout = bestLayoutHostMapping.get(hostBestLayout);
+          if (listBestLayout == null) {
+            listBestLayout = new LinkedList<TaskAttemptId>();
+            bestLayoutHostMapping.put(hostBestLayout, listBestLayout);
+          }
+          listBestLayout.add(event.getAttemptID());
+          if (LOG.isDebugEnabled()) {
+            LOG.debug("Added attempt req to best layout host " + hostBestLayout);
+          }
+
+          String hostSecondBestLayout1 = event.getHosts()[1];
+          String hostSecondBestLayout2 = event.getHosts()[2];
+          String[] tempHosts = new String[2];
+          tempHosts[0] = hostSecondBestLayout1;
+          tempHosts[1] = hostSecondBestLayout2;
+          for (String hostSecondBestLayout : tempHosts) {
+            LinkedList<TaskAttemptId> list = secondBestLayoutHostMapping.get(hostSecondBestLayout);
+            if (list == null) {
+              list = new LinkedList<TaskAttemptId>();
+              secondBestLayoutHostMapping.put(hostSecondBestLayout, list);
+            }
+            list.add(event.getAttemptID());
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Added attempt req to second best layout host " + hostSecondBestLayout);
+            }
+          }
+        }
+
+        // End added by Saman to fill out bestLayout and secondBestLayout
+
         for (String host : event.getHosts()) {
           LinkedList<TaskAttemptId> list = mapsHostMapping.get(host);
           if (list == null) {
@@ -878,14 +926,14 @@ public class RMContainerAllocator extends RMContainerRequestor
         boolean isAssignable = true;
         Priority priority = allocated.getPriority();
         int allocatedMemory = allocated.getResource().getMemory();
-        if (PRIORITY_FAST_FAIL_MAP.equals(priority) 
+        if (PRIORITY_FAST_FAIL_MAP.equals(priority)
             || PRIORITY_MAP.equals(priority)) {
           if (allocatedMemory < mapResourceRequest
               || maps.isEmpty()) {
-            LOG.info("Cannot assign container " + allocated 
+            LOG.info("Cannot assign container " + allocated
                 + " for a map as either "
                 + " container memory less than required " + mapResourceRequest
-                + " or no pending map tasks - maps.isEmpty=" 
+                + " or no pending map tasks - maps.isEmpty="
                 + maps.isEmpty()); 
             isAssignable = false; 
           }
@@ -1098,8 +1146,81 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     @SuppressWarnings("unchecked")
     private void assignMapsWithLocality(List<Container> allocatedContainers) {
-      // try to assign to all nodes first to match node local
+      // try to assign to all nodes first to match best layout node local
       Iterator<Container> it = allocatedContainers.iterator();
+      System.out.println( "[SAMAN][RMcontainerAllocator][assignMapsWithLocality] try to assign to all nodes first to match best layout node local" );
+      while(it.hasNext() && maps.size() > 0){
+        Container allocated = it.next();
+        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] allocated:id="+allocated.getId().getId()+",http="+allocated.getNodeHttpAddress() );
+        Priority priority = allocated.getPriority();
+        assert PRIORITY_MAP.equals(priority);
+        // "if (maps.containsKey(tId))" below should be almost always true.
+        // hence this while loop would almost always have O(1) complexity
+        String host = allocated.getNodeId().getHost();
+        LinkedList<TaskAttemptId> list = bestLayoutHostMapping.get(host);
+        //System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
+        while (list != null && list.size() > 0) {
+          if (LOG.isDebugEnabled()) {
+            LOG.debug("Host matched to the request list " + host);
+          }
+          TaskAttemptId tId = list.removeFirst();
+          if (maps.containsKey(tId)) {
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
+            ContainerRequest assigned = maps.remove(tId);
+            containerAssigned(allocated, assigned);
+            it.remove();
+            JobCounterUpdateEvent jce =
+                    new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+            jce.addCounterUpdate(JobCounter.DATA_LOCAL_MAPS, 1);
+            eventHandler.handle(jce);
+            hostLocalAssigned++;
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Assigned based on host match " + host);
+            }
+            break;
+          }
+        }
+      }
+
+      // try to assign to all nodes first to match second best layout node local
+      System.out.println( "[SAMAN][RMcontainerAllocator][assignMapsWithLocality] try to assign to all nodes first to match second best layout node local" );
+      it = allocatedContainers.iterator();
+      while(it.hasNext() && maps.size() > 0){
+        Container allocated = it.next();
+        System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] allocated:id="+allocated.getId().getId()+",http="+allocated.getNodeHttpAddress() );
+        Priority priority = allocated.getPriority();
+        assert PRIORITY_MAP.equals(priority);
+        // "if (maps.containsKey(tId))" below should be almost always true.
+        // hence this while loop would almost always have O(1) complexity
+        String host = allocated.getNodeId().getHost();
+        LinkedList<TaskAttemptId> list = secondBestLayoutHostMapping.get(host);
+        //System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
+        while (list != null && list.size() > 0) {
+          if (LOG.isDebugEnabled()) {
+            LOG.debug("Host matched to the request list " + host);
+          }
+          TaskAttemptId tId = list.removeFirst();
+          if (maps.containsKey(tId)) {
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
+            ContainerRequest assigned = maps.remove(tId);
+            containerAssigned(allocated, assigned);
+            it.remove();
+            JobCounterUpdateEvent jce =
+                    new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+            jce.addCounterUpdate(JobCounter.DATA_LOCAL_MAPS, 1);
+            eventHandler.handle(jce);
+            hostLocalAssigned++;
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Assigned based on host match " + host);
+            }
+            break;
+          }
+        }
+      }
+
+      // try to assign to all nodes first to match node local
+      System.out.println( "[SAMAN][RMcontainerAllocator][assignMapsWithLocality] try to assign to all nodes first to match node local" );
+      it = allocatedContainers.iterator();
       while(it.hasNext() && maps.size() > 0){
         Container allocated = it.next();
         System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] allocated:id="+allocated.getId().getId()+",http="+allocated.getNodeHttpAddress() );
@@ -1121,7 +1242,7 @@ public class RMContainerAllocator extends RMContainerRequestor
             containerAssigned(allocated, assigned);
             it.remove();
             JobCounterUpdateEvent jce =
-              new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+                    new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
             jce.addCounterUpdate(JobCounter.DATA_LOCAL_MAPS, 1);
             eventHandler.handle(jce);
             hostLocalAssigned++;
@@ -1133,56 +1254,57 @@ public class RMContainerAllocator extends RMContainerRequestor
         }
       }
 
-        // try to match all rack local
-        it = allocatedContainers.iterator();
-        while (it.hasNext() && maps.size() > 0) {
-          Container allocated = it.next();
-          Priority priority = allocated.getPriority();
-          assert PRIORITY_MAP.equals(priority);
-          // "if (maps.containsKey(tId))" below should be almost always true.
-          // hence this while loop would almost always have O(1) complexity
-          String host = allocated.getNodeId().getHost();
-          String rack = RackResolver.resolve(host).getNetworkLocation();
-          LinkedList<TaskAttemptId> list = mapsRackMapping.get(rack);
-          while (list != null && list.size() > 0) {
-            TaskAttemptId tId = list.removeFirst();
-            if (maps.containsKey(tId)) {
-              System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] rack local assigned!");
-              ContainerRequest assigned = maps.remove(tId);
-              containerAssigned(allocated, assigned);
-              it.remove();
-              JobCounterUpdateEvent jce =
-                      new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
-              jce.addCounterUpdate(JobCounter.RACK_LOCAL_MAPS, 1);
-              eventHandler.handle(jce);
-              rackLocalAssigned++;
-              if (LOG.isDebugEnabled()) {
-                LOG.debug("Assigned based on rack match " + rack);
-              }
-              break;
+      // try to match all rack local
+      System.out.println( "[SAMAN][RMcontainerAllocator][assignMapsWithLocality] try to match all rack local" );
+      it = allocatedContainers.iterator();
+      while (it.hasNext() && maps.size() > 0) {
+        Container allocated = it.next();
+        Priority priority = allocated.getPriority();
+        assert PRIORITY_MAP.equals(priority);
+        // "if (maps.containsKey(tId))" below should be almost always true.
+        // hence this while loop would almost always have O(1) complexity
+        String host = allocated.getNodeId().getHost();
+        String rack = RackResolver.resolve(host).getNetworkLocation();
+        LinkedList<TaskAttemptId> list = mapsRackMapping.get(rack);
+        while (list != null && list.size() > 0) {
+          TaskAttemptId tId = list.removeFirst();
+          if (maps.containsKey(tId)) {
+            System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] rack local assigned!");
+            ContainerRequest assigned = maps.remove(tId);
+            containerAssigned(allocated, assigned);
+            it.remove();
+            JobCounterUpdateEvent jce =
+                    new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+            jce.addCounterUpdate(JobCounter.RACK_LOCAL_MAPS, 1);
+            eventHandler.handle(jce);
+            rackLocalAssigned++;
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Assigned based on rack match " + rack);
             }
+            break;
           }
         }
+      }
 
-        // assign remaining
-        it = allocatedContainers.iterator();
-        while (it.hasNext() && maps.size() > 0) {
-          Container allocated = it.next();
-          Priority priority = allocated.getPriority();
-          assert PRIORITY_MAP.equals(priority);
-          TaskAttemptId tId = maps.keySet().iterator().next();
-          ContainerRequest assigned = maps.remove(tId);
-          containerAssigned(allocated, assigned);
-          System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] remaining assigned!");
-          it.remove();
-          JobCounterUpdateEvent jce =
-                  new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
-          jce.addCounterUpdate(JobCounter.OTHER_LOCAL_MAPS, 1);
-          eventHandler.handle(jce);
-          if (LOG.isDebugEnabled()) {
-            LOG.debug("Assigned based on * match");
-          }
+      // assign remaining
+      it = allocatedContainers.iterator();
+      while (it.hasNext() && maps.size() > 0) {
+        Container allocated = it.next();
+        Priority priority = allocated.getPriority();
+        assert PRIORITY_MAP.equals(priority);
+        TaskAttemptId tId = maps.keySet().iterator().next();
+        ContainerRequest assigned = maps.remove(tId);
+        containerAssigned(allocated, assigned);
+        System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] remaining assigned!");
+        it.remove();
+        JobCounterUpdateEvent jce =
+                new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+        jce.addCounterUpdate(JobCounter.OTHER_LOCAL_MAPS, 1);
+        eventHandler.handle(jce);
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("Assigned based on * match");
         }
+      }
     }
   }
 

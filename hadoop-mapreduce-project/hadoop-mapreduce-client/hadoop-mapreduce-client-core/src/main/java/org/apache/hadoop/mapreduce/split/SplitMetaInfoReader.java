@@ -51,6 +51,8 @@ public class SplitMetaInfoReader {
             MRJobConfig.MR_NETCDF_BEST_LAYOUT_ENABLED_VALUE);
     boolean bestFetchLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_BESTFETCH_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_BESTFETCH_LAYOUT_ENABLED_VALUE);
+    boolean secondBestLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED,
+            MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED_VALUE);
 
     long maxMetaInfoSize = conf.getLong(MRJobConfig.SPLIT_METAINFO_MAXSIZE,
         MRJobConfig.DEFAULT_SPLIT_METAINFO_MAXSIZE);
@@ -90,7 +92,13 @@ public class SplitMetaInfoReader {
       // read forcefully from a remote node
       // We would consider values 1/4, 1/2, and full
 
-      if( bestLayoutEnabled && isNetCDF ){
+      if( secondBestLayoutEnabled && isNetCDF ){
+        System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] secondBestLayoutEnabled && isNetCDF" );
+        allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
+                splitMetaInfo.getLocations(),
+                splitMetaInfo.getInputDataLength());
+      }
+      else if( bestLayoutEnabled && isNetCDF ){
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
         //locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);

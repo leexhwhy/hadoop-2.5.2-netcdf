@@ -767,7 +767,8 @@ public interface MRJobConfig {
   public static final String MR_NETCDF_BESTFETCH_LAYOUT_ENABLED = "mapreduce.netcdf.bestfetchlayout.enabled";
   public static final boolean MR_NETCDF_BESTFETCH_LAYOUT_ENABLED_VALUE = false;
 
-  public static final String MR_NETCDF_SECONDBEST_LAYOUT_ENABLED = "mapreduce.netcdf.secondbestlayout.enabled";
-  public static final boolean MR_NETCDF_SECONDBEST_LAYOUT_ENABLED_VALUE = false;
+  public static final String MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED = "mapreduce.netcdf.secondbestlayout.enabled";
+  public static final boolean MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED_VALUE = false;
+
 
 }
