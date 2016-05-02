@@ -32,7 +32,6 @@ import org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId;
 import org.apache.hadoop.mapreduce.v2.api.records.TaskType;
 import org.apache.hadoop.mapreduce.v2.app.AppContext;
 import org.apache.hadoop.mapreduce.v2.app.client.ClientService;
-import org.apache.hadoop.mapreduce.v2.app.job.TaskAttempt;
 import org.apache.hadoop.mapreduce.v2.app.job.event.*;
 import org.apache.hadoop.util.StringInterner;
 import org.apache.hadoop.yarn.api.protocolrecords.AllocateResponse;
@@ -169,6 +168,7 @@ public class RMContainerAllocator extends RMContainerRequestor
             MRJobConfig.MR_NETCDF_ISNETCDF_VALUE);
     scheduledRequests.setBestLayoutEnabled( bestLayoutEnabled );
     scheduledRequests.setIsNetcdf( isNetcdf );
+    scheduledRequests.setSecondBestLayoutEnabled(secondBestLayoutEnabled);
     RackResolver.init(conf);
     retryInterval = getConfig().getLong(MRJobConfig.MR_AM_TO_RM_WAIT_INTERVAL_MS,
                                 MRJobConfig.DEFAULT_MR_AM_TO_RM_WAIT_INTERVAL_MS);
@@ -840,6 +840,7 @@ public class RMContainerAllocator extends RMContainerRequestor
       } else {
 
         if( secondBestLayoutEnabled ) {
+
           System.out.println( "[SAMAN][RMContainerAllocator][addMap] secondBestLayout is enabled!" );
           // Added by Saman to fill out bestLayout and secondBestLayout
           String hostBestLayout = event.getHosts()[0];
