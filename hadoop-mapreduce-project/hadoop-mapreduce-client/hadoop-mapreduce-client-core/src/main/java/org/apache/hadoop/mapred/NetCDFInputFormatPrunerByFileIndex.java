@@ -211,11 +211,11 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                 if( path.getName().contains("lat") || path.getName().contains("lon") )
                     continue;
             }else if( queryType == QueryType.LAT ){
-                if( !path.getName().contains("lat") )
-                    continue;
+                //if( !path.getName().contains("lat") )
+                //    continue;
             }else if( queryType == QueryType.LON ){
-                if( !path.getName().contains("lon") )
-                    continue;
+                //if( !path.getName().contains("lon") )
+                //    continue;
             }
             if( queryType == QueryType.TIME ){
                 String[] parts = path.getName().split("-");
