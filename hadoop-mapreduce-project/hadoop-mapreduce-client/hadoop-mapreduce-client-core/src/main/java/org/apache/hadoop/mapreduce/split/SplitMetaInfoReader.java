@@ -42,6 +42,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @InterfaceStability.Unstable
 public class SplitMetaInfoReader {
 
+  public enum QueryType { TIME, LAT, LON, NOLIMIT }
+
   public static final String HIVE_QUERY = "hadoop.netcdf.hivequery.raw";
   
   public static JobSplit.TaskSplitMetaInfo[] readSplitMetaInfo(
@@ -55,8 +57,20 @@ public class SplitMetaInfoReader {
             MRJobConfig.MR_NETCDF_BESTFETCH_LAYOUT_ENABLED_VALUE);
     boolean secondBestLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED_VALUE);
+    // Added all by saman
     String hive_query = conf.get( HIVE_QUERY, "KosSher" );
-    System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] query is: " + hive_query );
+    QueryType queryType = QueryType.NOLIMIT;
+    if( hive_query.contains("time") || hive_query.contains("TIME") ){
+      queryType = QueryType.TIME;
+      System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] query type is time!" );
+    }else if( hive_query.contains("lat") || hive_query.contains("LAT") ){
+      queryType = QueryType.LAT;
+      System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] query type is lat!" );
+    }else if( hive_query.contains("lon") || hive_query.contains("LON") ){
+      queryType = QueryType.LON;
+      System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] query type is lon!" );
+    }
+
     long maxMetaInfoSize = conf.getLong(MRJobConfig.SPLIT_METAINFO_MAXSIZE,
         MRJobConfig.DEFAULT_SPLIT_METAINFO_MAXSIZE);
     Path metaSplitFile = JobSubmissionFiles.getJobSplitMetaFile(jobSubmitDir);
@@ -96,6 +110,20 @@ public class SplitMetaInfoReader {
       // We would consider values 1/4, 1/2, and full
 
       if( secondBestLayoutEnabled && isNetCDF ){
+        String[] reorderedLocations = new String[3];
+        if( queryType == QueryType.NOLIMIT || queryType == QueryType.TIME ) {
+          reorderedLocations[0] = splitMetaInfo.getLocations()[0];
+          reorderedLocations[1] = splitMetaInfo.getLocations()[1];
+          reorderedLocations[2] = splitMetaInfo.getLocations()[2];
+        }else if( queryType == QueryType.LAT ){
+          reorderedLocations[0] = splitMetaInfo.getLocations()[1];
+          reorderedLocations[1] = splitMetaInfo.getLocations()[0];
+          reorderedLocations[2] = splitMetaInfo.getLocations()[2];
+        }else if( queryType == QueryType.LON ){
+          reorderedLocations[0] = splitMetaInfo.getLocations()[2];
+          reorderedLocations[1] = splitMetaInfo.getLocations()[0];
+          reorderedLocations[2] = splitMetaInfo.getLocations()[1];
+        }
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] secondBestLayoutEnabled && isNetCDF" );
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 splitMetaInfo.getLocations(),
@@ -105,14 +133,26 @@ public class SplitMetaInfoReader {
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
         //locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
-        locations[0] = splitMetaInfo.getLocations()[0];
+        if( queryType == QueryType.NOLIMIT || queryType == QueryType.TIME ) {
+          locations[0] = splitMetaInfo.getLocations()[0];
+        }else if( queryType == QueryType.LAT ){
+          locations[0] = splitMetaInfo.getLocations()[1];
+        }else if( queryType == QueryType.LON ){
+          locations[0] = splitMetaInfo.getLocations()[2];
+        }
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else if( bestFetchLayoutEnabled && isNetCDF ){
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestFetchLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
         //locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
-        locations[0] = splitMetaInfo.getLocations()[0];
+        if( queryType == QueryType.NOLIMIT || queryType == QueryType.TIME ) {
+          locations[0] = splitMetaInfo.getLocations()[0];
+        }else if( queryType == QueryType.LAT ){
+          locations[0] = splitMetaInfo.getLocations()[1];
+        }else if( queryType == QueryType.LON ){
+          locations[0] = splitMetaInfo.getLocations()[2];
+        }
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
                 locations, splitMetaInfo.getInputDataLength());
       }else {
