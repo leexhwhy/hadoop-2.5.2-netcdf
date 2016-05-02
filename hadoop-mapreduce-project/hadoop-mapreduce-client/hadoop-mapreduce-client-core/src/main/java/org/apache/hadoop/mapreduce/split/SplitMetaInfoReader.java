@@ -41,6 +41,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @InterfaceAudience.Private
 @InterfaceStability.Unstable
 public class SplitMetaInfoReader {
+
+  public static final String HIVE_QUERY = "hadoop.netcdf.hivequery.raw";
   
   public static JobSplit.TaskSplitMetaInfo[] readSplitMetaInfo(
       JobID jobId, FileSystem fs, Configuration conf, Path jobSubmitDir) 
@@ -53,7 +55,8 @@ public class SplitMetaInfoReader {
             MRJobConfig.MR_NETCDF_BESTFETCH_LAYOUT_ENABLED_VALUE);
     boolean secondBestLayoutEnabled = conf.getBoolean(MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED,
             MRJobConfig.MR_NETCDF_SECOND_BEST_LAYOUT_ENABLED_VALUE);
-
+    String hive_query = conf.get( HIVE_QUERY, "KosSher" );
+    System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] query is: " + hive_query );
     long maxMetaInfoSize = conf.getLong(MRJobConfig.SPLIT_METAINFO_MAXSIZE,
         MRJobConfig.DEFAULT_SPLIT_METAINFO_MAXSIZE);
     Path metaSplitFile = JobSubmissionFiles.getJobSplitMetaFile(jobSubmitDir);
