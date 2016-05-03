@@ -300,7 +300,10 @@ class BlockSender implements java.io.Closeable {
       }
       chunkSize = size;
       checksum = csum;
-      checksumSize = checksum.getChecksumSize();
+      if( datanode.getDnConf().verifyChecksum == false )
+        checksumSize = 0;
+      else
+        checksumSize = checksum.getChecksumSize();
       length = length < 0 ? replicaVisibleLength : length;
 
       // end is either last byte on disk or the length for which we have a 
