@@ -175,7 +175,7 @@ class BlockSender implements java.io.Closeable {
       this.block = block;
       this.corruptChecksumOk = corruptChecksumOk;
       if( datanode.getDnConf().verifyChecksum == false )
-        this.verifyChecksum = this.datanode.getDnConf().verifyChecksum;
+        this.verifyChecksum = datanode.getDnConf().verifyChecksum;
       else
         this.verifyChecksum = verifyChecksum;
       this.clientTraceFmt = clientTraceFmt;
