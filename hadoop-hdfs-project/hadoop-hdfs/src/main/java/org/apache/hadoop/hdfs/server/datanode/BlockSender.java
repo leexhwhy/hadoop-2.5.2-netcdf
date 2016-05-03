@@ -17,21 +17,8 @@
  */
 package org.apache.hadoop.hdfs.server.datanode;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.Arrays;
-
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 import org.apache.commons.logging.Log;
 import org.apache.hadoop.fs.ChecksumException;
 import org.apache.hadoop.hdfs.protocol.ExtendedBlock;
@@ -45,8 +32,12 @@ import org.apache.hadoop.io.nativeio.NativeIO;
 import org.apache.hadoop.net.SocketOutputStream;
 import org.apache.hadoop.util.DataChecksum;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
+import java.io.*;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.Arrays;
 
 /**
  * Reads a block from the disk and sends it to a recipient.
@@ -183,8 +174,12 @@ class BlockSender implements java.io.Closeable {
     try {
       this.block = block;
       this.corruptChecksumOk = corruptChecksumOk;
-      this.verifyChecksum = verifyChecksum;
+      if( this.datanode.getDnConf().verifyChecksum )
+        this.verifyChecksum = this.datanode.getDnConf().verifyChecksum;
+      else
+        this.verifyChecksum = verifyChecksum;
       this.clientTraceFmt = clientTraceFmt;
+
 
       /*
        * If the client asked for the cache to be dropped behind all reads,
