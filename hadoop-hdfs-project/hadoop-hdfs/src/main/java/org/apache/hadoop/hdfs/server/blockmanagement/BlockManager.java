@@ -254,6 +254,9 @@ public class BlockManager {
   /** Check whether name system is running before terminating */
   private boolean checkNSRunning = true;
 
+  private boolean ignoreSizeMismatch = false;
+
+
   public Iterable<BlockInfo> getBlocksMapInfos(){
       return this.blocksMap.getBlocks();
   }
@@ -340,6 +343,9 @@ public class BlockManager {
     this.numBlocksPerIteration = conf.getInt(
         DFSConfigKeys.DFS_BLOCK_MISREPLICATION_PROCESSING_LIMIT,
         DFSConfigKeys.DFS_BLOCK_MISREPLICATION_PROCESSING_LIMIT_DEFAULT);
+
+    this.ignoreSizeMismatch = conf.getBoolean( DFSConfigKeys.DFS_NETCDF_IGNORE_SIZEMISMATCH,
+            false);
     
     LOG.info("defaultReplication         = " + defaultReplication);
     LOG.info("maxReplication             = " + maxReplication);
@@ -2192,6 +2198,7 @@ public class BlockManager {
               + " does not match genstamp in block map "
               + storedBlock.getGenerationStamp(), Reason.GENSTAMP_MISMATCH);
         } else if (storedBlock.getNumBytes() != reported.getNumBytes()) {
+          if( ignoreSizeMismatch ) return null;
           return new BlockToMarkCorrupt(storedBlock,
               "block is " + ucState + " and reported length " +
               reported.getNumBytes() + " does not match " +
