@@ -241,9 +241,11 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
             FileSystem fs = path.getFileSystem(job);
             long length = file.getLen();
             BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
+            String[] hosts = new String[3];
             for( int i = 0; i < blkLocations.length; i++ ){
                 for( int j = 0; j < blkLocations[i].getHosts().length; j++ ) {
                     System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] block location " + blkLocations[i].getHosts()[j]);
+                    hosts[j] = blkLocations[i].getHosts()[j];
                 }
             }
             if ((length != 0) && isSplitable(fs, path)) {
@@ -297,7 +299,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                     //        ", endChunk="+endChunk+", blockNo="+blockNo);
                     //System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
                     //        ", endChunk="+endChunk+", blockNo="+blockNo);
-                    String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
+                    //String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
+                    String[] splitHosts = hosts;
                     FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
                     split.getFileSplit().startChunk = thisChunk;
                     split.getFileSplit().endChunk = endChunk;
