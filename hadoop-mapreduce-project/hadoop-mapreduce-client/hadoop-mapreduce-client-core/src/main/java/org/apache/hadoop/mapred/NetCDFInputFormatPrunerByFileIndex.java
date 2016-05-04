@@ -134,8 +134,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
         {
             LOG.info( "Bad... "+ e );
-            System.out.println("Bad... "+ e);
-            throw e;
+            System.out.println("Bad... \n" + e.getStackTrace());
 
         }
         try{if (ncFile!=null)ncFile.close();}catch (Exception e) { LOG.info( "Bad2... "+e ); System.out.println("Bad2... "+e);}
@@ -145,7 +144,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
     @Override
     public InputSplit[] getSplits(JobConf job, int numSplits)
-            throws IOException, Exception {
+            throws IOException {
         FileStatus[] files = listStatus(job);
 
         LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
