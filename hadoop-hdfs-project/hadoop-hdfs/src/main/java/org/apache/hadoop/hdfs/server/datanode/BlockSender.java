@@ -174,9 +174,11 @@ class BlockSender implements java.io.Closeable {
     try {
       this.block = block;
       this.corruptChecksumOk = corruptChecksumOk;
+      /*
       if( datanode.getDnConf().verifyChecksum == false )
         this.verifyChecksum = datanode.getDnConf().verifyChecksum;
       else
+      */
         this.verifyChecksum = verifyChecksum;
       this.clientTraceFmt = clientTraceFmt;
 
@@ -300,9 +302,11 @@ class BlockSender implements java.io.Closeable {
       }
       chunkSize = size;
       checksum = csum;
+      /*
       if( datanode.getDnConf().verifyChecksum == false )
         checksumSize = 0;
       else
+      */
         checksumSize = checksum.getChecksumSize();
       length = length < 0 ? replicaVisibleLength : length;
 

@@ -87,7 +87,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
     private long blockSize = 128 * 1024 * 1024;
 
-    private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job)
+    private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job) throws Exception
     {
         //traverse header and return chunk start and size arrays
         NetCDFInfo result = new NetCDFInfo();//library call
@@ -135,6 +135,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
         {
             LOG.info( "Bad... "+ e );
             System.out.println("Bad... "+ e);
+            throw e;
+
         }
         try{if (ncFile!=null)ncFile.close();}catch (Exception e) { LOG.info( "Bad2... "+e ); System.out.println("Bad2... "+e);}
 
@@ -143,7 +145,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
     @Override
     public InputSplit[] getSplits(JobConf job, int numSplits)
-            throws IOException {
+            throws IOException, Exception {
         FileStatus[] files = listStatus(job);
 
         LOG.info("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] hive query is: " + job.get(HIVE_QUERY, "Kossher"));
