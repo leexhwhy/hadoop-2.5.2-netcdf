@@ -87,7 +87,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
     private long blockSize = 128 * 1024 * 1024;
 
-    private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job) throws Exception
+    private NetCDFInfo getNetCDFInfo(Path file, FileSystem fs, JobConf job)
     {
         //traverse header and return chunk start and size arrays
         NetCDFInfo result = new NetCDFInfo();//library call
