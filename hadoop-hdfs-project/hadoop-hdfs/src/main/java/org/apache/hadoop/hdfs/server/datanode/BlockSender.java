@@ -267,7 +267,7 @@ class BlockSender implements java.io.Closeable {
        * False, False: throws IOException file not found
        */
       DataChecksum csum = null;
-      if (verifyChecksum || this.sendChecksum) {
+      if (this.verifyChecksum || this.sendChecksum) {
         final InputStream metaIn = datanode.data.getMetaDataInputStream(block);
         if (!corruptChecksumOk || metaIn != null) {
           if (metaIn == null) {
