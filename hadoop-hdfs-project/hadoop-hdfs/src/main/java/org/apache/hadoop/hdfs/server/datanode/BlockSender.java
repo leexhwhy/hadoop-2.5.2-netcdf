@@ -123,6 +123,7 @@ class BlockSender implements java.io.Closeable {
   private boolean sentEntireByteRange;
   /** When true, verify checksum while reading from checksum file */
   private final boolean verifyChecksum;
+  private final boolean sendChecksum;
   /** Format used to print client trace log messages */
   private final String clientTraceFmt;
   private volatile ChunkChecksum lastChunkChecksum = null;
@@ -176,9 +177,11 @@ class BlockSender implements java.io.Closeable {
 
       if( datanode.getDnConf().verifyChecksum == false ) {
           this.verifyChecksum = datanode.getDnConf().verifyChecksum;
+          this.sendChecksum = false;
       }
       else {
           this.verifyChecksum = verifyChecksum;
+          this.sendChecksum = sendChecksum;
       }
 
       if( datanode.getDnConf().corruptedok == true ){
@@ -264,7 +267,7 @@ class BlockSender implements java.io.Closeable {
        * False, False: throws IOException file not found
        */
       DataChecksum csum = null;
-      if (verifyChecksum || sendChecksum) {
+      if (verifyChecksum || this.sendChecksum) {
         final InputStream metaIn = datanode.data.getMetaDataInputStream(block);
         if (!corruptChecksumOk || metaIn != null) {
           if (metaIn == null) {
