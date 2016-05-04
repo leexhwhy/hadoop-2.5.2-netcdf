@@ -126,7 +126,7 @@ public class SplitMetaInfoReader {
         }
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] secondBestLayoutEnabled && isNetCDF" );
         allSplitMetaInfo[i] = new JobSplit.TaskSplitMetaInfo(splitIndex,
-                splitMetaInfo.getLocations(),
+                reorderedLocations,
                 splitMetaInfo.getInputDataLength());
       }
       else if( bestLayoutEnabled && isNetCDF ){

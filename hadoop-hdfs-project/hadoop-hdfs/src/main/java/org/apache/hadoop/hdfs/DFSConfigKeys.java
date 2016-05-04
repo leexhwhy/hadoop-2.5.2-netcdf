@@ -676,4 +676,6 @@ public class DFSConfigKeys extends CommonConfigurationKeys {
 
    public static final String DFS_NETCDF_IGNORE_SIZEMISMATCH = "dfs.netcdf.ignore.sizemismatch";
 
+   public static final String DFS_NETCDF_CHECKSUM_CORRUPTEDOK = "dfs.netcdf.checksum.corruptedok";
+
 }
