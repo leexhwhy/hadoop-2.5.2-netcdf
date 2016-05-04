@@ -134,7 +134,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
 
         {
             LOG.info( "Bad... "+ e );
-            System.out.println("Bad... \n" + e.getStackTrace());
+            e.printStackTrace();
+            System.out.println("Bad... \n" + e.getStackTrace().toString();
 
         }
         try{if (ncFile!=null)ncFile.close();}catch (Exception e) { LOG.info( "Bad2... "+e ); System.out.println("Bad2... "+e);}
