@@ -173,13 +173,15 @@ class BlockSender implements java.io.Closeable {
       throws IOException {
     try {
       this.block = block;
-      this.corruptChecksumOk = corruptChecksumOk;
-      /*
-      if( datanode.getDnConf().verifyChecksum == false )
-        this.verifyChecksum = datanode.getDnConf().verifyChecksum;
-      else
-      */
-        this.verifyChecksum = verifyChecksum;
+
+      if( datanode.getDnConf().verifyChecksum == false ) {
+          this.verifyChecksum = datanode.getDnConf().verifyChecksum;
+          this.corruptChecksumOk = true;
+      }
+      else {
+          this.verifyChecksum = verifyChecksum;
+          this.corruptChecksumOk = corruptChecksumOk;
+      }
       this.clientTraceFmt = clientTraceFmt;
 
 
