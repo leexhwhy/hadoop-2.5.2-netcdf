@@ -514,6 +514,10 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
 
   private final FSImage fsImage;
 
+
+  /** added by saman for netcdf case */
+  private final boolean isNetcdf;
+
   /**
    * Notify that loading of this FSDirectory is complete, and
    * it is imageLoaded for use
@@ -836,6 +840,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
         auditLoggers.get(0) instanceof DefaultAuditLogger;
       this.retryCache = ignoreRetryCache ? null : initRetryCache(conf);
       this.nnConf = new NNConf(conf);
+      this.isNetcdf = conf.getBoolean(DFSConfigKeys.DFS_JOB_IS_NETCDF, false);
     } catch(IOException e) {
       LOG.error(getClass().getSimpleName() + " initialization failed.", e);
       close();
@@ -1686,35 +1691,38 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
 
     Iterator itr = blockManager.getBlocksMapInfos().iterator();
     int count = 1;
-    while( itr.hasNext() ){
-        BlockInfo bi = (BlockInfo)itr.next();
-        //DFSClient.LOG.info("[SAMAN] FSNameSystem.getBlockLocations, blockinfo #"+count+", isModifiedBlock="+bi.getIsModifiedBlock());
-        count++;
+    while (itr.hasNext()) {
+      BlockInfo bi = (BlockInfo) itr.next();
+      //DFSClient.LOG.info("[SAMAN] FSNameSystem.getBlockLocations, blockinfo #"+count+", isModifiedBlock="+bi.getIsModifiedBlock());
+      count++;
     }
 
     LocatedBlocks blocks = getBlockLocations(src, offset, length, true, true,
-        true);
+            true);
 
-    Iterator<LocatedBlock> itrTemp =  blocks.getLocatedBlocks().iterator();
-    while( itrTemp.hasNext() ){
-      LocatedBlock locatedBlock = (LocatedBlock)itrTemp.next();
-      for( int i = 0; i < locatedBlock.getLocations().length; i++ ){
-        System.out.println("[SAMAN][FSNameSystem][getBlockLocations] src " + src + " location = " + locatedBlock.getLocations()[i].getHostName() );
+    Iterator<LocatedBlock> itrTemp = blocks.getLocatedBlocks().iterator();
+    while (itrTemp.hasNext()) {
+      LocatedBlock locatedBlock = (LocatedBlock) itrTemp.next();
+      for (int i = 0; i < locatedBlock.getLocations().length; i++) {
+        System.out.println("[SAMAN][FSNameSystem][getBlockLocations] src " + src + " location = " + locatedBlock.getLocations()[i].getHostName());
       }
     }
 
-    if (blocks != null) {
-      blockManager.getDatanodeManager().sortLocatedBlocks(
-          clientMachine, blocks.getLocatedBlocks());
-      
-      // lastBlock is not part of getLocatedBlocks(), might need to sort it too
-      LocatedBlock lastBlock = blocks.getLastLocatedBlock();
-      if (lastBlock != null) {
-        ArrayList<LocatedBlock> lastBlockList =
-            Lists.newArrayListWithCapacity(1);
-        lastBlockList.add(lastBlock);
+
+    if (!this.isNetcdf){
+      if (blocks != null) {
         blockManager.getDatanodeManager().sortLocatedBlocks(
-                              clientMachine, lastBlockList);
+                clientMachine, blocks.getLocatedBlocks());
+
+        // lastBlock is not part of getLocatedBlocks(), might need to sort it too
+        LocatedBlock lastBlock = blocks.getLastLocatedBlock();
+        if (lastBlock != null) {
+          ArrayList<LocatedBlock> lastBlockList =
+                  Lists.newArrayListWithCapacity(1);
+          lastBlockList.add(lastBlock);
+          blockManager.getDatanodeManager().sortLocatedBlocks(
+                  clientMachine, lastBlockList);
+        }
       }
     }
     return blocks;
