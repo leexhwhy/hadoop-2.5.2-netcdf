@@ -1710,6 +1710,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
 
 
     if (!this.isNetcdf){
+      System.out.println( "[SAMAN][FSNameSystem][getBlockLocations] gonna reorder the blocks!" );
       if (blocks != null) {
         blockManager.getDatanodeManager().sortLocatedBlocks(
                 clientMachine, blocks.getLocatedBlocks());
