@@ -2964,6 +2964,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
     getEditLog().logSync();
 
     // Return located block
+
     return makeLocatedBlock(newBlock, targets, offset);
   }
 
@@ -3372,6 +3373,9 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
           throws IOException {
     assert hasWriteLock();
     BlockInfo b = dir.addBlock(src, inodes, newBlock, targets, isModifiedBlock);
+    for( int i = 0; i < targets.length; i++ ){
+      System.out.println( "[SAMAN][FSNameSystem][saveAllocatedBlock] target = " + targets[i].getDatanodeDescriptor().getHostName() );
+    }
     //DFSClient.LOG.info("[SAMAN] FSNameystem.saveAllocatedBlock, isModifiedBlock="+b.getIsModifiedBlock());
     NameNode.stateChangeLog.info("BLOCK* allocateBlock: " + src + ". "
             + getBlockPoolId() + " " + b);

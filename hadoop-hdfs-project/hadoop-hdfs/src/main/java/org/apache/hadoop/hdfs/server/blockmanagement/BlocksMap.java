@@ -117,7 +117,7 @@ class BlocksMap {
     BlockInfo info = blocks.get(b);
     if (info != b){
       //NameNode.LOG.info( "[SAMAN] BlocksMap.addBlockCollection => info != b");
-      //System.out.println( "[SAMAN] BlocksMap.addBlockCollection => info != b");
+      System.out.println( "[SAMAN] BlocksMap.addBlockCollection => info != b");
       info = b;
       blocks.put(info);
       Iterator itr = blocks.iterator();

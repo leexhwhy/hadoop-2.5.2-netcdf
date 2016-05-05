@@ -390,6 +390,10 @@ public class FSDirectory implements Closeable {
           getBlockManager().addBlockCollection(blockInfo, fileINode, isModifiedBlock);
           fileINode.addBlock(blockInfo);
 
+          for( int i = 0; i < blockInfo.getExpectedStorageLocations().length; i++ ){
+              System.out.println( "[SAMAN][FSDirectory][addBlock] location = " + blockInfo.getExpectedStorageLocations()[i].getDatanodeDescriptor().getHostName() );
+          }
+
           if(NameNode.stateChangeLog.isDebugEnabled()) {
               NameNode.stateChangeLog.debug("DIR* FSDirectory.addBlock: "
                       + path + " with " + block
