@@ -607,6 +607,14 @@ class NameNodeRpcServer implements NamenodeProtocols {
         : Arrays.asList(favoredNodes);
     LocatedBlock locatedBlock = namesystem.getAdditionalBlock(src, fileId,
         clientName, previous, excludedNodesSet, favoredNodesList);
+
+    for( int i = 0; i < locatedBlock.getCachedLocations().length; i++ ){
+        System.out.println( "[SAMAN][NameNodeRpcServer][addBlock] cached locations is: " + locatedBlock.getCachedLocations()[i].getName() )
+    }
+
+    for( int i = 0; i < locatedBlock.getLocations().length; i++ ){
+        System.out.println( "[SAMAN][NameNodeRpcServer][addBlock] location is: " + locatedBlock.getLocations()[i].getName() );
+    }
     if (locatedBlock != null)
       metrics.incrAddBlockOps();
     return locatedBlock;

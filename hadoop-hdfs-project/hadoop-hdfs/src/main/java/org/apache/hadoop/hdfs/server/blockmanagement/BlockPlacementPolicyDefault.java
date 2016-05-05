@@ -17,10 +17,7 @@
  */
 package org.apache.hadoop.hdfs.server.blockmanagement;
 
-import static org.apache.hadoop.util.Time.now;
-
-import java.util.*;
-
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hdfs.DFSConfigKeys;
@@ -36,7 +33,9 @@ import org.apache.hadoop.net.NetworkTopology;
 import org.apache.hadoop.net.Node;
 import org.apache.hadoop.net.NodeBase;
 
-import com.google.common.annotations.VisibleForTesting;
+import java.util.*;
+
+import static org.apache.hadoop.util.Time.now;
 
 /**
  * The class is responsible for choosing the desired number of targets
@@ -705,6 +704,10 @@ public class BlockPlacementPolicyDefault extends BlockPlacementPolicy {
     //System.out.println( "[SAMAN][BlockPlacementPolicyDefault][getPipeline]" );
     if (storages.length == 0) {
       return storages;
+    }
+
+    for( int i = 0; i < storages.length; i++ ){
+        System.out.println( "[SAMAN]][BlockPlacementDefault][getPipeline] storage " + storages[i].getDatanodeDescriptor().getHostName() );
     }
 
     synchronized(clusterMap) {
