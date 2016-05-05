@@ -1694,6 +1694,15 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
 
     LocatedBlocks blocks = getBlockLocations(src, offset, length, true, true,
         true);
+
+    Iterator<LocatedBlock> itrTemp =  blocks.getLocatedBlocks().iterator();
+    while( itrTemp.hasNext() ){
+      LocatedBlock locatedBlock = (LocatedBlock)itrTemp.next();
+      for( int i = 0; i < locatedBlock.getLocations().length; i++ ){
+        System.out.println("[SAMAN][FSNameSystem][getBlockLocations] src " + src + " location = " + locatedBlock.getLocations()[0].getHostName() );
+      }
+    }
+
     if (blocks != null) {
       blockManager.getDatanodeManager().sortLocatedBlocks(
           clientMachine, blocks.getLocatedBlocks());
