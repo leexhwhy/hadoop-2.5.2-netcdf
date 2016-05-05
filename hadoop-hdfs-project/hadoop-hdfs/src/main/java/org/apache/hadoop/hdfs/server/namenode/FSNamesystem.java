@@ -1699,7 +1699,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
     while( itrTemp.hasNext() ){
       LocatedBlock locatedBlock = (LocatedBlock)itrTemp.next();
       for( int i = 0; i < locatedBlock.getLocations().length; i++ ){
-        System.out.println("[SAMAN][FSNameSystem][getBlockLocations] src " + src + " location = " + locatedBlock.getLocations()[0].getHostName() );
+        System.out.println("[SAMAN][FSNameSystem][getBlockLocations] src " + src + " location = " + locatedBlock.getLocations()[i].getHostName() );
       }
     }
 
