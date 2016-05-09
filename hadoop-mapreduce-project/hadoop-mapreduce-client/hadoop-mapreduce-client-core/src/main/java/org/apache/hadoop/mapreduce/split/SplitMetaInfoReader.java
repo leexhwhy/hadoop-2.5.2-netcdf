@@ -109,10 +109,12 @@ public class SplitMetaInfoReader {
       // read forcefully from a remote node
       // We would consider values 1/4, 1/2, and full
 
-      System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] locations = " +
-              splitMetaInfo.getLocations()[0] + "," +
-              splitMetaInfo.getLocations()[1] + "," +
-              splitMetaInfo.getLocations()[2] );
+      if( splitMetaInfo.getLocations().length == 3 ) {
+        System.out.println("[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] locations = " +
+                splitMetaInfo.getLocations()[0] + "," +
+                splitMetaInfo.getLocations()[1] + "," +
+                splitMetaInfo.getLocations()[2]);
+      }
 
       if( secondBestLayoutEnabled && isNetCDF ){
         String[] reorderedLocations = new String[3];
