@@ -240,7 +240,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
             FileSystem  fs = path.getFileSystem(job);
             long length = file.getLen();
             BlockLocation[] blkLocations = fs.getFileBlockLocations(file, 0, length);
-            String[] hosts = new String[3];
+            String[] hosts = new String[1];
             for( int i = 0; i < blkLocations.length; i++ ){
                 for( int j = 0; j < blkLocations[i].getHosts().length; j++ ) {
                     System.out.println("[SAMAN][NetCDFInputFormatPrunerByFileIndex][getSplits] block location " + blkLocations[i].getHosts()[j]);
