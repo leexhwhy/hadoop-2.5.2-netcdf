@@ -298,8 +298,8 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
                     //        ", endChunk="+endChunk+", blockNo="+blockNo);
                     //System.out.println( "[SAMAN] NetCDFInputFormatPruner.getSplits => splitSize="+splitSize+", thisStart="+thisStart+
                     //        ", endChunk="+endChunk+", blockNo="+blockNo);
-                    //String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
-                    String[] splitHosts = hosts;
+                    String[] splitHosts = getSplitHosts(blkLocations, tempStart, splitSize, clusterMap);
+                    //String[] splitHosts = hosts;
                     FileSplit split     = new FileSplit(path, tempStart, splitSize, splitHosts);
                     split.getFileSplit().startChunk = thisChunk;
                     split.getFileSplit().endChunk = endChunk;
