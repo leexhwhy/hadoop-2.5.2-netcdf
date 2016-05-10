@@ -76,10 +76,10 @@ import org.apache.hadoop.mapred.NetCDFReaderWithMeta;
 /**
  * Treats keys as offset in fil`e and value as line. 
  */
-public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, NetCDFArrayWritable> {
+public class NetCDFInputFormatPrunerByFileIndexSecondBest extends FileInputFormat<Text, NetCDFArrayWritable> {
 
     private static final Log LOG
-            = LogFactory.getLog(NetCDFInputFormatPrunerByFileIndex.class.getName());
+            = LogFactory.getLog(NetCDFInputFormatPrunerByFileIndexSecondBest.class.getName());
 
     public static final String HIVE_QUERY = "hadoop.netcdf.hivequery.raw";
 
@@ -409,7 +409,7 @@ public class NetCDFInputFormatPrunerByFileIndex extends FileInputFormat<Text, Ne
         reporter.setStatus(genericSplit.toString());
         //LOG.info( "[SAMAN] return getRecordReader" );
         //System.out.println( "[SAMAN] return getRecordReader" );
-        return new NetCDFReaderWithMeta(job, (FileSplit) genericSplit);
+        return new NetCDFReaderWithMetaSecondBest(job, (FileSplit) genericSplit);
     }
 
 
