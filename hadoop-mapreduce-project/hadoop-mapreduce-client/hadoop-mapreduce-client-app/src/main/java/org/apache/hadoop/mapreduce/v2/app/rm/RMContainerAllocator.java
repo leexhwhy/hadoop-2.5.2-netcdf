@@ -1166,7 +1166,7 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
           TaskAttemptId tId = list.removeFirst();
           if (maps.containsKey(tId)) {
-            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality][BesFirsttLayout] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
             ContainerRequest assigned = maps.remove(tId);
             containerAssigned(allocated, assigned);
             it.remove();
@@ -1202,7 +1202,7 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
           TaskAttemptId tId = list.removeFirst();
           if (maps.containsKey(tId)) {
-            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality][BestSecondLayout] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
             ContainerRequest assigned = maps.remove(tId);
             containerAssigned(allocated, assigned);
             it.remove();
@@ -1238,7 +1238,7 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
           TaskAttemptId tId = list.removeFirst();
           if (maps.containsKey(tId)) {
-            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
+            System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality][BestLayout] map contains key: " + tId.getTaskId().getJobId().getId()+":"+tId.getTaskId().getTaskType().name()+":"+tId.getTaskId().getId() );
             ContainerRequest assigned = maps.remove(tId);
             containerAssigned(allocated, assigned);
             it.remove();
@@ -1270,7 +1270,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         while (list != null && list.size() > 0) {
           TaskAttemptId tId = list.removeFirst();
           if (maps.containsKey(tId)) {
-            System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality] rack local assigned!");
+            System.out.println("[SAMAN][RMContainerAllocator][assignMapsWithLocality][BestRackLayout] rack local assigned!");
             ContainerRequest assigned = maps.remove(tId);
             containerAssigned(allocated, assigned);
             it.remove();
