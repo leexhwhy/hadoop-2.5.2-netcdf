@@ -1474,7 +1474,6 @@ class BlockReceiver implements Closeable {
 
     try{
       inputFile = NetcdfFile.open(((ReplicaInPipeline)replicaInfo).getBlockFile().getAbsolutePath(), null);
-      inputFile.
       outputFile = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, ((ReplicaInPipeline)replicaInfo).getNetCDFBlockFile().getAbsolutePath());
 
       if( outputFile == null )
