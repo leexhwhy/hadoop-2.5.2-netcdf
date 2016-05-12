@@ -1159,7 +1159,8 @@ public class RMContainerAllocator extends RMContainerRequestor
         // hence this while loop would almost always have O(1) complexity
         String host = allocated.getNodeId().getHost();
         LinkedList<TaskAttemptId> list = bestLayoutHostMapping.get(host);
-        System.out.println( "[SAMAN][RMContainerAllocator[assignMapsWithLocality][BestFirstLayout] candidates for host " + host + " is " + list.size() );
+        if( list != null )
+          System.out.println( "[SAMAN][RMContainerAllocator[assignMapsWithLocality][BestFirstLayout] candidates for host " + host + " is " + list.size() );
         //System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
         while (list != null && list.size() > 0) {
           if (LOG.isDebugEnabled()) {
@@ -1196,7 +1197,8 @@ public class RMContainerAllocator extends RMContainerRequestor
         // hence this while loop would almost always have O(1) complexity
         String host = allocated.getNodeId().getHost();
         LinkedList<TaskAttemptId> list = secondBestLayoutHostMapping.get(host);
-        System.out.println( "[SAMAN][RMContainerAllocator[assignMapsWithLocality][BestSecondLayout] candidates for host " + host + " is " + list.size() );
+        if( list != null )
+          System.out.println( "[SAMAN][RMContainerAllocator[assignMapsWithLocality][BestSecondLayout] candidates for host " + host + " is " + list.size() );
         //System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
         while (list != null && list.size() > 0) {
           if (LOG.isDebugEnabled()) {
@@ -1233,7 +1235,8 @@ public class RMContainerAllocator extends RMContainerRequestor
         // hence this while loop would almost always have O(1) complexity
         String host = allocated.getNodeId().getHost();
         LinkedList<TaskAttemptId> list = mapsHostMapping.get(host);
-        System.out.println( "[SAMAN][RMContainerAllocator[assignMapsWithLocality][BestLayout] candidates for host " + host + " is " + list.size() );
+        if( list != null )
+          System.out.println( "[SAMAN][RMContainerAllocator[assignMapsWithLocality][BestLayout] candidates for host " + host + " is " + list.size() );
         //System.out.println( "[SAMAN][RMContainerAllocator][assignMapsWithLocality] list size is: " + list.size() );
         while (list != null && list.size() > 0) {
           if (LOG.isDebugEnabled()) {
