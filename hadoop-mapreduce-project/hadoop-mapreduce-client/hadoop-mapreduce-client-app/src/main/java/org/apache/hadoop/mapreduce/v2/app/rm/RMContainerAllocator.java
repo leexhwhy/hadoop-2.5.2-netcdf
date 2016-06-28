@@ -855,21 +855,22 @@ public class RMContainerAllocator extends RMContainerRequestor
               LOG.debug("Added attempt req to best layout host " + hostBestLayout);
             }
           }
-
-          String hostSecondBestLayout1 = event.getHosts()[1];
-          String hostSecondBestLayout2 = event.getHosts()[2];
-          String[] tempHosts = new String[2];
-          tempHosts[0] = hostSecondBestLayout1;
-          tempHosts[1] = hostSecondBestLayout2;
-          for (String hostSecondBestLayout : tempHosts) {
-            LinkedList<TaskAttemptId> list = secondBestLayoutHostMapping.get(hostSecondBestLayout);
-            if (list == null) {
-              list = new LinkedList<TaskAttemptId>();
-              secondBestLayoutHostMapping.put(hostSecondBestLayout, list);
-            }
-            list.add(event.getAttemptID());
-            if (LOG.isDebugEnabled()) {
-              LOG.debug("Added attempt req to second best layout host " + hostSecondBestLayout);
+          else {
+            String hostSecondBestLayout1 = event.getHosts()[1];
+            String hostSecondBestLayout2 = event.getHosts()[2];
+            String[] tempHosts = new String[2];
+            tempHosts[0] = hostSecondBestLayout1;
+            tempHosts[1] = hostSecondBestLayout2;
+            for (String hostSecondBestLayout : tempHosts) {
+              LinkedList<TaskAttemptId> list = secondBestLayoutHostMapping.get(hostSecondBestLayout);
+              if (list == null) {
+                list = new LinkedList<TaskAttemptId>();
+                secondBestLayoutHostMapping.put(hostSecondBestLayout, list);
+              }
+              list.add(event.getAttemptID());
+              if (LOG.isDebugEnabled()) {
+                LOG.debug("Added attempt req to second best layout host " + hostSecondBestLayout);
+              }
             }
           }
         }
