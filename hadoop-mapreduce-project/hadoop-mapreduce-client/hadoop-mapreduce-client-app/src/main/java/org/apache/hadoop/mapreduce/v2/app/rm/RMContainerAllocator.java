@@ -839,19 +839,21 @@ public class RMContainerAllocator extends RMContainerRequestor
         LOG.info("Added "+event.getAttemptID()+" to list of failed maps");
       } else {
 
-        if( secondBestLayoutEnabled ) {
+        if( secondBestLayoutEnabled || bestLayoutEnabled ) {
 
-          System.out.println( "[SAMAN][RMContainerAllocator][addMap] secondBestLayout is enabled!" );
-          // Added by Saman to fill out bestLayout and secondBestLayout
-          String hostBestLayout = event.getHosts()[0];
-          LinkedList<TaskAttemptId> listBestLayout = bestLayoutHostMapping.get(hostBestLayout);
-          if (listBestLayout == null) {
-            listBestLayout = new LinkedList<TaskAttemptId>();
-            bestLayoutHostMapping.put(hostBestLayout, listBestLayout);
-          }
-          listBestLayout.add(event.getAttemptID());
-          if (LOG.isDebugEnabled()) {
-            LOG.debug("Added attempt req to best layout host " + hostBestLayout);
+          System.out.println( "[SAMAN][RMContainerAllocator][addMap] secondBestLayout || bestLayout is enabled!" );
+          if( bestLayoutEnabled ) {
+            // Added by Saman to fill out bestLayout and secondBestLayout
+            String hostBestLayout = event.getHosts()[0];
+            LinkedList<TaskAttemptId> listBestLayout = bestLayoutHostMapping.get(hostBestLayout);
+            if (listBestLayout == null) {
+              listBestLayout = new LinkedList<TaskAttemptId>();
+              bestLayoutHostMapping.put(hostBestLayout, listBestLayout);
+            }
+            listBestLayout.add(event.getAttemptID());
+            if (LOG.isDebugEnabled()) {
+              LOG.debug("Added attempt req to best layout host " + hostBestLayout);
+            }
           }
 
           String hostSecondBestLayout1 = event.getHosts()[1];
