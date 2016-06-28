@@ -855,7 +855,7 @@ public class RMContainerAllocator extends RMContainerRequestor
               LOG.debug("Added attempt req to best layout host " + hostBestLayout);
             }
           }
-          else {
+          if( secondBestLayoutEnabled ) {
             String hostSecondBestLayout1 = event.getHosts()[1];
             String hostSecondBestLayout2 = event.getHosts()[2];
             String[] tempHosts = new String[2];
