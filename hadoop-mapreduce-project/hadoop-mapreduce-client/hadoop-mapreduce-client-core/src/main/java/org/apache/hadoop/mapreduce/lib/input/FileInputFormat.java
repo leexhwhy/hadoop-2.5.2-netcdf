@@ -426,6 +426,7 @@ public abstract class FileInputFormat<K, V> extends InputFormat<K, V> {
           + ", TimeTaken: " + sw.elapsedMillis());
     }
 
+    /*
     Iterator itr = splits.iterator();
     while( itr.hasNext() ){
       InputSplit split = (InputSplit)itr.next();
@@ -436,6 +437,7 @@ public abstract class FileInputFormat<K, V> extends InputFormat<K, V> {
         result += sli.getLocation() + ",";
       }
     }
+    */
 
     return splits;
   }
