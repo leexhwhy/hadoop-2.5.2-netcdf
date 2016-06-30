@@ -1723,7 +1723,7 @@ public class FSNamesystem implements Namesystem, FSClusterStats,
                   clientMachine, lastBlockList);
         }
       }
-    
+
     return blocks;
   }
 
