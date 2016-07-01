@@ -984,6 +984,8 @@ public class FairScheduler extends
         }
       }
       try {
+        System.out.println( "[SAMAN][FairScheduler][continuousScheduling] sleep for: "
+                + getContinuousSchedulingSleepMs() );
         Thread.sleep(getContinuousSchedulingSleepMs());
       } catch (InterruptedException e) {
         LOG.warn("Error while doing sleep in continuous scheduling: " +
