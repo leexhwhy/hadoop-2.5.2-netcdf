@@ -18,13 +18,7 @@
 
 package org.apache.hadoop.mapreduce.v2.app.rm;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -57,7 +51,12 @@ import org.apache.hadoop.yarn.exceptions.YarnRuntimeException;
 import org.apache.hadoop.yarn.factories.RecordFactory;
 import org.apache.hadoop.yarn.factory.providers.RecordFactoryProvider;
 
-import com.google.common.annotations.VisibleForTesting;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Registers/unregisters to RM and sends heartbeats to RM.
@@ -263,6 +262,7 @@ public abstract class RMCommunicator extends AbstractService
       public void run() {
         while (!stopped.get() && !Thread.currentThread().isInterrupted()) {
           try {
+            System.out.println( "[SAMAN][RMCommunicator][startAllocatorThread] poll interval: " + rmPollInterval );
             Thread.sleep(rmPollInterval);
             try {
               heartbeat();
