@@ -241,6 +241,13 @@ public class FairScheduler extends
     // Recursively compute fair shares for all queues
     // and update metrics
     rootQueue.recomputeShares();
+    List<FSQueue> list = rootQueue.getChildQueues();
+    Iterator itr = list.iterator();
+    while( itr.hasNext() ){
+      FSQueue fsQueue = (FSQueue) itr.next();
+      System.out.println( "[SAMAN][FairScheduler][update] name="+fsQueue.getName()+", Memory="+fsQueue.getMetrics().getFairShareMB()+", CPU="+fsQueue.getMetrics().getFairShareVirtualCores() );
+    }
+
   }
 
   /**
