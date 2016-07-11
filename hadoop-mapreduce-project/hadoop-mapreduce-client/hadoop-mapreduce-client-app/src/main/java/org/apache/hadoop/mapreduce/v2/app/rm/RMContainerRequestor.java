@@ -193,26 +193,26 @@ public abstract class RMContainerRequestor extends RMCommunicator {
     AllocateResponse allocateResponse;
     try {
       // Logging Daste Khar
-      System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside allocateRequest!" );
+      //System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside allocateRequest!" );
       Iterator itr = allocateRequest.getAskList().iterator();
       while( itr.hasNext() ) {
         ResourceRequest temp = (ResourceRequest) itr.next();
-        System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] numContainers=" + temp.getNumContainers()
-                + ",memory=" + temp.getCapability().getMemory()
-                + ",vcores=" + temp.getCapability().getVirtualCores()
-                + ",name=" + temp.getResourceName()
-                + ",relax=" + temp.getRelaxLocality());
+        //System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] numContainers=" + temp.getNumContainers()
+        //        + ",memory=" + temp.getCapability().getMemory()
+        //        + ",vcores=" + temp.getCapability().getVirtualCores()
+        //        + ",name=" + temp.getResourceName()
+        //        + ",relax=" + temp.getRelaxLocality());
       }
       allocateResponse = scheduler.allocate(allocateRequest);
-      System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside response!" );
+      //System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] inside response!" );
       itr = allocateResponse.getAllocatedContainers().iterator();
       while( itr.hasNext() ){
         Container container = (Container)itr.next();
-        System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] container=" + container.getNodeHttpAddress()+","+container.getResource().getMemory()+","+container.getResource().getVirtualCores());
+        //System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] container=" + container.getNodeHttpAddress()+","+container.getResource().getMemory()+","+container.getResource().getVirtualCores());
       }
       //System.out.println("[SAMAN][RMContainerRequester][makeRemoteRequest] command="+allocateResponse.getAMCommand);
     } catch (YarnException e) {
-      System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] An exception happened!" );
+      //System.out.println( "[SAMAN][RMContainerRequester][makeRemoteRequest] An exception happened!" );
       throw new IOException(e);
     }
     lastResponseID = allocateResponse.getResponseId();

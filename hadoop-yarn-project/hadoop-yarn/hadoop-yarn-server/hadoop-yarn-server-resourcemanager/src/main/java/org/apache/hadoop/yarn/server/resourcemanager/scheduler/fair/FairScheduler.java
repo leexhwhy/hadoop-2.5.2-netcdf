@@ -802,7 +802,7 @@ public class FairScheduler extends
     SimpleDateFormat time_formatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS");
 
 
-    System.out.println( "[SAMAN][FairScheduler][allocate]" );
+    //System.out.println( "[SAMAN][FairScheduler][allocate]" );
     for( ResourceRequest request : ask ){
       System.out.println( "[SAMAN][FairScheduler][allocate] request = " + request.getResourceName() +","+request.getNumContainers()+","+request.getCapability()  );
     }
@@ -821,7 +821,7 @@ public class FairScheduler extends
     String current_time_str = time_formatter.format(System.currentTimeMillis());
 
     FSSchedulerApp application = getSchedulerApp(appAttemptId);
-    System.out.println( "[SAMAN][FairScheduler][allocate] " + current_time_str + " application=="+application.getApplicationId().getId() );
+    //System.out.println( "[SAMAN][FairScheduler][allocate] " + current_time_str + " application=="+application.getApplicationId().getId() );
 
     if (application == null) {
       LOG.info("Calling allocate on removed " +
@@ -842,7 +842,7 @@ public class FairScheduler extends
     // Release containers
     for (ContainerId releasedContainerId : release) {
 
-      System.out.println( "[SAMAN][FairScheduler][allocate] release = " + releasedContainerId.getId() );
+      //System.out.println( "[SAMAN][FairScheduler][allocate] release = " + releasedContainerId.getId() );
 
       RMContainer rmContainer = getRMContainer(releasedContainerId);
       if (rmContainer == null) {
@@ -869,7 +869,7 @@ public class FairScheduler extends
         application.showRequests();
 
         // Update application requests
-        System.out.println( "[SAMAN][FairScheduler][allocate] application.updateResourceRequests!" );
+        //System.out.println( "[SAMAN][FairScheduler][allocate] application.updateResourceRequests!" );
         application.updateResourceRequests(ask);
 
         LOG.debug("allocate: post-update");
@@ -984,8 +984,8 @@ public class FairScheduler extends
         }
       }
       try {
-        System.out.println( "[SAMAN][FairScheduler][continuousScheduling] sleep for: "
-                + getContinuousSchedulingSleepMs() );
+        //System.out.println( "[SAMAN][FairScheduler][continuousScheduling] sleep for: "
+        //        + getContinuousSchedulingSleepMs() );
         Thread.sleep(getContinuousSchedulingSleepMs());
       } catch (InterruptedException e) {
         LOG.warn("Error while doing sleep in continuous scheduling: " +

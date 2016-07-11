@@ -376,7 +376,7 @@ public class ApplicationMasterService extends AbstractService implements
   public AllocateResponse allocate(AllocateRequest request)
       throws YarnException, IOException {
 
-    System.out.println( "[SAMAN][ApplicationMasterService][allocate]" );
+    //System.out.println( "[SAMAN][ApplicationMasterService][allocate]" );
 
     ApplicationAttemptId appAttemptId = authorizeRequest();
 
