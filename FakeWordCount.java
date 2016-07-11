@@ -85,7 +85,7 @@ public class FakeWordCount {
         job.setInputFormatClass(FakeTextInputFormat.class);
         for( int j = 0; j < 4096; j++ ) {
             for (int i = 0; i < otherArgs.length - 1; ++i) {
-                FileInputFormat.addInputPath(job, new Path(otherArgs[i]));
+                FileInputFormat.addInputPath(job, new Path(otherArgs[i] + ((i%8)+1)));
             }
         }
         FileOutputFormat.setOutputPath(job,
