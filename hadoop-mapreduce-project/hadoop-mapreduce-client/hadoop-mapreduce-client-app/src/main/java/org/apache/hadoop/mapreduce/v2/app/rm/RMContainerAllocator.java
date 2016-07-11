@@ -829,7 +829,6 @@ public class RMContainerAllocator extends RMContainerRequestor
       }
       return null;
     }
-    
     void addMap(ContainerRequestEvent event) {
       ContainerRequest request = null;
       

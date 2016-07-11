@@ -192,7 +192,7 @@ public class FakeLineRecordReader extends RecordReader<LongWritable, Text> {
         text += text;
         text += text;
         text += text;
-        if( counter < 512*1024*1024 ){
+        if( counter < 256*1024*1024 ){
             value = new Text(text);
             pos += 64*512;
             counter += 64*512;

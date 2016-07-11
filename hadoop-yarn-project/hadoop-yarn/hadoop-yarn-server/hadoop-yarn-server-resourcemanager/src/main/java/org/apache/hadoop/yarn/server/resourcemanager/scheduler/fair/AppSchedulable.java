@@ -234,7 +234,7 @@ public class AppSchedulable extends Schedulable {
 
     // How much does this request need?
     Resource capability = request.getCapability();
-    System.out.println( "[SAMAN][AppSchedulable][assignContainer] capability="+capability.getVirtualCores()+":"+capability.getMemory() );
+    //System.out.println( "[SAMAN][AppSchedulable][assignContainer] capability="+capability.getVirtualCores()+":"+capability.getMemory() );
 
     // How much does the node have?
     Resource available = node.getAvailableResource();
@@ -317,13 +317,13 @@ public class AppSchedulable extends Schedulable {
 
         ResourceRequest rackLocalRequest = app.getResourceRequest(priority,
             node.getRackName());
-        if( rackLocalRequest != null )
-          System.out.println( "[SAMAN][AppSchedulable][assignContainer] rackLocalRequest="+rackLocalRequest.getResourceName()+","+rackLocalRequest.getNumContainers()+","+rackLocalRequest.getRelaxLocality() );
+        //if( rackLocalRequest != null )
+          //System.out.println( "[SAMAN][AppSchedulable][assignContainer] rackLocalRequest="+rackLocalRequest.getResourceName()+","+rackLocalRequest.getNumContainers()+","+rackLocalRequest.getRelaxLocality() );
         ResourceRequest localRequest = app.getResourceRequest(priority,
             node.getNodeName());
-        if( localRequest != null )
-          System.out.println( "[SAMAN][AppSchedulable][assignContainer] localRequest="+localRequest.getResourceName()+","+localRequest.getNumContainers()+","+localRequest.getRelaxLocality() );
-        
+        //if( localRequest != null )
+          //System.out.println( "[SAMAN][AppSchedulable][assignContainer] localRequest="+localRequest.getResourceName()+","+localRequest.getNumContainers()+","+localRequest.getRelaxLocality() );
+
         if (localRequest != null && !localRequest.getRelaxLocality()) {
           LOG.warn("Relax locality off is not supported on local request: "
               + localRequest);
@@ -331,13 +331,13 @@ public class AppSchedulable extends Schedulable {
         
         NodeType allowedLocality;
         if (scheduler.isContinuousSchedulingEnabled()) {
-          System.out.println( "[SAMAN][AppSchedulable][assignContainer] continuous scheduling is enabled!" );
+          //System.out.println( "[SAMAN][AppSchedulable][assignContainer] continuous scheduling is enabled!" );
           allowedLocality = app.getAllowedLocalityLevelByTime(priority,
                   scheduler.getNodeLocalityDelayMs(),
                   scheduler.getRackLocalityDelayMs(),
                   scheduler.getClock().getTime());
         } else {
-          System.out.println( "[SAMAN][AppSchedulable][assignContainer] continuous scheduling is not scheduled!" );
+          //System.out.println( "[SAMAN][AppSchedulable][assignContainer] continuous scheduling is not scheduled!" );
           allowedLocality = app.getAllowedLocalityLevel(priority,
                   scheduler.getNumClusterNodes(),
                   scheduler.getNodeLocalityThreshold(),

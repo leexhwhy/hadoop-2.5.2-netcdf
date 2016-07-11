@@ -124,7 +124,7 @@ public interface YarnScheduler extends EventHandler<SchedulerEvent> {
       List<String> blacklistRemovals);
 
   /**
-   * Get node resource usage report.
+   * Get node resource usage report.re
    * @param nodeId
    * @return the {@link SchedulerNodeReport} for the node or null
    * if nodeId does not point to a defined node.
