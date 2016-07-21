@@ -185,7 +185,11 @@ public class LineRecordReader extends RecordReader<LongWritable, Text> {
         newSize = skipUtfByteOrderMark();
       } else {
         try {
+          long start = System.currentTimeMillis();
           newSize = in.readLine(value, maxLineLength, maxBytesToConsume(pos));
+          long end = System.currentTimeMillis();
+
+          System.out.println( "Time diff in reading part of file is: " + (end-start) );
         }catch ( IOException e ){
           //LOG.info( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
           //System.out.println( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
