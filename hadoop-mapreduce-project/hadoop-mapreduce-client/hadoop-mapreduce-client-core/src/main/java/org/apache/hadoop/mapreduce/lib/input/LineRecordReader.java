@@ -185,9 +185,9 @@ public class LineRecordReader extends RecordReader<LongWritable, Text> {
         newSize = skipUtfByteOrderMark();
       } else {
         try {
-          long start = System.currentTimeMillis();
+          long start = System.nanoTime();
           newSize = in.readLine(value, maxLineLength, maxBytesToConsume(pos));
-          long end = System.currentTimeMillis();
+          long end = System.nanoTime();
 
           System.out.println( "Time diff in reading part of file is: " + (end-start) );
         }catch ( IOException e ){
