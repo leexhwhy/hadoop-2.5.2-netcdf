@@ -188,7 +188,7 @@ public class LineRecordReader extends RecordReader<LongWritable, Text> {
           //long start = System.nanoTime();
           newSize = in.readLine(value, maxLineLength, maxBytesToConsume(pos));
           //long end = System.nanoTime();
-
+          System.out.println( "Read one line" );
           //System.out.println( "Time diff in reading part of file is: " + (end-start) );
         }catch ( IOException e ){
           //LOG.info( "[SAMAN] LineRecordReader.nextKeyValue(), exception for value="+value );
