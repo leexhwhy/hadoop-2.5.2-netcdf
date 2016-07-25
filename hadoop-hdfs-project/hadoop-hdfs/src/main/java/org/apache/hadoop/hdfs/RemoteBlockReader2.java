@@ -185,6 +185,9 @@ public class RemoteBlockReader2  implements BlockReader {
 
   private void readNextPacket() throws IOException {
     //Read packet headers.
+
+    System.out.println( "[SAMAN][RemoteBlockReader][readNextPacket]" );
+
     packetReceiver.receiveNextPacket(in);
 
     PacketHeader curHeader = packetReceiver.getHeader();
