@@ -145,7 +145,10 @@ public class RemoteBlockReader2  implements BlockReader {
     }
 
     if (curDataSlice == null || curDataSlice.remaining() == 0 && bytesNeededToFinish > 0) {
+      long start = System.nanoTime();
       readNextPacket();
+      long end = System.nanoTime();
+      System.out.println( "[SAMAN][RemoteBlockReader2][read] readNextPacket time = " + (end - start) );
     }
 
     if (LOG.isTraceEnabled()) {

@@ -533,9 +533,15 @@ class BlockReaderLocal implements BlockReader {
       }
       try {
         if (canSkipChecksum && zeroReadaheadRequested) {
+          long start = System.nanoTime();
           nRead = readWithoutBounceBuffer(arr, off, len);
+          long end = System.nanoTime();
+          System.out.println( "[SAMAN][BlockReaderLocal][read] readWithoutBounceBuffer time = " + (end - start) );
         } else {
+          long start = System.nanoTime();
           nRead = readWithBounceBuffer(arr, off, len, canSkipChecksum);
+          long end = System.nanoTime();
+          System.out.println( "[SAMAN][BlockReaderLocal][read] readWithBoundeBuffer time = " + (end - start) );
         }
       } catch (IOException e) {
         if (LOG.isTraceEnabled()) {
