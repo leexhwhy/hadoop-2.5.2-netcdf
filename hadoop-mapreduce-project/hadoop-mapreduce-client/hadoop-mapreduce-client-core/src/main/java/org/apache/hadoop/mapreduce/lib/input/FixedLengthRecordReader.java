@@ -145,7 +145,9 @@ public class FixedLengthRecordReader
         offset += numBytesRead;
         numBytesToRead -= numBytesRead;
       }
+      System.out.println( "[SAMAN][FixedLengthRecordReader][nextKeyValue] recordLength = " + recordLength );
       numBytesRead = recordLength - numBytesToRead;
+      System.out.println( "[SAMAN][FixedLengthRecordReader][nextKeyValue] numBytesRead = " + numBytesRead );
       pos += numBytesRead;
       if (numBytesRead > 0) {
         dataRead = true;
