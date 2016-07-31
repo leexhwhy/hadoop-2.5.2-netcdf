@@ -85,7 +85,7 @@ public class FixedLength {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         job.setInputFormatClass(FixedLengthInputFormat.class);
-        for( int j = 0; j < 50; j++ ) {
+        for( int j = 0; j < 200; j++ ) {
             for (int i = 0; i < otherArgs.length - 1; ++i) {
                 FileInputFormat.addInputPath(job, new Path(otherArgs[i] + ((i%8)+1)));
             }
