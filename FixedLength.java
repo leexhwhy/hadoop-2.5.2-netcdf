@@ -47,7 +47,7 @@ public class FixedLength {
             StringTokenizer itr = new StringTokenizer(value.toString());
             while (itr.hasMoreTokens()) {
                 word.set(itr.nextToken());
-                context.write(word, one);
+                //context.write(word, one);
             }
         }
     }
