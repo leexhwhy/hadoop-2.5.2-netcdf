@@ -21,7 +21,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.ByteWritable;
+import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -37,12 +37,12 @@ import java.util.StringTokenizer;
 public class FixedLength {
 
     public static class TokenizerMapper
-            extends Mapper<Object, ByteWritable, Text, IntWritable>{
+            extends Mapper<Object, BytesWritable, Text, IntWritable>{
 
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
-        public void map(Object key, ByteWritable value, Context context
+        public void map(Object key, BytesWritable value, Context context
         ) throws IOException, InterruptedException {
             StringTokenizer itr = new StringTokenizer(value.toString());
             while (itr.hasMoreTokens()) {
