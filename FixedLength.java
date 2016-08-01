@@ -44,9 +44,9 @@ public class FixedLength {
 
         public void map(Object key, BytesWritable value, Context context
         ) throws IOException, InterruptedException {
-            StringTokenizer itr = new StringTokenizer(value.toString());
-            while (itr.hasMoreTokens()) {
-                word.set(itr.nextToken());
+            //StringTokenizer itr = new StringTokenizer(value.toString());
+            //while (itr.hasMoreTokens()) {
+            //    word.set(itr.nextToken());
                 //context.write(word, one);
             }
         }
