@@ -48,7 +48,7 @@ public class FixedLength {
             //while (itr.hasMoreTokens()) {
             //    word.set(itr.nextToken());
                 //context.write(word, one);
-            }
+
         }
     }
 
