@@ -20,6 +20,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormat;
 //import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormatRandomSecond;
+import org.apache.hadoop.mapred.NetCDFInputFormatRandomSecond;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
@@ -97,7 +98,7 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     job.setReducerClass(ReducerMax.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(FloatWritable.class);
-    job.setInputFormatClass(NetCDFInputFormat.class);
+    job.setInputFormatClass(NetCDFInputFormatRandomSecond.class);
     job.setOutputFormatClass(TextOutputFormat.class);
     //job.setNumReduceTasks(16);
     for (int i = 0; i < otherArgs.length - 1; ++i) {
