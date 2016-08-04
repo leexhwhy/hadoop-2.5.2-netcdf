@@ -19,8 +19,8 @@ import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormatYiqi;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.NetCDFInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormatRandomSecond;
 //import org.apache.hadoop.mapred.NetCDFInputFormat;
 import org.apache.hadoop.io.NetCDFArrayWritable;
 import java.util.ArrayList;
@@ -52,11 +52,11 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
       //  realValues[i]=records[i].get();
       //}
       //Arrays.sort(realValues);
-      float max = records[records.length-1].get();
+      //float max = records[records.length-1].get();
       //LOG.info("M Writing out " + key + " " + max);
       //LOG.info( "[SAMAN] Number of dimensions is: " + numberOfDimensions + " " + dimensionsSizeString );
       		
-      context.write(key, new FloatWritable(max));
+      //context.write(key, new FloatWritable(max));
     }
   }
   
@@ -89,28 +89,6 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     //get the args w/o generic hadoop args
     Configuration conf = new Configuration();
     String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-    if (otherArgs.length < 2) {
-      System.err.println("Usage: NetCDF <in> <out>");
-      System.exit(2);
-    }
-
-    int numPriority=0;
-    try
-    {
-         numPriority = Integer.parseInt(otherArgs[2]);
-         System.err.println("IO weight from "+otherArgs[2]);
-    }
-    catch (Exception e)
-    {
-
-        numPriority = 1;
-    }
-    if (numPriority <0)
-    {
-        numPriority=1;
-    }
-    conf.setInt("mapred.job.ioweight", numPriority);
-    System.err.println("IO weight "+numPriority);
 
     Job job = new Job(conf, "NetCDF");
     job.setJarByClass(NetCDF.class);
@@ -119,9 +97,9 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     job.setReducerClass(ReducerMax.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(FloatWritable.class);
-    job.setInputFormatClass(NetCDFInputFormat.class);
+    job.setInputFormatClass(NetCDFInputFormatRandomSecond.class);
     job.setOutputFormatClass(TextOutputFormat.class);
-    job.setNumReduceTasks(16);
+    //job.setNumReduceTasks(16);
     for (int i = 0; i < otherArgs.length - 1; ++i) {
       NetCDFInputFormat.addInputPath(job, new Path(otherArgs[i]));
     }
