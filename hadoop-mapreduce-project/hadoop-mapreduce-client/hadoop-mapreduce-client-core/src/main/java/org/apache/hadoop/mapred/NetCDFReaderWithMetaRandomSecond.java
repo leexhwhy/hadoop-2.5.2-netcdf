@@ -127,7 +127,7 @@ public class NetCDFReaderWithMetaRandomSecond implements RecordReader<Text, NetC
                 else if (rand == 2) {
                     chunk = ncFile.readSection("rsut(:," + pos + ":" + pos + ",:)");
                 }
-                else if (read == 3){
+                else if (rand == 3){
                     chunk = ncFile.readSection("rsut(:,:," + pos + ":" + pos + ")");
                 }
 
