@@ -42,7 +42,7 @@ import ucar.ma2.ArrayFloat;
 /**
  * Treats keys as offset in fil`e and value as line. 
  */
-public class NetCDFInputFormatRandomSeconds extends FileInputFormat<Text, NetCDFArrayWritable> {
+public class NetCDFInputFormatRandomSecond extends FileInputFormat<Text, NetCDFArrayWritable> {
 
     private static final Log LOG
             = LogFactory.getLog(NetCDFInputFormat.class.getName());
