@@ -838,7 +838,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         LOG.info("Added "+event.getAttemptID()+" to list of failed maps");
       } else {
 
-        if( secondBestLayoutEnabled || bestLayoutEnabled ) {
+        if( secondBestLayoutEnabled ) {
 
           System.out.println( "[SAMAN][RMContainerAllocator][addMap] secondBestLayout || bestLayout is enabled!" );
           if( bestLayoutEnabled ) {

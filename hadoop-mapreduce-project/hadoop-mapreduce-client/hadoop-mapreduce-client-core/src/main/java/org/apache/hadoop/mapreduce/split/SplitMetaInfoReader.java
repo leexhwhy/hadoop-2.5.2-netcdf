@@ -136,7 +136,8 @@ public class SplitMetaInfoReader {
                 reorderedLocations,
                 splitMetaInfo.getInputDataLength());
       }
-      else if( bestLayoutEnabled && isNetCDF ){
+      //else if( bestLayoutEnabled && isNetCDF ){
+      else if (false) {
         System.out.println( "[SAMAN][SplitMetaInfoReader][readSplitMetaInfo] bestLayoutEnabled && isNetCDF" );
         String[] locations = new String[1];
         //locations[0] = getFakeNode(splitMetaInfo.getLocations(), i);
