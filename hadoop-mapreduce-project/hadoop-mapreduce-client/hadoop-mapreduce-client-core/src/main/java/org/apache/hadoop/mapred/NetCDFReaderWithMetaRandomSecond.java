@@ -99,7 +99,7 @@ public class NetCDFReaderWithMetaRandomSecond implements RecordReader<Text, NetC
                 rand = 2;
             }
         }
-        
+
         System.out.println ( "[SAMAN][NetCDFReaderWithMeta] rand is " + rand );
 
     }
