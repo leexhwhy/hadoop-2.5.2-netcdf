@@ -205,7 +205,7 @@ public class NetCDFInputFormatRandomSecond extends FileInputFormat<Text, NetCDFA
             InputSplit genericSplit, TaskAttemptContext context)
             throws IOException {
 
-        return new NetCDFReader();
+        return new NetCDFReaderRandomSecond();
     }
 
 
