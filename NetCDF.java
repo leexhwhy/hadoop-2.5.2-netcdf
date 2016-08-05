@@ -98,7 +98,7 @@ private static final Log LOG = LogFactory.getLog(NetCDF.class);
     job.setReducerClass(ReducerMax.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(FloatWritable.class);
-    job.setInputFormatClass(NetCDFInputFormatRandomSecond.class);
+    job.setInputFormatClass(NetCDFInputFormat.class);
     job.setOutputFormatClass(TextOutputFormat.class);
     //job.setNumReduceTasks(16);
     for (int i = 0; i < otherArgs.length - 1; ++i) {
